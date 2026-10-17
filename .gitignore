@@ -1,0 +1,22 @@
+# Material de referencia temporal (clases, export de Figma). No se sube.
+_referencias/
+
+# Gradle / Java
+.gradle/
+build/
+out/
+*.class
+*.log
+
+# IDEs
+.idea/
+*.iml
+
+# Secretos y configuración local
+.env
+application-local.yaml
+application-local.properties
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
