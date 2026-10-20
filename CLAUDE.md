@@ -98,17 +98,22 @@ La arquitectura **no la decide Claude**. Se construye con el equipo, una decisi�
 Si durante la implementación algo choca con la arquitectura acordada, **pará y planteálo** como nueva decisión. No la cambies por tu cuenta.
 
 ### Decisiones tomadas
-- **Stack:** C# / .NET 10 con ASP.NET Core MVC, EF Core y PostgreSQL (sección 3). Bootstrap habilitado.
-- **Patrón:** MVC, con capa de Services para las reglas de negocio y ViewModels/DTOs hacia la View.
+Detalle, alternativas y motivos en `docs/DECISIONES.md`.
+- **D-01 Stack:** C# / .NET 10 con ASP.NET Core MVC, EF Core y PostgreSQL (sección 3). Bootstrap habilitado.
+- **D-02 Patrón:** MVC, con capa de Services para las reglas de negocio y ViewModels/DTOs hacia la View.
+- **D-03 Alcance de la 1ª entrega:** registro y login con roles, perfil, recetas filtradas por alérgenos y restricciones, detalle, despensa, favoritos y ABM de recetas (admin). Fotos, mapa embebido, ABM de ingredientes y preferencias personalizadas quedan para la 2ª.
+- **D-04 Acceso a datos:** los Services usan el `DbContext` directamente (sin capa Repository).
+- **D-05 Organización:** carpetas por capa.
+- **D-06 Vistas:** Razor por defecto; `fetch()` solo para despensa y favoritos; checklist de pasos en JS local.
+- **D-07 Modelo:** entidades de la sección 9 de la documentación funcional, sin `PreferenciaPersonalizada`; alérgenos y aptitud calculados desde los ingredientes.
+- **D-08 Estilos:** Bootstrap + variables CSS de Figma en `wwwroot/css/estilos.css`.
+- **D-09 Mapa:** links a Google Maps (búsqueda por tipo de comercio y ruta a pie); Leaflet queda para la 2ª entrega.
+- **D-10 Entorno:** primero solo local; `Dockerfile` y Render, más adelante.
 
-### Decisiones pendientes (orden sugerido)
-1. **Alcance para la entrega:** la documentación funcional es mucho más grande que el mínimo del enunciado (registro/login, roles, admin, 118 recetas, mapas). Hay que definir qué entra en la primera entrega y qué queda para después.
-2. **Acceso a datos:** Services que usan el `DbContext` directamente, o una capa Repository encima de EF Core.
-3. **Organización del código:** carpetas por capa (`Controllers/`, `Services/`…) o por módulo (`Recetas/`, `Usuarios/`…).
-4. **Qué pantallas son Razor puro y cuáles usan `fetch`** (por ejemplo, despensa y favoritos sin recargar).
-5. **Modelo de datos para el alcance elegido:** qué entidades y relaciones del modelo funcional (sección 9) entran.
-6. **Estilos:** cuánto de Bootstrap y cuánto CSS propio para respetar el diseño de Figma.
-7. **Mapa de comercios:** link o `<iframe>` de Google Maps/OpenStreetMap, o Leaflet como complementaria.
+### Decisiones pendientes
+- Idioma del código (sección 5).
+- jQuery: viene con la plantilla MVC para la validación del lado del cliente. Decidir si se mantiene o se quita.
+- Íconos: Bootstrap Icons, emojis o SVG inline (sección 7).
 
 ### Estructura de referencia
 ```
@@ -201,7 +206,11 @@ Esperá validación. Cuando el equipo escriba "TECNOLOGIAS.md aprobado", esa lis
 
 ## 9. Cómo correr el proyecto
 ```
-<<se completa cuando exista el proyecto: docker compose up -d → dotnet ef database update → dotnet run --project src/CocinaFacil.Web>>
+docker compose up -d                                        # PostgreSQL en Docker
+dotnet tool restore                                         # dotnet-ef (solo la primera vez)
+dotnet ef database update --project src/CocinaFacil.Web    # aplica las migraciones
+dotnet run --project src/CocinaFacil.Web                    # http://localhost:5224
+dotnet test                                                 # tests
 ```
 
 ## 10. Cuando no sabés algo
