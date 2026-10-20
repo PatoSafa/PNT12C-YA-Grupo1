@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía de conexión — Backend, MySQL, Git Bash y Vista</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#1f2937;line-height:1.6}
+header{background:#111827;color:white;padding:42px 20px}
+.wrap,main,footer{max-width:1100px;margin:auto}
+header h1{margin:0 0 10px;font-size:2.2rem}
+header p{margin:0;color:#d1d5db}
+main{padding:28px 20px 60px}
+section{background:white;border-radius:14px;padding:28px;margin-bottom:22px;box-shadow:0 3px 14px rgba(0,0,0,.07)}
+h2{margin-top:0;color:#111827}
+h3{color:#1d4ed8;margin-top:26px}
+pre{background:#111827;color:#e5e7eb;padding:17px;border-radius:9px;overflow:auto}
+code{font-family:Consolas,"Courier New",monospace}
+.inline{background:#e5e7eb;padding:2px 5px;border-radius:5px}
+.note,.ok,.warning,.danger{padding:15px 18px;border-radius:9px;margin:16px 0}
+.note{background:#eff6ff;border-left:5px solid #2563eb}
+.ok{background:#ecfdf5;border-left:5px solid #10b981}
+.warning{background:#fffbeb;border-left:5px solid #f59e0b}
+.danger{background:#fef2f2;border-left:5px solid #ef4444}
+table{width:100%;border-collapse:collapse;margin:18px 0}
+th,td{border:1px solid #d1d5db;padding:11px;text-align:left;vertical-align:top}
+th{background:#eef2ff}
+.step{display:inline-block;background:#2563eb;color:#fff;border-radius:50%;width:32px;height:32px;text-align:center;line-height:32px;margin-right:8px}
+.flow{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:20px 0}
+.box{border:2px solid #cbd5e1;border-radius:10px;padding:13px 18px;background:#f8fafc;text-align:center;font-weight:bold}
+.arrow{font-size:1.5rem}
+.small{font-size:.92rem;color:#6b7280}
+li{margin:7px 0}
+footer{padding:0 20px 40px;color:#6b7280}
+</style>
+</head>
+<body>
+
+<header>
+<div class="wrap">
+<h1>Guía: conectar Backend, MySQL, GitHub y Vista</h1>
+<p>Configuración del entorno para trabajar con Spring Boot, Docker, MySQL, Git Bash y una vista web.</p>
+</div>
+</header>
+
+<main>
+
+<section>
+<h2>🎯 ¿Qué vamos a conectar?</h2>
+<div class="flow">
+<div class="box">GitHub<br><span class="small">Código</span></div>
+<div class="arrow">→</div>
+<div class="box">Proyecto local<br><span class="small">Git Bash</span></div>
+<div class="arrow">→</div>
+<div class="box">Vista<br><span class="small">HTML / JS</span></div>
+<div class="arrow">→</div>
+<div class="box">Backend<br><span class="small">Spring Boot</span></div>
+<div class="arrow">→</div>
+<div class="box">MySQL<br><span class="small">Docker</span></div>
+</div>
+<div class="note"><strong>Idea principal:</strong> la vista no se conecta directamente a MySQL. La vista se comunica con el Backend mediante HTTP. El Backend se comunica con MySQL.</div>
+</section>
+
+<section>
+<h2><span class="step">1</span>Variables que debemos configurar</h2>
+<p>Para que todos trabajemos con una configuración común, revisen estos valores antes de ejecutar el proyecto.</p>
+
+<table>
+<tr><th>Variable / dato</th><th>Valor</th><th>¿Para qué sirve?</th></tr>
+<tr><td>Motor</td><td><code>MySQL</code></td><td>Motor de base de datos utilizado.</td></tr>
+<tr><td>Host</td><td><code>localhost</code></td><td>Indica que MySQL está disponible desde la computadora local.</td></tr>
+<tr><td>Puerto</td><td><code>3306</code></td><td>Puerto utilizado para acceder a MySQL.</td></tr>
+<tr><td>Base de datos</td><td><code>clase</code></td><td>Nombre de la base que utilizará la aplicación.</td></tr>
+<tr><td>Usuario</td><td><code>alumno</code></td><td>Usuario con el que la aplicación se conecta a MySQL.</td></tr>
+<tr><td>Contraseña</td><td><code>alumno</code></td><td>Contraseña del usuario de la aplicación.</td></tr>
+<tr><td>Usuario root</td><td><code>root</code></td><td>Usuario administrador de MySQL.</td></tr>
+<tr><td>Contraseña root</td><td><code>root</code></td><td>Contraseña del usuario root.</td></tr>
+</table>
+
+<div class="warning"><strong>Importante: el puerto también debe estar configurado.</strong> No alcanza con indicar usuario, contraseña y base de datos. El Backend necesita saber en qué host y puerto encontrar MySQL.</div>
+</section>
+
+<section>
+<h2><span class="step">2</span>Configuración de Docker</h2>
+<p>El archivo <code>docker-compose.yml</code> debe contener la configuración de MySQL.</p>
+
+<pre><code>services:
+  mysql:
+    image: mysql:8.4
+    container_name: mysql-clase
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: clase
+      MYSQL_USER: alumno
+      MYSQL_PASSWORD: alumno
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:</code></pre>
+
+<h3>¿Qué significa <code>3306:3306</code>?</h3>
+<p>La primera parte corresponde al <strong>puerto de la computadora (host)</strong> y la segunda al <strong>puerto dentro del contenedor</strong>.</p>
+
+<pre><code>"3306:3306"
+   │     │
+   │     └── Puerto de MySQL dentro del contenedor
+   └──────── Puerto disponible desde Windows</code></pre>
+
+<div class="ok"><strong>Para este proyecto:</strong> Windows → <code>localhost:3306</code> → Docker → MySQL.</div>
+
+<h3>Levantar MySQL</h3>
+<pre><code>docker compose up -d</code></pre>
+
+<h3>Comprobar el contenedor</h3>
+<pre><code>docker ps</code></pre>
+
+<p>Debe aparecer <code>mysql-clase</code> ejecutándose.</p>
+</section>
+
+<section>
+<h2><span class="step">3</span>Configuración del Backend</h2>
+<p>El Backend debe utilizar los mismos datos definidos en Docker. Por ejemplo, en <code>application.yaml</code>:</p>
+
+<pre><code>spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/clase
+    username: alumno
+    password: alumno
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true</code></pre>
+
+<table>
+<tr><th>Parte</th><th>Valor</th></tr>
+<tr><td>Servidor</td><td><code>localhost</code></td></tr>
+<tr><td>Puerto MySQL</td><td><code>3306</code></td></tr>
+<tr><td>Base</td><td><code>clase</code></td></tr>
+<tr><td>Usuario</td><td><code>alumno</code></td></tr>
+<tr><td>Contraseña</td><td><code>alumno</code></td></tr>
+</table>
+
+<div class="danger"><strong>Error frecuente:</strong> si Docker está configurado con <code>3306:3306</code>, pero en el Backend se coloca otro puerto, la aplicación no podrá conectarse a MySQL.</div>
+</section>
+
+<section>
+<h2><span class="step">4</span>Configurar Git Bash</h2>
+<h3>4.1 Abrir Git Bash</h3>
+<ol>
+<li>Instalar <strong>Git for Windows</strong>.</li>
+<li>Abrir la carpeta donde está el proyecto.</li>
+<li>Hacer clic derecho dentro de la carpeta y seleccionar <strong>Open Git Bash here</strong>, si aparece esa opción.</li>
+</ol>
+
+<h3>4.2 Comprobar Git</h3>
+<pre><code>git --version</code></pre>
+
+<h3>4.3 Configurar nombre y correo</h3>
+<p>Utilicen el nombre y correo asociados a su cuenta de GitHub:</p>
+<pre><code>git config --global user.name "Tu Nombre"
+git config --global user.email "tu-correo@example.com"</code></pre>
+
+<h3>4.4 Verificar la configuración</h3>
+<pre><code>git config --global --list</code></pre>
+</section>
+
+<section>
+<h2><span class="step">5</span>Clonar el repositorio desde GitHub</h2>
+<p>Si el repositorio ya existe en GitHub y todavía no lo tienen en la computadora:</p>
+
+<pre><code>git clone URL_DEL_REPOSITORIO</code></pre>
+
+<p>Luego entrar a la carpeta:</p>
+<pre><code>cd nombre-del-proyecto</code></pre>
+
+<p>Comprobar que Git reconoce el proyecto:</p>
+<pre><code>git status</code></pre>
+
+<div class="ok">Si aparece información de la rama y del estado del repositorio, están trabajando dentro de un repositorio Git.</div>
+</section>
+
+<section>
+<h2><span class="step">6</span>Subir cambios a GitHub</h2>
+<p>Después de modificar el código:</p>
+
+<h3>6.1 Ver qué cambió</h3>
+<pre><code>git status</code></pre>
+
+<h3>6.2 Agregar los archivos</h3>
+<pre><code>git add .</code></pre>
+
+<h3>6.3 Crear el commit</h3>
+<pre><code>git commit -m "Actualización del proyecto"</code></pre>
+
+<h3>6.4 Subir a GitHub</h3>
+<pre><code>git push</code></pre>
+
+<div class="note"><strong>Secuencia para recordar:</strong></div>
+<pre><code>git status
+git add .
+git commit -m "mensaje"
+git push</code></pre>
+
+<div class="warning"><strong>No confundir:</strong> <code>git add .</code> prepara los cambios; <code>git commit</code> los guarda en el historial local; <code>git push</code> los envía a GitHub.</div>
+</section>
+
+<section>
+<h2><span class="step">7</span>Conectar la Vista con el Backend</h2>
+<p>La vista (HTML + JavaScript) debe comunicarse con los endpoints de la API del Backend.</p>
+
+<div class="note"><strong>Importante:</strong> la Vista → Backend → Base de datos. No hacemos Vista → Base de datos directamente.</div>
+
+<h3>7.1 El Backend debe estar ejecutándose</h3>
+<p>Por ejemplo, si Spring Boot está levantado en el puerto <code>8080</code>, la API estará disponible en:</p>
+
+<pre><code>http://localhost:8080</code></pre>
+
+<p>Si tenemos un controlador con un endpoint:</p>
+
+<pre><code>@GetMapping("/elementos")
+public List&lt;Elemento&gt; listar() {
+    return repository.findAll();
+}</code></pre>
+
+<p>La URL de la API será:</p>
+
+<pre><code>http://localhost:8080/elementos</code></pre>
+
+<h3>7.2 Llamar al Backend desde JavaScript</h3>
+<p>Ejemplo utilizando <code>fetch</code>:</p>
+
+<pre><code>fetch("http://localhost:8080/elementos")
+  .then(response =&gt; response.json())
+  .then(data =&gt; {
+      console.log(data);
+  })
+  .catch(error =&gt; {
+      console.error("Error:", error);
+  });</code></pre>
+
+<h3>7.3 Mostrar los datos en la Vista</h3>
+
+<pre><code>&lt;ul id="lista"&gt;&lt;/ul&gt;
+
+&lt;script&gt;
+fetch("http://localhost:8080/elementos")
+  .then(response =&gt; response.json())
+  .then(data =&gt; {
+
+      const lista = document.getElementById("lista");
+
+      data.forEach(elemento =&gt; {
+          const li = document.createElement("li");
+          li.textContent = elemento.nombre;
+          lista.appendChild(li);
+      });
+
+  })
+  .catch(error =&gt; {
+      console.error("No se pudo conectar con el Backend:", error);
+  });
+&lt;/script&gt;</code></pre>
+</section>
+
+<section>
+<h2><span class="step">8</span>Probar la conexión completa</h2>
+
+<div class="flow">
+<div class="box">1. Docker<br><span class="small">MySQL</span></div>
+<div class="arrow">→</div>
+<div class="box">2. Spring Boot<br><span class="small">Backend</span></div>
+<div class="arrow">→</div>
+<div class="box">3. Postman<br><span class="small">API</span></div>
+<div class="arrow">→</div>
+<div class="box">4. HTML + JS<br><span class="small">Vista</span></div>
+</div>
+
+<h3>Orden recomendado</h3>
+<ol>
+<li>Levantar Docker y comprobar MySQL con <code>docker ps</code>.</li>
+<li>Iniciar el Backend desde IntelliJ.</li>
+<li>Comprobar que el Backend conecta correctamente con MySQL.</li>
+<li>Probar los endpoints con Postman.</li>
+<li>Abrir la Vista.</li>
+<li>Desde JavaScript, llamar al endpoint mediante <code>fetch()</code>.</li>
+<li>Verificar los datos en el navegador.</li>
+</ol>
+
+<div class="ok"><strong>Si todo funciona:</strong> la Vista realiza una petición HTTP → Spring Boot recibe la petición → el Backend consulta MySQL → obtiene los datos → devuelve JSON → JavaScript recibe el JSON → la Vista muestra la información.</div>
+</section>
+
+<section>
+<h2><span class="step">9</span>Errores frecuentes</h2>
+<table>
+<tr><th>Problema</th><th>Qué revisar</th></tr>
+<tr><td>Backend no conecta con MySQL</td><td>Host, puerto <code>3306</code>, usuario, contraseña y nombre de la base.</td></tr>
+<tr><td>Docker no muestra MySQL</td><td>Ejecutar <code>docker ps</code> y revisar <code>docker compose up -d</code>.</td></tr>
+<tr><td><code>Connection refused</code></td><td>Verificar que MySQL esté levantado y que el puerto sea correcto.</td></tr>
+<tr><td>La Vista no obtiene datos</td><td>Verificar que Spring Boot esté ejecutándose y que la URL del endpoint sea correcta.</td></tr>
+<tr><td>Error CORS</td><td>Revisar la configuración de CORS del Backend cuando la Vista y API se sirven desde orígenes diferentes.</td></tr>
+<tr><td><code>git push</code> falla</td><td>Verificar que estén dentro del repositorio, la rama correcta y la autenticación con GitHub.</td></tr>
+</table>
+</section>
+
+<section>
+<h2>✅ Checklist final</h2>
+<ul>
+<li>☐ Docker Desktop está funcionando.</li>
+<li>☐ <code>docker ps</code> muestra <code>mysql-clase</code>.</li>
+<li>☐ El puerto <code>3306</code> está configurado.</li>
+<li>☐ La base se llama <code>clase</code>.</li>
+<li>☐ El usuario es <code>alumno</code>.</li>
+<li>☐ La contraseña es <code>alumno</code>.</li>
+<li>☐ <code>application.yaml</code> tiene los mismos datos.</li>
+<li>☐ <code>git --version</code> funciona.</li>
+<li>☐ El proyecto está conectado con GitHub.</li>
+<li>☐ Puedo ejecutar <code>git add .</code>, <code>git commit</code> y <code>git push</code>.</li>
+<li>☐ El Backend funciona en <code>localhost:8080</code>.</li>
+<li>☐ Puedo probar la API con Postman.</li>
+<li>☐ La Vista puede llamar al Backend mediante <code>fetch()</code>.</li>
+</ul>
+</section>
+
+</main>
+
+<footer>
+<p>Material de apoyo para la clase. Los nombres de endpoints pueden variar según el proyecto utilizado.</p>
+</footer>
+
+</body>
+</html>

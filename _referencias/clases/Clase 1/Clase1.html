@@ -1,0 +1,2093 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+```
+<meta charset="UTF-8">
+
+<title>Aprendiendo HTML desde cero</title>
+
+<style>
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background-color: #f4f6f8;
+        color: #333;
+        line-height: 1.6;
+    }
+
+    header {
+        background-color: #263238;
+        color: white;
+        padding: 40px 20px;
+        text-align: center;
+    }
+
+    header h1 {
+        margin-bottom: 10px;
+    }
+
+    main {
+        max-width: 1000px;
+        margin: 30px auto;
+        padding: 0 20px;
+    }
+
+    .introduccion {
+        background-color: white;
+        padding: 25px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+    }
+
+    .etiqueta {
+        background-color: white;
+        margin-bottom: 30px;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .etiqueta h2 {
+        color: #1565c0;
+        border-bottom: 2px solid #e0e0e0;
+        padding-bottom: 10px;
+    }
+
+    .que-es {
+        background-color: #e3f2fd;
+        border-left: 5px solid #1976d2;
+        padding: 15px;
+        margin: 15px 0;
+    }
+
+    .para-que {
+        background-color: #f1f8e9;
+        border-left: 5px solid #689f38;
+        padding: 15px;
+        margin: 15px 0;
+    }
+
+    .codigo {
+        background-color: #263238;
+        color: white;
+        padding: 20px;
+        border-radius: 6px;
+        overflow-x: auto;
+        margin-top: 15px;
+    }
+
+    .codigo pre {
+        margin: 0;
+        font-family: Consolas, monospace;
+    }
+
+    .resultado {
+        background-color: #fff8e1;
+        border-left: 5px solid #ffb300;
+        padding: 20px;
+        margin-top: 15px;
+    }
+
+    .resultado-titulo {
+        font-weight: bold;
+        color: #e65100;
+        margin-bottom: 10px;
+    }
+
+    code {
+        background-color: #eeeeee;
+        padding: 2px 5px;
+        border-radius: 4px;
+        color: #c62828;
+    }
+
+    .codigo code {
+        background-color: transparent;
+        color: white;
+        padding: 0;
+    }
+
+    input,
+    textarea,
+    select,
+    button {
+        font-size: 16px;
+        padding: 8px;
+    }
+
+    button {
+        cursor: pointer;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th,
+    td {
+        border: 1px solid #999;
+        padding: 10px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #eeeeee;
+    }
+
+    footer {
+        background-color: #263238;
+        color: white;
+        text-align: center;
+        padding: 25px;
+        margin-top: 40px;
+    }
+
+    .importante {
+        background-color: #ffebee;
+        border-left: 5px solid #e53935;
+        padding: 15px;
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+<header>
+
+```
+<h1>Aprendiendo HTML desde cero</h1>
+
+<p>
+    Guía sencilla para conocer las principales etiquetas HTML
+</p>
+```
+
+</header>
+
+<main>
+
+```
+<!-- INTRODUCCIÓN -->
+
+<div class="introduccion">
+
+    <h2>¿Qué es HTML?</h2>
+
+    <p>
+        HTML significa
+        <strong>HyperText Markup Language</strong>.
+    </p>
+
+    <p>
+        HTML es el lenguaje que utilizamos para
+        <strong>crear la estructura de una página web</strong>.
+    </p>
+
+    <p>
+        Con HTML podemos indicar que una parte de la página
+        es un título, otra es un párrafo, otra es una imagen,
+        otra es un formulario, etc.
+    </p>
+
+    <p>
+        Una página HTML está formada por
+        <strong>etiquetas</strong>.
+    </p>
+
+    <div class="importante">
+
+        <strong>Idea fundamental:</strong>
+
+        <p>
+            HTML define principalmente
+            <strong>qué elementos tiene una página</strong>.
+        </p>
+
+        <p>
+            CSS define
+            <strong>cómo se ven esos elementos</strong>.
+        </p>
+
+        <p>
+            JavaScript define
+            <strong>qué comportamiento tienen</strong>.
+        </p>
+
+    </div>
+
+</div>
+
+
+
+<!-- HTML -->
+
+<section class="etiqueta">
+
+    <h2>1. &lt;html&gt;</h2>
+
+    <div class="que-es">
+
+        <strong>¿Qué es?</strong>
+
+        <p>
+            Es la etiqueta principal de un documento HTML.
+        </p>
+
+        <p>
+            Todo el contenido de una página HTML se encuentra
+            dentro de esta etiqueta.
+        </p>
+
+    </div>
+
+    <div class="para-que">
+
+        <strong>¿Para qué sirve?</strong>
+
+        <p>
+            Sirve para indicar al navegador que todo lo que
+            está dentro del elemento corresponde a un documento HTML.
+        </p>
+
+    </div>
+
+    <h3>Código</h3>
+
+    <div class="codigo">
+```
+
+<pre><code>&lt;html&gt;
+
+    Contenido de la página
+
+&lt;/html&gt;</code></pre>
+
+```
+    </div>
+
+    <div class="resultado">
+
+        <div class="resultado-titulo">
+            Resultado
+        </div>
+
+        <p>
+            La etiqueta no genera algo visible por sí misma.
+            Define el comienzo y el final del documento HTML.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- HEAD -->
+
+<section class="etiqueta">
+
+    <h2>2. &lt;head&gt;</h2>
+
+    <div class="que-es">
+
+        <strong>¿Qué es?</strong>
+
+        <p>
+            Es la sección que contiene información sobre
+            la página web.
+        </p>
+
+    </div>
+
+    <div class="para-que">
+
+        <strong>¿Para qué sirve?</strong>
+
+        <p>
+            Se utiliza para colocar configuraciones,
+            el título de la página, estilos CSS y otra información
+            que necesita el navegador.
+        </p>
+
+    </div>
+
+    <h3>Código</h3>
+
+    <div class="codigo">
+```
+
+<pre><code>&lt;head&gt;
+
+    &lt;title&gt;Mi página&lt;/title&gt;
+
+&lt;/head&gt;</code></pre>
+
+```
+    </div>
+
+    <div class="resultado">
+
+        <div class="resultado-titulo">
+            Resultado
+        </div>
+
+        <p>
+            El contenido de <code>&lt;head&gt;</code>
+            normalmente no aparece directamente en la página.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- TITLE -->
+
+<section class="etiqueta">
+
+    <h2>3. &lt;title&gt;</h2>
+
+    <div class="que-es">
+
+        <strong>¿Qué es?</strong>
+
+        <p>
+            Define el título de la página web.
+        </p>
+
+    </div>
+
+    <div class="para-que">
+
+        <strong>¿Para qué sirve?</strong>
+
+        <p>
+            Sirve para definir el texto que aparece
+            en la pestaña del navegador.
+        </p>
+
+    </div>
+
+    <div class="codigo">
+```
+
+<pre><code>&lt;title&gt;
+    Mi primera página
+&lt;/title&gt;</code></pre>
+
+```
+    </div>
+
+    <div class="resultado">
+
+        <div class="resultado-titulo">
+            Resultado
+        </div>
+
+        <p>
+            Mirá la pestaña del navegador.
+            Allí debería aparecer:
+        </p>
+
+        <strong>Mi primera página</strong>
+
+    </div>
+
+</section>
+
+
+
+<!-- BODY -->
+
+<section class="etiqueta">
+
+    <h2>4. &lt;body&gt;</h2>
+
+    <div class="que-es">
+
+        <strong>¿Qué es?</strong>
+
+        <p>
+            Es el cuerpo de la página HTML.
+        </p>
+
+    </div>
+
+    <div class="para-que">
+
+        <strong>¿Para qué sirve?</strong>
+
+        <p>
+            Dentro de <code>&lt;body&gt;</code> colocamos
+            todo aquello que queremos mostrar al usuario.
+        </p>
+
+    </div>
+
+    <div class="codigo">
+```
+
+<pre><code>&lt;body&gt;
+
+    &lt;h1&gt;Hola mundo&lt;/h1&gt;
+
+    &lt;p&gt;Mi primera página web&lt;/p&gt;
+
+&lt;/body&gt;</code></pre>
+
+```
+    </div>
+
+    <div class="resultado">
+
+        <div class="resultado-titulo">
+            Resultado
+        </div>
+
+        <h1>Hola mundo</h1>
+
+        <p>
+            Mi primera página web
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- H1 -->
+
+<section class="etiqueta">
+
+    <h2>5. &lt;h1&gt; hasta &lt;h6&gt;</h2>
+
+    <div class="que-es">
+
+        <strong>¿Qué son?</strong>
+
+        <p>
+            Son etiquetas que permiten crear títulos
+            y subtítulos.
+        </p>
+
+    </div>
+
+    <div class="para-que">
+
+        <strong>¿Para qué sirven?</strong>
+
+        <p>
+            Sirven para organizar jerárquicamente
+            los títulos de una página.
+        </p>
+
+        <p>
+            <code>&lt;h1&gt;</code> es el título de mayor importancia
+            y <code>&lt;h6&gt;</code> el de menor nivel.
+        </p>
+
+    </div>
+
+    <div class="codigo">
+```
+
+<pre><code>&lt;h1&gt;Título principal&lt;/h1&gt;
+
+&lt;h2&gt;Subtítulo&lt;/h2&gt;
+
+&lt;h3&gt;Título secundario&lt;/h3&gt;</code></pre>
+
+```
+    </div>
+
+    <div class="resultado">
+
+        <div class="resultado-titulo">
+            Resultado
+        </div>
+
+        <h1>Título principal</h1>
+
+        <h2>Subtítulo</h2>
+
+        <h3>Título secundario</h3>
+
+    </div>
+
+</section>
+
+
+
+<!-- P -->
+
+<section class="etiqueta">
+
+    <h2>6. &lt;p&gt;</h2>
+
+    <div class="que-es">
+
+        <strong>¿Qué es?</strong>
+
+        <p>
+            <code>&lt;p&gt;</code> significa párrafo.
+        </p>
+
+    </div>
+
+    <div class="para-que">
+
+        <strong>¿Para qué sirve?</strong>
+
+        <p>
+            Se utiliza para escribir bloques de texto.
+        </p>
+
+    </div>
+
+    <div class="codigo">
+```
+
+<pre><code>&lt;p&gt;
+    HTML es un lenguaje de marcado.
+&lt;/p&gt;</code></pre>
+
+```
+    </div>
+
+    <div class="resultado">
+
+        <div class="resultado-titulo">
+            Resultado
+        </div>
+
+        <p>
+            HTML es un lenguaje de marcado.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- A -->
+
+<section class="etiqueta">
+
+    <h2>7. &lt;a&gt;</h2>
+
+    <div class="que-es">
+
+        <strong>¿Qué es?</strong>
+
+        <p>
+            Es la etiqueta utilizada para crear enlaces.
+        </p>
+
+    </div>
+
+    <div class="para-que">
+
+        <strong>¿Para qué sirve?</strong>
+
+        <p>
+            Permite que el usuario pueda ir desde una página
+            hacia otra página o recurso.
+        </p>
+
+    </div>
+
+    <div class="codigo">
+```
+
+<pre><code>&lt;a href="https://www.google.com"&gt;
+    Ir a Google
+&lt;/a&gt;</code></pre>
+
+```
+    </div>
+
+    <div class="resultado">
+
+        <div class="resultado-titulo">
+            Resultado
+        </div>
+
+        <a href="https://www.google.com" target="_blank">
+            Ir a Google
+        </a>
+
+    </div>
+
+    <p>
+        El atributo <code>href</code> indica
+        hacia dónde debe dirigirnos el enlace.
+    </p>
+
+</section>
+
+
+
+<!-- IMG -->
+
+<section class="etiqueta">
+
+    <h2>8. &lt;img&gt;</h2>
+
+    <div class="que-es">
+
+        <strong>¿Qué es?</strong>
+
+        <p>
+            Es la etiqueta utilizada para mostrar imágenes.
+        </p>
+
+    </div>
+
+    <div class="para-que">
+
+        <strong>¿Para qué sirve?</strong>
+
+        <p>
+            Permite incorporar una imagen dentro de una página web.
+        </p>
+
+    </div>
+
+    <div class="codigo">
+```
+
+<pre><code>&lt;img
+    src="https://picsum.photos/300/150"
+    alt="Imagen de ejemplo"
+&gt;</code></pre>
+
+```
+    </div>
+
+    <div class="resultado">
+
+        <div class="resultado-titulo">
+            Resultado
+        </div>
+
+        <img
+            src="https://picsum.photos/300/150"
+            alt="Imagen de ejemplo"
+        >
+
+    </div>
+
+    <p>
+        <strong>src</strong> indica dónde está la imagen.
+    </p>
+
+    <p>
+        <strong>alt</strong> contiene una descripción
+        de la imagen.
+    </p>
+
+</section>
+
+
+
+<!-- UL -->
+
+<section class="etiqueta">
+
+    <h2>9. &lt;ul&gt; y &lt;li&gt;</h2>
+
+    <div class="que-es">
+
+        <strong>¿Qué son?</strong>
+
+        <p>
+            <code>&lt;ul&gt;</code> crea una lista sin orden.
+        </p>
+
+        <p>
+            <code>&lt;li&gt;</code> representa cada elemento
+            de la lista.
+        </p>
+
+    </div>
+
+    <div class="para-que">
+
+        <strong>¿Para qué sirven?</strong>
+
+        <p>
+            Permiten mostrar información mediante una lista
+            de elementos.
+        </p>
+
+    </div>
+
+    <div class="codigo">
+```
+
+<pre><code>&lt;ul&gt;
+
+    &lt;li&gt;HTML&lt;/li&gt;
+    &lt;li&gt;CSS&lt;/li&gt;
+    &lt;li&gt;JavaScript&lt;/li&gt;
+
+&lt;/ul&gt;</code></pre>
+
+```
+    </div>
+
+    <div class="resultado">
+
+        <div class="resultado-titulo">
+            Resultado
+        </div>
+
+        <ul>
+
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>JavaScript</li>
+
+        </ul>
+
+    </div>
+
+</section>
+
+
+
+<!-- OL -->
+
+<section class="etiqueta">
+
+    <h2>10. &lt;ol&gt;</h2>
+
+    <div class="que-es">
+
+        <strong>¿Qué es?</strong>
+
+        <p>
+            Es una lista ordenada.
+        </p>
+
+    </div>
+
+    <div class="para-que">
+
+        <strong>¿Para qué sirve?</strong>
+
+        <p>
+            Sirve cuando el orden de los elementos es importante.
+        </p>
+
+    </div>
+
+    <div class="codigo">
+```
+
+<pre><code>&lt;ol&gt;
+
+    &lt;li&gt;Crear HTML&lt;/li&gt;
+    &lt;li&gt;Crear CSS&lt;/li&gt;
+    &lt;li&gt;Agregar JavaScript&lt;/li&gt;
+
+&lt;/ol&gt;</code></pre>
+
+```
+    </div>
+
+    <div class="resultado">
+
+        <div class="resultado-titulo">
+            Resultado
+        </div>
+
+        <ol>
+
+            <li>Crear HTML</li>
+            <li>Crear CSS</li>
+            <li>Agregar JavaScript</li>
+
+        </ol>
+
+    </div>
+
+</section>
+
+
+
+<!-- DIV -->
+
+<section class="etiqueta">
+
+    <h2>11. &lt;div&gt;</h2>
+
+    <div class="que-es">
+
+        <strong>¿Qué es?</strong>
+
+        <p>
+            Es un contenedor genérico.
+        </p>
+
+    </div>
+
+    <div class="para-que">
+
+        <strong>¿Para qué sirve?</strong>
+
+        <p>
+            Sirve para agrupar diferentes elementos.
+        </p>
+
+        <p>
+            Es muy utilizado para organizar la estructura
+            de una página y aplicar CSS.
+        </p>
+
+    </div>
+
+    <div class="codigo">
+```
+
+<pre><code>&lt;div&gt;
+
+    &lt;h2&gt;Alumno&lt;/h2&gt;
+
+    &lt;p&gt;Nombre: Ana&lt;/p&gt;
+
+&lt;/div&gt;</code></pre>
+
+```
+    </div>
+
+    <div class="resultado">
+
+        <div class="resultado-titulo">
+            Resultado
+        </div>
+
+        <div>
+
+            <h3>Alumno</h3>
+
+            <p>
+                Nombre: Ana
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- FORM -->
+
+<section class="etiqueta">
+
+    <h2>12. &lt;form&gt;</h2>
+
+    <div class="que-es">
+
+        <strong>¿Qué es?</strong>
+
+        <p>
+            Es la etiqueta que permite crear formularios.
+        </p>
+
+    </div>
+
+    <div class="para-que">
+
+        <strong>¿Para qué sirve?</strong>
+
+        <p>
+            Sirve para permitir que el usuario ingrese
+            información y posteriormente enviarla a un servidor.
+        </p>
+
+    </div>
+
+    <div class="codigo">
+```
+
+<pre><code>&lt;form&gt;
+
+    &lt;label&gt;Nombre:&lt;/label&gt;
+
+    &lt;input type="text"&gt;
+
+    &lt;button&gt;Enviar&lt;/button&gt;
+
+&lt;/form&gt;</code></pre>
+
+```
+    </div>
+
+    <div class="resultado">
+
+        <div class="resultado-titulo">
+            Resultado
+        </div>
+
+        <form>
+
+            <label>
+                Nombre:
+            </label>
+
+            <input type="text">
+
+            <button type="button">
+                Enviar
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+
+<!-- LABEL -->
+
+<section class="etiqueta">
+
+    <h2>13. &lt;label&gt; ⭐ MUY IMPORTANTE</h2>
+
+    <div class="que-es">
+
+        <strong>¿Qué es?</strong>
+
+        <p>
+            <code>&lt;label&gt;</code> es una etiqueta que
+            identifica o describe un campo de un formulario.
+        </p>
+
+        <p>
+            Es el texto que le indica al usuario
+            <strong>qué debe ingresar o seleccionar</strong>.
+        </p>
+
+    </div>
+
+    <div class="para-que">
+
+        <strong>¿Para qué sirve?</strong>
+
+        <p>
+            Sirve para relacionar un texto con un campo
+            del formulario.
+        </p>
+
+        <p>
+            Esto hace que el formulario sea más claro
+            y también mejora la accesibilidad.
+        </p>
+
+    </div>
+
+    <h3>Código</h3>
+
+    <div class="codigo">
+```
+
+<pre><code>&lt;label for="nombre"&gt;
+    Nombre:
+&lt;/label&gt;
+
+&lt;input
+    type="text"
+    id="nombre"
+&gt;</code></pre>
+
+```
+    </div>
+
+    <div class="resultado">
+
+        <div class="resultado-titulo">
+            Resultado
+        </div>
+
+        <label for="nombreEjemplo">
+            Nombre:
+        </label>
+
+        <input
+            type="text"
+            id="nombreEjemplo"
+        >
+
+    </div>
+
+    <div class="explicacion">
+
+        <h3>¿Qué significa for="nombre"?</h3>
+
+        <p>
+            El atributo <code>for</code> del
+            <code>&lt;label&gt;</code> debe coincidir
+            con el <code>id</code> del campo.
+        </p>
+
+        <p>
+            Por ejemplo:
+        </p>
+
+        <p>
+            <code>for="nombre"</code>
+        </p>
+
+        <p>
+            debe coincidir con:
+        </p>
+
+        <p>
+            <code>id="nombre"</code>
+        </p>
+
+        <p>
+            De esta manera el navegador sabe que el
+            label "Nombre" corresponde al campo.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- INPUT -->
+
+<section class="etiqueta">
+
+    <h2>14. &lt;input&gt;</h2>
+
+    <div class="que-es">
+
+        <strong>¿Qué es?</strong>
+
+        <p>
+            Es uno de los elementos más utilizados
+            en los formularios.
+        </p>
+
+    </div>
+
+    <div class="para-que">
+
+        <strong>¿Para qué sirve?</strong>
+
+        <p>
+            Permite que el usuario ingrese o seleccione información.
+        </p>
+
+        <p>
+            Su comportamiento depende del atributo
+            <code>type</code>.
+        </p>
+
+    </div>
+
+    <h3>Texto</h3>
+
+    <div class="codigo">
+```
+
+<pre><code>&lt;input type="text"&gt;</code></pre>
+
+```
+    </div>
+
+    <div class="resultado">
+
+        <input
+            type="text"
+            placeholder="Escribí tu nombre"
+        >
+
+    </div>
+
+
+    <h3>Email</h3>
+
+    <div class="codigo">
+```
+
+<pre><code>&lt;input type="email"&gt;</code></pre>
+
+```
+    </div>
+
+    <div class="resultado">
+
+        <input
+            type="email"
+            placeholder="Escribí tu email"
+        >
+
+    </div>
+
+
+    <h3>Password</h3>
+
+    <div class="codigo">
+```
+
+<pre><code>&lt;input type="password"&gt;</code></pre>
+
+```
+    </div>
+
+    <div class="resultado">
+
+        <input
+            type="password"
+            placeholder="Escribí tu contraseña"
+        >
+
+    </div>
+
+
+    <h3>Número</h3>
+
+    <div class="codigo">
+```
+
+<pre><code>&lt;input type="number"&gt;</code></pre>
+
+```
+    </div>
+
+    <div class="resultado">
+
+        <input type="number">
+
+    </div>
+
+</section>
+
+
+
+<!-- CHECKBOX -->
+
+<section class="etiqueta">
+
+    <h2>15. Checkbox</h2>
+
+    <div class="que-es">
+
+        <strong>¿Qué es?</strong>
+
+        <p>
+            Es un campo que permite marcar o desmarcar
+            una opción.
+        </p>
+
+    </div>
+
+    <div class="para-que">
+
+        <strong>¿Para qué sirve?</strong>
+
+        <p>
+            Se utiliza cuando el usuario puede elegir
+            una o varias opciones.
+        </p>
+
+    </div>
+
+    <div class="codigo">
+```
+
+<pre><code>&lt;input
+    type="checkbox"
+    id="terminos"
+&gt;
+
+&lt;label for="terminos"&gt;
+    Acepto los términos
+&lt;/label&gt;</code></pre>
+
+```
+    </div>
+
+    <div class="resultado">
+
+        <input
+            type="checkbox"
+            id="terminos"
+        >
+
+        <label for="terminos">
+            Acepto los términos
+        </label>
+
+    </div>
+
+</section>
+
+
+
+<!-- RADIO -->
+
+<section class="etiqueta">
+
+    <h2>16. Radio Button</h2>
+
+    <div class="que-es">
+
+        <strong>¿Qué es?</strong>
+
+        <p>
+            Es un tipo de input que permite elegir
+            una sola opción entre varias.
+        </p>
+
+    </div>
+
+    <div class="para-que">
+
+        <strong>¿Para qué sirve?</strong>
+
+        <p>
+            Se utiliza cuando el usuario debe seleccionar
+            una única opción.
+        </p>
+
+    </div>
+
+    <div class="codigo">
+```
+
+<pre><code>&lt;input
+    type="radio"
+    name="lenguaje"
+    id="java"
+&gt;
+
+&lt;label for="java"&gt;
+    Java
+&lt;/label&gt;
+
+&lt;input
+    type="radio"
+    name="lenguaje"
+    id="python"
+&gt;
+
+&lt;label for="python"&gt;
+    Python
+&lt;/label&gt;</code></pre>
+
+```
+    </div>
+
+    <div class="resultado">
+
+        <input
+            type="radio"
+            name="lenguaje"
+            id="javaEjemplo"
+        >
+
+        <label for="javaEjemplo">
+            Java
+        </label>
+
+        <br>
+
+        <input
+            type="radio"
+            name="lenguaje"
+            id="pythonEjemplo"
+        >
+
+        <label for="pythonEjemplo">
+            Python
+        </label>
+
+    </div>
+
+    <div class="explicacion">
+
+        <strong>¿Por qué usamos name?</strong>
+
+        <p>
+            Los radio buttons que tienen el mismo
+            <code>name</code> forman parte del mismo grupo.
+        </p>
+
+        <p>
+            Por eso solamente podemos seleccionar uno.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- SELECT -->
+
+<section class="etiqueta">
+
+    <h2>17. &lt;select&gt; y &lt;option&gt;</h2>
+
+    <div class="que-es">
+
+        <strong>¿Qué son?</strong>
+
+        <p>
+            <code>&lt;select&gt;</code> crea una lista desplegable.
+        </p>
+
+        <p>
+            <code>&lt;option&gt;</code> representa cada opción
+            disponible.
+        </p>
+
+    </div>
+
+    <div class="para-que">
+
+        <strong>¿Para qué sirven?</strong>
+
+        <p>
+            Permiten que el usuario seleccione una opción
+            de una lista.
+        </p>
+
+    </div>
+
+    <div class="codigo">
+```
+
+<pre><code>&lt;select&gt;
+
+    &lt;option&gt;Java&lt;/option&gt;
+    &lt;option&gt;Python&lt;/option&gt;
+    &lt;option&gt;JavaScript&lt;/option&gt;
+
+&lt;/select&gt;</code></pre>
+
+```
+    </div>
+
+    <div class="resultado">
+
+        <select>
+
+            <option>Java</option>
+            <option>Python</option>
+            <option>JavaScript</option>
+
+        </select>
+
+    </div>
+
+</section>
+
+
+
+<!-- TEXTAREA -->
+
+<section class="etiqueta">
+
+    <h2>18. &lt;textarea&gt;</h2>
+
+    <div class="que-es">
+
+        <strong>¿Qué es?</strong>
+
+        <p>
+            Es un campo de texto que permite escribir
+            varias líneas.
+        </p>
+
+    </div>
+
+    <div class="para-que">
+
+        <strong>¿Para qué sirve?</strong>
+
+        <p>
+            Es útil para comentarios, descripciones,
+            mensajes y textos largos.
+        </p>
+
+    </div>
+
+    <div class="codigo">
+```
+
+<pre><code>&lt;textarea&gt;
+&lt;/textarea&gt;</code></pre>
+
+```
+    </div>
+
+    <div class="resultado">
+
+        <textarea
+            rows="5"
+            cols="50"
+            placeholder="Escribí un comentario..."
+        ></textarea>
+
+    </div>
+
+</section>
+
+
+
+<!-- BUTTON -->
+
+<section class="etiqueta">
+
+    <h2>19. &lt;button&gt;</h2>
+
+    <div class="que-es">
+
+        <strong>¿Qué es?</strong>
+
+        <p>
+            Es un elemento que representa un botón.
+        </p>
+
+    </div>
+
+    <div class="para-que">
+
+        <strong>¿Para qué sirve?</strong>
+
+        <p>
+            Permite que el usuario realice una acción,
+            por ejemplo enviar un formulario o ejecutar
+            una función JavaScript.
+        </p>
+
+    </div>
+
+    <div class="codigo">
+```
+
+<pre><code>&lt;button&gt;
+    Hacer clic
+&lt;/button&gt;</code></pre>
+
+```
+    </div>
+
+    <div class="resultado">
+
+        <button
+            type="button"
+            onclick="alert('¡Hiciste clic en el botón!')"
+        >
+            Hacer clic
+        </button>
+
+    </div>
+
+    <p>
+        En este ejemplo agregamos
+        <code>onclick</code> para mostrar que el botón
+        puede ejecutar una acción.
+    </p>
+
+</section>
+
+
+
+<!-- TABLE -->
+
+<section class="etiqueta">
+
+    <h2>20. &lt;table&gt;, &lt;tr&gt;, &lt;th&gt; y &lt;td&gt;</h2>
+
+    <div class="que-es">
+
+        <strong>¿Qué son?</strong>
+
+        <p>
+            Son etiquetas utilizadas para construir tablas.
+        </p>
+
+    </div>
+
+    <div class="para-que">
+
+        <strong>¿Para qué sirven?</strong>
+
+        <p>
+            Permiten organizar información en filas y columnas.
+        </p>
+
+    </div>
+
+    <div class="codigo">
+```
+
+<pre><code>&lt;table&gt;
+
+    &lt;tr&gt;
+
+        &lt;th&gt;Nombre&lt;/th&gt;
+        &lt;th&gt;Edad&lt;/th&gt;
+
+    &lt;/tr&gt;
+
+    &lt;tr&gt;
+
+        &lt;td&gt;Ana&lt;/td&gt;
+        &lt;td&gt;22&lt;/td&gt;
+
+    &lt;/tr&gt;
+
+&lt;/table&gt;</code></pre>
+
+```
+    </div>
+
+    <div class="resultado">
+
+        <table>
+
+            <tr>
+
+                <th>Nombre</th>
+                <th>Edad</th>
+
+            </tr>
+
+            <tr>
+
+                <td>Ana</td>
+                <td>22</td>
+
+            </tr>
+
+            <tr>
+
+                <td>Juan</td>
+                <td>25</td>
+
+            </tr>
+
+        </table>
+
+    </div>
+
+    <div class="explicacion">
+
+        <p>
+            <code>&lt;table&gt;</code> → crea la tabla.
+        </p>
+
+        <p>
+            <code>&lt;tr&gt;</code> → crea una fila.
+        </p>
+
+        <p>
+            <code>&lt;th&gt;</code> → crea un encabezado.
+        </p>
+
+        <p>
+            <code>&lt;td&gt;</code> → contiene un dato.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- ESTRUCTURA SEMÁNTICA -->
+
+<section class="etiqueta">
+
+    <h2>21. Etiquetas semánticas</h2>
+
+    <div class="que-es">
+
+        <strong>¿Qué significa "semántica"?</strong>
+
+        <p>
+            Significa que la etiqueta nos ayuda a entender
+            qué representa el contenido.
+        </p>
+
+    </div>
+
+    <div class="para-que">
+
+        <strong>¿Para qué sirven?</strong>
+
+        <p>
+            Permiten organizar mejor la estructura de una página
+            y facilitan que los navegadores, buscadores y tecnologías
+            de asistencia entiendan el contenido.
+        </p>
+
+    </div>
+
+    <div class="codigo">
+```
+
+<pre><code>&lt;header&gt;
+
+    Encabezado
+
+&lt;/header&gt;
+
+&lt;nav&gt;
+
+    Menú
+
+&lt;/nav&gt;
+
+&lt;main&gt;
+
+    Contenido principal
+
+    &lt;section&gt;
+
+        Una sección
+
+    &lt;/section&gt;
+
+&lt;/main&gt;
+
+&lt;footer&gt;
+
+    Pie de página
+
+&lt;/footer&gt;</code></pre>
+
+```
+    </div>
+
+    <div class="resultado">
+
+        <div class="resultado-titulo">
+            Estructura conceptual
+        </div>
+
+        <header style="background:#ddd;color:#333;padding:15px;">
+            HEADER
+        </header>
+
+        <nav style="background:#eee;padding:15px;">
+            NAV
+        </nav>
+
+        <main style="background:#fafafa;padding:15px;">
+
+            MAIN
+
+            <section style="background:#e3f2fd;padding:15px;margin-top:10px;">
+                SECTION
+            </section>
+
+        </main>
+
+        <footer style="background:#ddd;color:#333;padding:15px;">
+            FOOTER
+        </footer>
+
+    </div>
+
+    <div class="explicacion">
+
+        <p>
+            <strong>&lt;header&gt;</strong> → encabezado.
+        </p>
+
+        <p>
+            <strong>&lt;nav&gt;</strong> → navegación.
+        </p>
+
+        <p>
+            <strong>&lt;main&gt;</strong> → contenido principal.
+        </p>
+
+        <p>
+            <strong>&lt;section&gt;</strong> → sección de contenido.
+        </p>
+
+        <p>
+            <strong>&lt;footer&gt;</strong> → pie de página.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- RESUMEN -->
+
+<section class="etiqueta">
+
+    <h2>22. Resumen de las etiquetas</h2>
+
+    <p>
+        Estas son algunas de las etiquetas más importantes
+        que deberías conocer al comenzar con HTML.
+    </p>
+
+    <table>
+
+        <tr>
+
+            <th>Etiqueta</th>
+
+            <th>¿Para qué sirve?</th>
+
+            <th>Ejemplo</th>
+
+        </tr>
+
+        <tr>
+
+            <td>&lt;html&gt;</td>
+
+            <td>Documento HTML</td>
+
+            <td>Contenedor principal</td>
+
+        </tr>
+
+        <tr>
+
+            <td>&lt;head&gt;</td>
+
+            <td>Configuración</td>
+
+            <td>Meta información</td>
+
+        </tr>
+
+        <tr>
+
+            <td>&lt;body&gt;</td>
+
+            <td>Contenido visible</td>
+
+            <td>Textos, imágenes, formularios</td>
+
+        </tr>
+
+        <tr>
+
+            <td>&lt;h1&gt; - &lt;h6&gt;</td>
+
+            <td>Títulos</td>
+
+            <td>&lt;h1&gt;Título&lt;/h1&gt;</td>
+
+        </tr>
+
+        <tr>
+
+            <td>&lt;p&gt;</td>
+
+            <td>Párrafos</td>
+
+            <td>&lt;p&gt;Hola&lt;/p&gt;</td>
+
+        </tr>
+
+        <tr>
+
+            <td>&lt;a&gt;</td>
+
+            <td>Enlaces</td>
+
+            <td>Ir a otra página</td>
+
+        </tr>
+
+        <tr>
+
+            <td>&lt;img&gt;</td>
+
+            <td>Imágenes</td>
+
+            <td>Mostrar una imagen</td>
+
+        </tr>
+
+        <tr>
+
+            <td>&lt;ul&gt;</td>
+
+            <td>Lista sin orden</td>
+
+            <td>• Elemento</td>
+
+        </tr>
+
+        <tr>
+
+            <td>&lt;ol&gt;</td>
+
+            <td>Lista ordenada</td>
+
+            <td>1. Elemento</td>
+
+        </tr>
+
+        <tr>
+
+            <td>&lt;li&gt;</td>
+
+            <td>Elemento de lista</td>
+
+            <td>Elemento</td>
+
+        </tr>
+
+        <tr>
+
+            <td>&lt;div&gt;</td>
+
+            <td>Agrupar contenido</td>
+
+            <td>Contenedor</td>
+
+        </tr>
+
+        <tr>
+
+            <td>&lt;form&gt;</td>
+
+            <td>Formulario</td>
+
+            <td>Datos del usuario</td>
+
+        </tr>
+
+        <tr>
+
+            <td>&lt;label&gt;</td>
+
+            <td>Describir un campo</td>
+
+            <td>Nombre:</td>
+
+        </tr>
+
+        <tr>
+
+            <td>&lt;input&gt;</td>
+
+            <td>Ingresar datos</td>
+
+            <td>Texto, email, número</td>
+
+        </tr>
+
+        <tr>
+
+            <td>&lt;select&gt;</td>
+
+            <td>Lista desplegable</td>
+
+            <td>Seleccionar país</td>
+
+        </tr>
+
+        <tr>
+
+            <td>&lt;textarea&gt;</td>
+
+            <td>Texto largo</td>
+
+            <td>Comentarios</td>
+
+        </tr>
+
+        <tr>
+
+            <td>&lt;button&gt;</td>
+
+            <td>Botón</td>
+
+            <td>Enviar</td>
+
+        </tr>
+
+        <tr>
+
+            <td>&lt;table&gt;</td>
+
+            <td>Tabla</td>
+
+            <td>Datos tabulares</td>
+
+        </tr>
+
+        <tr>
+
+            <td>&lt;header&gt;</td>
+
+            <td>Encabezado</td>
+
+            <td>Cabecera</td>
+
+        </tr>
+
+        <tr>
+
+            <td>&lt;nav&gt;</td>
+
+            <td>Navegación</td>
+
+            <td>Menú</td>
+
+        </tr>
+
+        <tr>
+
+            <td>&lt;main&gt;</td>
+
+            <td>Contenido principal</td>
+
+            <td>Contenido central</td>
+
+        </tr>
+
+        <tr>
+
+            <td>&lt;section&gt;</td>
+
+            <td>Sección</td>
+
+            <td>Bloque de contenido</td>
+
+        </tr>
+
+        <tr>
+
+            <td>&lt;footer&gt;</td>
+
+            <td>Pie de página</td>
+
+            <td>Información final</td>
+
+        </tr>
+
+    </table>
+
+</section>
+
+
+
+<!-- EJERCICIO -->
+
+<section class="etiqueta">
+
+    <h2>23. 🧑‍💻 Ahora es tu turno</h2>
+
+    <div class="que-es">
+
+        <strong>Ejercicio</strong>
+
+        <p>
+            Crear una página HTML que contenga:
+        </p>
+
+    </div>
+
+    <ol>
+
+        <li>
+            Un título con <code>&lt;h1&gt;</code>.
+        </li>
+
+        <li>
+            Un párrafo con <code>&lt;p&gt;</code>.
+        </li>
+
+        <li>
+            Una imagen con <code>&lt;img&gt;</code>.
+        </li>
+
+        <li>
+            Una lista de tres lenguajes utilizando
+            <code>&lt;ul&gt;</code> y <code>&lt;li&gt;</code>.
+        </li>
+
+        <li>
+            Un formulario.
+        </li>
+
+        <li>
+            Un <code>&lt;label&gt;</code> para el nombre.
+        </li>
+
+        <li>
+            Un <code>&lt;input&gt;</code> para ingresar el nombre.
+        </li>
+
+        <li>
+            Un <code>&lt;select&gt;</code> para seleccionar
+            un lenguaje.
+        </li>
+
+        <li>
+            Un botón para enviar.
+        </li>
+
+    </ol>
+
+    <div class="importante">
+
+        <strong>Objetivo:</strong>
+
+        <p>
+            No memorices las etiquetas.
+        </p>
+
+        <p>
+            Intentá entender
+            <strong>qué representa cada una y cuándo utilizarla</strong>.
+        </p>
+
+    </div>
+
+</section>
+```
+
+</main>
+
+<footer>
+
+```
+<p>
+    Material educativo - HTML desde cero
+</p>
+```
+
+</footer>
+
+</body>
+
+</html>

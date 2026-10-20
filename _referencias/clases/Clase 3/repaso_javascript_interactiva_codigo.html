@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase práctica de JavaScript</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+header {
+    background: #0f172a;
+    color: white;
+    padding: 35px 20px;
+    text-align: center;
+}
+
+header h1 { margin: 0 0 10px; }
+
+main {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 0 20px 50px;
+}
+
+section {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,.08);
+}
+
+h2 {
+    margin-top: 0;
+    color: #0f172a;
+}
+
+h3 {
+    margin-bottom: 8px;
+}
+
+.explicacion {
+    background: #eff6ff;
+    border-left: 4px solid #2563eb;
+    padding: 15px;
+    margin: 15px 0;
+}
+
+.codigo {
+    background: #111827;
+    color: #e5e7eb;
+    border-radius: 8px;
+    padding: 18px;
+    overflow-x: auto;
+    font-family: Consolas, monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    white-space: pre;
+}
+
+.demo {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 15px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+input {
+    width: 100%;
+    max-width: 450px;
+    padding: 10px;
+    border: 1px solid #94a3b8;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 16px;
+    cursor: pointer;
+    margin: 4px 4px 4px 0;
+}
+
+button:hover {
+    opacity: .85;
+}
+
+button.secundario {
+    background: #64748b;
+}
+
+button.peligro {
+    background: #dc2626;
+}
+
+.resultado {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 6px;
+}
+
+.error {
+    color: #dc2626;
+    display: block;
+    min-height: 20px;
+    font-size: 14px;
+}
+
+.exito {
+    background: #ecfdf5;
+    border: 1px solid #10b981;
+}
+
+#contador {
+    font-size: 42px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+#consola {
+    background: #020617;
+    color: #86efac;
+    min-height: 80px;
+    padding: 15px;
+    border-radius: 7px;
+    font-family: Consolas, monospace;
+    white-space: pre-wrap;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+ul { line-height: 1.8; }
+
+code {
+    background: #e2e8f0;
+    padding: 2px 5px;
+    border-radius: 4px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>JavaScript desde cero</h1>
+    <p>Ejemplos interactivos + código fuente + explicación</p>
+</header>
+
+<main>
+
+<!-- ===================================================== -->
+<!-- INTRODUCCIÓN -->
+<!-- ===================================================== -->
+
+<section>
+    <h2>¿Qué vamos a aprender?</h2>
+
+    <p>
+        En esta página vamos a utilizar JavaScript para hacer que una página HTML
+        sea interactiva.
+    </p>
+
+    <ul>
+        <li>Variables</li>
+        <li>Funciones</li>
+        <li>Eventos</li>
+        <li>DOM</li>
+        <li>Alertas</li>
+        <li>Condicionales</li>
+        <li>Validaciones</li>
+        <li>Manipulación de contenido HTML</li>
+        <li>Console.log()</li>
+    </ul>
+</section>
+
+
+<!-- ===================================================== -->
+<!-- EJEMPLO 1 -->
+<!-- ===================================================== -->
+
+<section>
+    <h2>1. Variables + input + alert()</h2>
+
+    <div class="explicacion">
+        <strong>Idea:</strong>
+        JavaScript puede obtener información escrita por el usuario,
+        guardarla en una variable y utilizarla.
+    </div>
+
+    <h3>Código JavaScript</h3>
+
+    <div class="codigo">function saludar() {
+
+    const nombre =
+        document.getElementById("nombreDemo").value;
+
+    if (nombre === "") {
+        alert("Ingresá tu nombre");
+        return;
+    }
+
+    alert(`Hola ${nombre}!`);
+}</div>
+
+    <h3>Probalo</h3>
+
+    <div class="demo">
+        <label for="nombreDemo">Nombre:</label>
+        <input id="nombreDemo" type="text" placeholder="Escribí tu nombre">
+
+        <br>
+
+        <button onclick="saludar()">
+            Saludar
+        </button>
+    </div>
+
+    <div class="explicacion">
+        <strong>¿Qué sucede?</strong>
+        <ol>
+            <li><code>getElementById()</code> busca el elemento HTML.</li>
+            <li><code>.value</code> obtiene lo que escribió el usuario.</li>
+            <li>El valor se guarda en <code>nombre</code>.</li>
+            <li><code>if</code> verifica si está vacío.</li>
+            <li><code>alert()</code> muestra una ventana.</li>
+        </ol>
+    </div>
+</section>
+
+
+<!-- ===================================================== -->
+<!-- EJEMPLO 2 -->
+<!-- ===================================================== -->
+
+<section>
+    <h2>2. Funciones + eventos + DOM</h2>
+
+    <div class="explicacion">
+        <strong>Idea:</strong>
+        una función contiene instrucciones que podemos ejecutar varias veces.
+        En este ejemplo modificamos el contenido de un elemento HTML.
+    </div>
+
+    <h3>Código JavaScript</h3>
+
+    <div class="codigo">let contador = 0;
+
+function incrementar() {
+    contador++;
+    actualizarContador();
+}
+
+function decrementar() {
+    contador--;
+    actualizarContador();
+}
+
+function actualizarContador() {
+    document.getElementById("contador")
+        .textContent = contador;
+}</div>
+
+    <h3>Probalo</h3>
+
+    <div class="demo">
+        <div id="contador">0</div>
+
+        <button onclick="incrementar()">+1</button>
+        <button onclick="decrementar()">-1</button>
+        <button class="secundario" onclick="reiniciarContador()">
+            Reiniciar
+        </button>
+    </div>
+
+    <div class="explicacion">
+        <strong>Conceptos:</strong>
+        <ul>
+            <li><code>let</code> permite declarar una variable cuyo valor puede cambiar.</li>
+            <li><code>contador++</code> aumenta el valor en uno.</li>
+            <li><code>textContent</code> modifica el texto del HTML.</li>
+            <li><code>onclick</code> ejecuta una función cuando hacemos click.</li>
+        </ul>
+    </div>
+</section>
+
+
+<!-- ===================================================== -->
+<!-- EJEMPLO 3 -->
+<!-- ===================================================== -->
+
+<section>
+    <h2>3. Condicionales</h2>
+
+    <div class="explicacion">
+        <strong>Idea:</strong>
+        los condicionales permiten que el programa tome decisiones.
+    </div>
+
+    <h3>Código JavaScript</h3>
+
+    <div class="codigo">function verificarEdad() {
+
+    const edad =
+        Number(document.getElementById("edadDemo").value);
+
+    if (edad === 0 || isNaN(edad)) {
+
+        alert("Ingresá una edad válida.");
+
+    } else if (edad >= 18) {
+
+        alert("Sos mayor de edad.");
+
+    } else {
+
+        alert("Sos menor de edad.");
+    }
+}</div>
+
+    <h3>Probalo</h3>
+
+    <div class="demo">
+        <label for="edadDemo">Edad:</label>
+        <input id="edadDemo" type="number">
+
+        <br>
+
+        <button onclick="verificarEdad()">
+            Verificar edad
+        </button>
+    </div>
+</section>
+
+
+<!-- ===================================================== -->
+<!-- EJEMPLO 4 -->
+<!-- ===================================================== -->
+
+<section>
+    <h2>4. Formulario + validaciones</h2>
+
+    <div class="explicacion">
+        <strong>Idea:</strong>
+        antes de procesar información podemos verificar que los datos
+        sean correctos.
+    </div>
+
+    <h3>Código JavaScript</h3>
+
+    <div class="codigo">formulario.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    let valido = true;
+
+    if (nombre.value.trim() === "") {
+
+        errorNombre.textContent =
+            "El nombre es obligatorio.";
+
+        valido = false;
+    }
+
+    if (edad.value === "") {
+
+        errorEdad.textContent =
+            "La edad es obligatoria.";
+
+        valido = false;
+    }
+
+    if (valido) {
+
+        alert("Formulario válido.");
+
+    } else {
+
+        alert("Hay errores.");
+    }
+});</div>
+
+    <h3>HTML del formulario</h3>
+
+    <div class="codigo">&lt;form id="formulario"&gt;
+
+    &lt;input id="nombre"&gt;
+
+    &lt;input id="edad" type="number"&gt;
+
+    &lt;input id="email" type="email"&gt;
+
+    &lt;button type="submit"&gt;
+        Enviar
+    &lt;/button&gt;
+
+&lt;/form&gt;</div>
+
+    <h3>Probalo</h3>
+
+    <div class="demo">
+
+        <form id="formulario">
+
+            <div class="grid">
+
+                <div>
+                    <label for="nombre">Nombre</label>
+                    <input id="nombre" type="text">
+                    <span id="errorNombre" class="error"></span>
+                </div>
+
+                <div>
+                    <label for="edad">Edad</label>
+                    <input id="edad" type="number">
+                    <span id="errorEdad" class="error"></span>
+                </div>
+
+                <div>
+                    <label for="email">Email</label>
+                    <input id="email" type="email">
+                    <span id="errorEmail" class="error"></span>
+                </div>
+
+            </div>
+
+            <button type="submit">
+                Validar
+            </button>
+
+            <button type="button"
+                    class="secundario"
+                    id="btnLimpiar">
+                Limpiar
+            </button>
+
+        </form>
+
+        <div id="resultadoFormulario"></div>
+
+    </div>
+</section>
+
+
+<!-- ===================================================== -->
+<!-- EJEMPLO 5 -->
+<!-- ===================================================== -->
+
+<section>
+    <h2>5. Validación en tiempo real</h2>
+
+    <div class="explicacion">
+        <strong>Idea:</strong>
+        podemos ejecutar JavaScript mientras el usuario escribe.
+        Para esto utilizamos el evento <code>input</code>.
+    </div>
+
+    <h3>Código JavaScript</h3>
+
+    <div class="codigo">const campo =
+    document.getElementById("nombreTiempoReal");
+
+campo.addEventListener("input", function() {
+
+    const texto = campo.value.trim();
+
+    if (texto.length < 3) {
+
+        mensaje.textContent =
+            "Debe tener al menos 3 caracteres.";
+
+    } else {
+
+        mensaje.textContent =
+            "✓ Nombre válido.";
+    }
+});</div>
+
+    <h3>Probalo</h3>
+
+    <div class="demo">
+        <label for="nombreTiempoReal">
+            Nombre:
+        </label>
+
+        <input id="nombreTiempoReal"
+               type="text"
+               placeholder="Escribí algo...">
+
+        <p id="mensajeTiempoReal"></p>
+    </div>
+</section>
+
+
+<!-- ===================================================== -->
+<!-- EJEMPLO 6 -->
+<!-- ===================================================== -->
+
+<section>
+    <h2>6. console.log()</h2>
+
+    <div class="explicacion">
+        <strong>Idea:</strong>
+        <code>console.log()</code> sirve para mostrar información en la
+        consola del navegador. Es una herramienta fundamental para
+        encontrar errores y entender qué está haciendo nuestro programa.
+    </div>
+
+    <h3>Código JavaScript</h3>
+
+    <div class="codigo">function mostrarEnConsola() {
+
+    const nombre = "Ana";
+    const edad = 25;
+
+    console.log("Nombre:", nombre);
+    console.log("Edad:", edad);
+    console.log("El programa se está ejecutando");
+}</div>
+
+    <h3>Probalo</h3>
+
+    <div class="demo">
+        <button onclick="mostrarEnConsola()">
+            Ejecutar console.log()
+        </button>
+
+        <div id="consola">
+            Presioná el botón y luego abrí F12 → Console.
+        </div>
+    </div>
+</section>
+
+
+<!-- ===================================================== -->
+<!-- EJERCICIO -->
+<!-- ===================================================== -->
+
+<section>
+    <h2>7. Desafío para los alumnos</h2>
+
+    <div class="explicacion">
+        Ahora modificá el código JavaScript de los ejemplos y observá
+        qué sucede.
+    </div>
+
+    <ol>
+        <li>Cambiá el mensaje del <code>alert()</code>.</li>
+        <li>Hacé que el contador aumente de 2 en 2.</li>
+        <li>Cambiá la edad mínima de 18 a 21.</li>
+        <li>Hacé que el nombre tenga como mínimo 5 caracteres.</li>
+        <li>Agregá una validación para que el email termine en <code>.com</code>.</li>
+        <li>Agregá un nuevo campo al formulario.</li>
+        <li>Mostrá los datos ingresados en la página usando <code>innerHTML</code>.</li>
+    </ol>
+
+    <div class="demo">
+        <strong>Pregunta para pensar:</strong>
+        ¿Qué diferencia hay entre <code>value</code>,
+        <code>textContent</code> e <code>innerHTML</code>?
+    </div>
+</section>
+
+</main>
+
+
+<script>
+
+// =========================================================
+// 1. VARIABLES + ALERT
+// =========================================================
+
+function saludar() {
+
+    const nombre =
+        document.getElementById("nombreDemo").value.trim();
+
+    if (nombre === "") {
+
+        alert("Ingresá tu nombre");
+
+        return;
+    }
+
+    alert(`Hola ${nombre}!`);
+}
+
+
+// =========================================================
+// 2. CONTADOR
+// =========================================================
+
+let contador = 0;
+
+function incrementar() {
+
+    contador++;
+
+    actualizarContador();
+}
+
+function decrementar() {
+
+    contador--;
+
+    actualizarContador();
+}
+
+function reiniciarContador() {
+
+    contador = 0;
+
+    actualizarContador();
+
+    alert("Contador reiniciado.");
+}
+
+function actualizarContador() {
+
+    document.getElementById("contador")
+        .textContent = contador;
+}
+
+
+// =========================================================
+// 3. CONDICIONALES
+// =========================================================
+
+function verificarEdad() {
+
+    const edad =
+        Number(document.getElementById("edadDemo").value);
+
+    if (edad === 0 || isNaN(edad)) {
+
+        alert("Ingresá una edad válida.");
+
+    } else if (edad >= 18) {
+
+        alert("Sos mayor de edad.");
+
+    } else {
+
+        alert("Sos menor de edad.");
+    }
+}
+
+
+// =========================================================
+// 4. FORMULARIO
+// =========================================================
+
+const formulario =
+    document.getElementById("formulario");
+
+formulario.addEventListener("submit", function(event) {
+
+    // Evita que el navegador recargue la página
+    event.preventDefault();
+
+    const nombre =
+        document.getElementById("nombre");
+
+    const edad =
+        document.getElementById("edad");
+
+    const email =
+        document.getElementById("email");
+
+    const errorNombre =
+        document.getElementById("errorNombre");
+
+    const errorEdad =
+        document.getElementById("errorEdad");
+
+    const errorEmail =
+        document.getElementById("errorEmail");
+
+    const resultado =
+        document.getElementById("resultadoFormulario");
+
+    // Limpiar errores
+    errorNombre.textContent = "";
+    errorEdad.textContent = "";
+    errorEmail.textContent = "";
+
+    resultado.innerHTML = "";
+
+    let valido = true;
+
+
+    // VALIDACIÓN DEL NOMBRE
+
+    if (nombre.value.trim() === "") {
+
+        errorNombre.textContent =
+            "El nombre es obligatorio.";
+
+        valido = false;
+
+    } else if (nombre.value.trim().length < 3) {
+
+        errorNombre.textContent =
+            "El nombre debe tener al menos 3 caracteres.";
+
+        valido = false;
+    }
+
+
+    // VALIDACIÓN DE EDAD
+
+    const edadIngresada =
+        Number(edad.value);
+
+    if (edad.value === "") {
+
+        errorEdad.textContent =
+            "La edad es obligatoria.";
+
+        valido = false;
+
+    } else if (edadIngresada < 18) {
+
+        errorEdad.textContent =
+            "Debes ser mayor de 18 años.";
+
+        valido = false;
+    }
+
+
+    // VALIDACIÓN DE EMAIL
+
+    if (email.value.trim() === "") {
+
+        errorEmail.textContent =
+            "El email es obligatorio.";
+
+        valido = false;
+
+    } else if (!email.value.includes("@")) {
+
+        errorEmail.textContent =
+            "El email debe contener @.";
+
+        valido = false;
+    }
+
+
+    // RESULTADO
+
+    if (valido) {
+
+        alert("Formulario válido.");
+
+        resultado.className = "resultado exito";
+
+        resultado.innerHTML = `
+            <strong>¡Datos correctos!</strong>
+            <p>Nombre: ${nombre.value}</p>
+            <p>Edad: ${edad.value}</p>
+            <p>Email: ${email.value}</p>
+        `;
+
+    } else {
+
+        alert("Hay errores en el formulario.");
+    }
+
+});
+
+
+// =========================================================
+// BOTÓN LIMPIAR
+// =========================================================
+
+document.getElementById("btnLimpiar")
+    .addEventListener("click", function() {
+
+        formulario.reset();
+
+        document.getElementById("errorNombre")
+            .textContent = "";
+
+        document.getElementById("errorEdad")
+            .textContent = "";
+
+        document.getElementById("errorEmail")
+            .textContent = "";
+
+        document.getElementById("resultadoFormulario")
+            .innerHTML = "";
+
+    });
+
+
+// =========================================================
+// 5. INPUT EN TIEMPO REAL
+// =========================================================
+
+const nombreTiempoReal =
+    document.getElementById("nombreTiempoReal");
+
+const mensajeTiempoReal =
+    document.getElementById("mensajeTiempoReal");
+
+nombreTiempoReal.addEventListener("input", function() {
+
+    const texto =
+        nombreTiempoReal.value.trim();
+
+    if (texto === "") {
+
+        mensajeTiempoReal.textContent =
+            "Esperando que escribas...";
+
+    } else if (texto.length < 3) {
+
+        mensajeTiempoReal.textContent =
+            "Debe tener al menos 3 caracteres.";
+
+    } else {
+
+        mensajeTiempoReal.textContent =
+            "✓ Nombre válido.";
+    }
+});
+
+
+// =========================================================
+// 6. CONSOLE.LOG
+// =========================================================
+
+function mostrarEnConsola() {
+
+    const nombre = "Ana";
+    const edad = 25;
+
+    console.log("Nombre:", nombre);
+    console.log("Edad:", edad);
+    console.log("El programa se está ejecutando");
+
+    document.getElementById("consola")
+        .textContent =
+        "Se ejecutó console.log().\n\n" +
+        "Abrí F12 → Console para ver los valores.";
+}
+
+</script>
+
+</body>
+</html>

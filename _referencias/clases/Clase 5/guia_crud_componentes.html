@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía paso a paso - CRUD de Componentes</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #222;
+            line-height: 1.6;
+        }
+
+        .contenedor {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 14px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        h1, h2 {
+            color: #4c51bf;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        h2 {
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 6px;
+            margin-top: 35px;
+        }
+
+        .paso {
+            background: #f7f7ff;
+            border-left: 5px solid #667eea;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+        }
+
+        .importante {
+            background: #fff4d6;
+            border-left: 5px solid #f0ad4e;
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+
+        code {
+            background: #eeeeee;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        pre {
+            background: #1e1e1e;
+            color: #f5f5f5;
+            padding: 18px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+    <h1>CRUD de Componentes</h1>
+
+    <p>
+        En esta guía vamos a completar la pantalla <strong>Home</strong>
+        para que podamos consultar, crear, modificar y eliminar componentes
+        utilizando nuestra API REST.
+    </p>
+
+    <p>
+        La comunicación entre el HTML y el backend se realiza mediante
+        JavaScript y <code>fetch()</code>.
+    </p>
+
+    <h2>1. ¿Qué vamos a agregar?</h2>
+
+    <p>En la pantalla Home tendremos:</p>
+
+    <ul>
+        <li>Una tabla con los componentes.</li>
+        <li>Un botón <strong>+</strong> para agregar un componente.</li>
+        <li>Un botón <strong>✏️</strong> para editar.</li>
+        <li>Un botón <strong>🗑️</strong> para eliminar.</li>
+        <li>Un formulario para crear y modificar componentes.</li>
+    </ul>
+
+    <p>Los campos de un componente son:</p>
+
+    <table>
+        <tr>
+            <th>Campo</th>
+            <th>Descripción</th>
+        </tr>
+        <tr>
+            <td><code>id</code></td>
+            <td>Identificador del componente.</td>
+        </tr>
+        <tr>
+            <td><code>descripcion</code></td>
+            <td>Descripción del componente.</td>
+        </tr>
+        <tr>
+            <td><code>color</code></td>
+            <td>Color del componente.</td>
+        </tr>
+        <tr>
+            <td><code>medida</code></td>
+            <td>Medida del componente.</td>
+        </tr>
+    </table>
+
+    <h2>2. Paso 1: obtener los componentes con GET</h2>
+
+    <div class="paso">
+        <strong>Objetivo:</strong> consultar al backend y mostrar en la tabla
+        los componentes que existen.
+    </div>
+
+    <p>El endpoint es:</p>
+
+    <pre>GET /api/componente</pre>
+
+    <p>Desde JavaScript hacemos una petición:</p>
+
+    <pre>fetch("/api/componente")
+    .then(response => response.json())
+    .then(componentes => {
+        // mostrar los componentes
+    });</pre>
+
+    <p>
+        El backend devuelve una lista de componentes, por ejemplo:
+    </p>
+
+    <pre>[
+    {
+        "id": 1,
+        "descripcion": "Componente 1",
+        "color": "rojo",
+        "medida": "estandar"
+    },
+    {
+        "id": 2,
+        "descripcion": "Componente 3",
+        "color": "rojo",
+        "medida": "estandar"
+    }
+]</pre>
+
+    <p>
+        JavaScript recorre esa lista y crea una fila de la tabla
+        para cada componente.
+    </p>
+
+    <h2>3. Paso 2: agregar el botón +</h2>
+
+    <p>
+        El botón <strong>+</strong> permite comenzar la carga de un nuevo
+        componente.
+    </p>
+
+    <pre>&lt;button onclick="nuevoComponente()"&gt;+&lt;/button&gt;</pre>
+
+    <p>
+        Al hacer clic se ejecuta <code>nuevoComponente()</code>, que
+        prepara el formulario vacío.
+    </p>
+
+    <h2>4. Paso 3: crear un componente con POST</h2>
+
+    <div class="paso">
+        <strong>Objetivo:</strong> enviar al backend los datos ingresados
+        en el formulario.
+    </div>
+
+    <p>Utilizamos:</p>
+
+    <pre>POST /api/componente</pre>
+
+    <p>Los datos se envían como JSON:</p>
+
+    <pre>{
+    "descripcion": "Componente nuevo",
+    "color": "azul",
+    "medida": "estandar"
+}</pre>
+
+    <p>La petición desde JavaScript es:</p>
+
+    <pre>fetch("/api/componente", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(datos)
+});</pre>
+
+    <p>
+        <code>JSON.stringify()</code> convierte el objeto JavaScript
+        en una cadena JSON para enviarla al backend.
+    </p>
+
+    <h2>5. Paso 4: editar un componente con PUT</h2>
+
+    <p>
+        Cada fila tiene un botón de edición. Al presionarlo,
+        los datos del componente se cargan en el formulario.
+    </p>
+
+    <p>Para guardar los cambios utilizamos:</p>
+
+    <pre>PUT /api/componente</pre>
+
+    <p>En este caso enviamos también el <code>id</code>:</p>
+
+    <pre>{
+    "id": 1,
+    "descripcion": "Componente modificado",
+    "color": "verde",
+    "medida": "estandar"
+}</pre>
+
+    <p>La petición es:</p>
+
+    <pre>fetch("/api/componente", {
+    method: "PUT",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(datosEdicion)
+});</pre>
+
+    <div class="importante">
+        <strong>¿Por qué necesitamos el id?</strong>
+        Porque el backend debe saber qué componente queremos modificar.
+    </div>
+
+    <h2>6. Paso 5: eliminar un componente con DELETE</h2>
+
+    <p>
+        El botón <strong>🗑️</strong> permite eliminar un componente.
+        Para hacerlo necesitamos enviar su <code>id</code>.
+    </p>
+
+    <p>La URL queda de esta forma:</p>
+
+    <pre>DELETE /api/componente?id=3</pre>
+
+    <p>Desde JavaScript:</p>
+
+    <pre>fetch("/api/componente?id=" + id, {
+    method: "DELETE"
+});</pre>
+
+    <p>
+        Antes de realizar la eliminación se utiliza una confirmación
+        para evitar borrar accidentalmente un registro.
+    </p>
+
+    <h2>7. Ajuste del Controller para DELETE</h2>
+
+    <p>
+        Como el <code>id</code> llega como parámetro de la URL,
+        lo indicamos explícitamente con <code>@RequestParam</code>.
+    </p>
+
+    <pre>@DeleteMapping
+public ResponseEntity&lt;String&gt; borraComponente(@RequestParam Long id) {
+    boolean eliminado = service.borrar(id);
+
+    if (eliminado) {
+        return ResponseEntity.accepted().build();
+    } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("Componente no encontrado");
+    }
+}</pre>
+
+    <div class="importante">
+        <strong>Atención:</strong>
+        el mensaje de error corresponde a un componente,
+        por eso debe decir <code>"Componente no encontrado"</code>.
+    </div>
+
+    <h2>8. Paso 6: volver a cargar la tabla</h2>
+
+    <p>
+        Después de crear, modificar o eliminar un componente,
+        volvemos a ejecutar:
+    </p>
+
+    <pre>cargarComponentes();</pre>
+
+    <p>
+        De esta forma se vuelve a consultar el backend y la tabla
+        queda actualizada con los datos actuales.
+    </p>
+
+    <h2>9. Resumen de los endpoints</h2>
+
+    <table>
+        <tr>
+            <th>Operación</th>
+            <th>Método HTTP</th>
+            <th>Endpoint</th>
+        </tr>
+        <tr>
+            <td>Consultar</td>
+            <td>GET</td>
+            <td><code>/api/componente</code></td>
+        </tr>
+        <tr>
+            <td>Crear</td>
+            <td>POST</td>
+            <td><code>/api/componente</code></td>
+        </tr>
+        <tr>
+            <td>Modificar</td>
+            <td>PUT</td>
+            <td><code>/api/componente</code></td>
+        </tr>
+        <tr>
+            <td>Eliminar</td>
+            <td>DELETE</td>
+            <td><code>/api/componente?id=...</code></td>
+        </tr>
+    </table>
+
+    <h2>10. ¿Qué sucede cuando usamos cada botón?</h2>
+
+    <ol>
+        <li>
+            <strong>+</strong> → abre el formulario vacío.
+        </li>
+        <li>
+            <strong>Guardar un nuevo componente</strong> → realiza un
+            <code>POST</code>.
+        </li>
+        <li>
+            <strong>✏️</strong> → carga los datos existentes en el formulario.
+        </li>
+        <li>
+            <strong>Guardar una modificación</strong> → realiza un
+            <code>PUT</code>.
+        </li>
+        <li>
+            <strong>🗑️</strong> → solicita confirmación y realiza un
+            <code>DELETE</code>.
+        </li>
+        <li>
+            Después de cada operación → se vuelve a ejecutar el
+            <code>GET</code> para actualizar la tabla.
+        </li>
+    </ol>
+
+    <h2>11. ¿Qué estamos aprendiendo?</h2>
+
+    <ul>
+        <li>Cómo conectar HTML y JavaScript con un backend.</li>
+        <li>Cómo utilizar <code>fetch()</code>.</li>
+        <li>Cómo enviar y recibir JSON.</li>
+        <li>Cómo utilizar los métodos HTTP GET, POST, PUT y DELETE.</li>
+        <li>Cómo consumir una API REST desde el navegador.</li>
+        <li>Cómo actualizar una tabla dinámicamente.</li>
+        <li>Cómo implementar las operaciones básicas de un CRUD.</li>
+    </ul>
+
+    <h2>12. Flujo completo</h2>
+
+    <div class="paso">
+        <strong>Frontend → Backend → Base de datos</strong>
+        <p>
+            El usuario realiza una acción en el HTML. JavaScript envía una
+            petición HTTP al Controller. El Controller utiliza el Service
+            para realizar la operación correspondiente y luego devuelve
+            una respuesta al navegador.
+        </p>
+    </div>
+
+    <p>
+        El flujo que implementamos es:
+    </p>
+
+    <pre>
+HTML
+  ↓
+JavaScript + fetch()
+  ↓
+Controller
+  ↓
+Service
+  ↓
+Base de datos
+  ↓
+Respuesta al navegador
+  ↓
+Actualización de la tabla
+    </pre>
+
+    <div class="importante">
+        <strong>Objetivo final:</strong>
+        desde una única pantalla podemos consultar los componentes,
+        agregar nuevos registros, modificar los existentes y eliminarlos,
+        utilizando nuestra API REST.
+    </div>
+
+</div>
+
+</body>
+</html>

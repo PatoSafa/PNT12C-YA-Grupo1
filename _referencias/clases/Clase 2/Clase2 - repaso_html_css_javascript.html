@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repaso HTML + CSS + JavaScript</title>
+
+    <!-- =========================================================
+         PASO 1: CSS EXTERNO
+         El archivo HTML se conecta con un archivo estilos.css
+         mediante la etiqueta <link>.
+         ========================================================= -->
+    <link rel="stylesheet" href="estilos.css">
+
+    <!--
+        En esta demostración el CSS también está incluido dentro
+        del HTML para que el archivo pueda verse correctamente
+        aunque todavía no se haya creado estilos.css.
+        En una práctica real, conviene separar HTML y CSS.
+    -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f4f6f8;
+            color: #222;
+            line-height: 1.6;
+        }
+
+        header {
+            background: #263238;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        nav {
+            background: #37474f;
+            padding: 12px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 12px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            width: 90%;
+            max-width: 1000px;
+            margin: 25px auto;
+        }
+
+        section {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            color: #1565c0;
+        }
+
+        h3 {
+            color: #37474f;
+        }
+
+        .ejemplo {
+            background: #263238;
+            color: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .nota {
+            background: #fff3cd;
+            border-left: 5px solid #ffca28;
+            padding: 12px;
+            margin: 15px 0;
+        }
+
+        .resultado {
+            border: 2px dashed #90a4ae;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .imagen-ejemplo {
+            width: 280px;
+            border-radius: 10px;
+            display: block;
+            margin: 15px 0;
+        }
+
+        button {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: #1565c0;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #263238;
+            color: white;
+        }
+
+        .destacado {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Repaso de HTML + CSS + JavaScript</h1>
+    <p>De una página HTML básica a una página con estilo e interacción</p>
+</header>
+
+<nav>
+    <a href="#html">HTML</a>
+    <a href="#imagenes">Imágenes</a>
+    <a href="#css">CSS</a>
+    <a href="#javascript">JavaScript</a>
+    <a href="#actividad">Actividad</a>
+</nav>
+
+<main>
+
+    <!-- =========================================================
+         1. REPASO DE HTML
+         ========================================================= -->
+    <section id="html">
+        <h2>1. Repaso: ¿qué es HTML?</h2>
+
+        <p>
+            <strong>HTML</strong> significa HyperText Markup Language.
+            Se utiliza para definir la <strong>estructura y el contenido</strong>
+            de una página web.
+        </p>
+
+        <h3>Estructura mínima</h3>
+
+        <div class="ejemplo">&lt;!DOCTYPE html&gt;
+&lt;html lang="es"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Mi página&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+    &lt;h1&gt;Hola mundo&lt;/h1&gt;
+    &lt;p&gt;Esta es mi primera página.&lt;/p&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</div>
+
+        <div class="nota">
+            <strong>Idea clave:</strong>
+            HTML no se ocupa principalmente de "hacer bonito" el sitio.
+            HTML organiza qué contenido existe y qué significado tiene.
+        </div>
+
+        <h3>Etiquetas que ya conocemos</h3>
+
+        <ul>
+            <li><code>&lt;h1&gt;</code> → título principal.</li>
+            <li><code>&lt;h2&gt;</code> → subtítulo.</li>
+            <li><code>&lt;p&gt;</code> → párrafo.</li>
+            <li><code>&lt;ul&gt;</code> y <code>&lt;li&gt;</code> → lista.</li>
+            <li><code>&lt;a&gt;</code> → enlace.</li>
+            <li><code>&lt;img&gt;</code> → imagen.</li>
+            <li><code>&lt;form&gt;</code> → formulario.</li>
+        </ul>
+    </section>
+
+    <!-- =========================================================
+         2. IMAGEN
+         ========================================================= -->
+    <section id="imagenes">
+        <h2>2. Agregamos una imagen</h2>
+
+        <p>
+            Para mostrar una imagen utilizamos <code>&lt;img&gt;</code>.
+            Es una etiqueta que no necesita una etiqueta de cierre.
+        </p>
+
+        <h3>Paso 1: indicar dónde está la imagen</h3>
+
+        <div class="ejemplo">&lt;img src="imagenes/computadora.jpg" alt="Computadora"&gt;</div>
+
+        <h3>Paso 2: comprender los atributos</h3>
+
+        <ul>
+            <li><strong>src</strong>: indica la ubicación de la imagen.</li>
+            <li><strong>alt</strong>: describe la imagen.</li>
+        </ul>
+
+        <div class="resultado">
+            <p><strong>Ejemplo visual:</strong></p>
+            <svg class="imagen-ejemplo" viewBox="0 0 560 280"
+                 xmlns="http://www.w3.org/2000/svg"
+                 role="img" aria-label="Ilustración de una computadora">
+                <rect width="560" height="280" rx="20" fill="#e3f2fd"/>
+                <rect x="130" y="45" width="300" height="150" rx="8" fill="#263238"/>
+                <rect x="150" y="65" width="260" height="110" fill="#90caf9"/>
+                <rect x="250" y="195" width="60" height="20" fill="#455a64"/>
+                <rect x="210" y="215" width="140" height="12" rx="6" fill="#37474f"/>
+                <text x="280" y="125" text-anchor="middle" font-size="25" fill="white">HTML</text>
+            </svg>
+            <p>
+                La imagen real podría estar en una carpeta llamada
+                <code>imagenes</code>.
+            </p>
+        </div>
+
+        <div class="nota">
+            <strong>Pregunta para la clase:</strong>
+            ¿Qué pasaría si escribimos mal la ruta de <code>src</code>?
+        </div>
+    </section>
+
+    <!-- =========================================================
+         3. CSS
+         ========================================================= -->
+    <section id="css">
+        <h2>3. Tema nuevo: CSS</h2>
+
+        <p>
+            <strong>CSS</strong> significa Cascading Style Sheets.
+            Se utiliza para definir la <strong>presentación visual</strong>
+            de una página HTML.
+        </p>
+
+        <h3>La idea fundamental</h3>
+
+        <div class="destacado">
+            <p><strong>HTML → estructura</strong></p>
+            <p><strong>CSS → apariencia</strong></p>
+            <p><strong>JavaScript → comportamiento e interacción</strong></p>
+        </div>
+
+        <h3>Forma 1: CSS en línea</h3>
+
+        <p>Se escribe directamente dentro del elemento:</p>
+
+        <div class="ejemplo">&lt;p style="color: blue;"&gt;
+    Hola
+&lt;/p&gt;</div>
+
+        <p style="color: blue; font-weight: bold;">
+            Este párrafo es un ejemplo de CSS en línea.
+        </p>
+
+        <div class="nota">
+            Es sencillo para probar algo puntual, pero no es la opción
+            más conveniente cuando tenemos muchos elementos.
+        </div>
+
+        <h3>Forma 2: CSS interno</h3>
+
+        <p>
+            Se coloca dentro de <code>&lt;style&gt;</code>, generalmente
+            dentro de <code>&lt;head&gt;</code>.
+        </p>
+
+        <div class="ejemplo">&lt;style&gt;
+    p {
+        color: green;
+    }
+&lt;/style&gt;</div>
+
+        <h3>Forma 3: CSS externo ⭐</h3>
+
+        <p>
+            Creamos un archivo separado, por ejemplo:
+            <code>estilos.css</code>.
+        </p>
+
+        <p>En el HTML lo conectamos mediante:</p>
+
+        <div class="ejemplo">&lt;link rel="stylesheet" href="estilos.css"&gt;</div>
+
+        <p>Y dentro de <code>estilos.css</code> escribimos:</p>
+
+        <div class="ejemplo">p {
+    color: green;
+    font-size: 18px;
+}
+
+h1 {
+    text-align: center;
+}</div>
+
+        <div class="nota">
+            <strong>Concepto importante:</strong>
+            HTML y CSS pueden estar en archivos diferentes.
+            El HTML contiene la estructura y el CSS define la apariencia.
+        </div>
+
+        <h3>¿Cómo funciona una regla CSS?</h3>
+
+        <div class="ejemplo">p {
+    color: red;
+    font-size: 20px;
+}</div>
+
+        <ul>
+            <li><strong>p</strong> → selector.</li>
+            <li><strong>color</strong> → propiedad.</li>
+            <li><strong>red</strong> → valor.</li>
+            <li><strong>font-size</strong> → otra propiedad.</li>
+            <li><strong>20px</strong> → valor.</li>
+        </ul>
+    </section>
+
+    <!-- =========================================================
+         4. JAVASCRIPT
+         ========================================================= -->
+    <section id="javascript">
+        <h2>4. Tema nuevo: JavaScript</h2>
+
+        <p>
+            JavaScript permite agregar <strong>comportamiento e interacción</strong>
+            a una página.
+        </p>
+
+        <h3>Paso 1: crear una función</h3>
+
+        <div class="ejemplo">function saludar() {
+    alert("¡Hola!");
+}</div>
+
+        <h3>Paso 2: conectar la función con un botón</h3>
+
+        <div class="ejemplo">&lt;button onclick="saludar()"&gt;
+    Saludar
+&lt;/button&gt;</div>
+
+        <div class="resultado">
+            <p>Probalo:</p>
+
+            <button onclick="saludar()">Saludar</button>
+        </div>
+
+        <h3>Paso 3: modificar contenido HTML</h3>
+
+        <p id="mensaje">
+            Este texto puede ser modificado por JavaScript.
+        </p>
+
+        <div class="ejemplo">function cambiarTexto() {
+    document.getElementById("mensaje").textContent =
+        "¡El texto cambió utilizando JavaScript!";
+}</div>
+
+        <div class="resultado">
+            <button onclick="cambiarTexto()">Cambiar texto</button>
+        </div>
+
+        <h3>Paso 4: conectar un archivo JavaScript externo</h3>
+
+        <p>
+            Al igual que CSS, JavaScript puede estar en un archivo separado.
+        </p>
+
+        <div class="ejemplo">&lt;script src="script.js"&gt;&lt;/script&gt;</div>
+
+        <p>
+            Y en <code>script.js</code> podríamos tener:
+        </p>
+
+        <div class="ejemplo">function cambiarTexto() {
+    document.getElementById("mensaje").textContent =
+        "Texto modificado.";
+}</div>
+
+        <div class="nota">
+            <strong>Idea clave:</strong>
+            HTML crea los elementos, CSS los presenta y JavaScript
+            puede hacer que respondan a las acciones del usuario.
+        </div>
+    </section>
+
+    <!-- =========================================================
+         5. LOS TRES JUNTOS
+         ========================================================= -->
+    <section>
+        <h2>5. HTML + CSS + JavaScript juntos</h2>
+
+        <div class="ejemplo">HTML
+    ↓
+¿Qué elementos existen?
+    ↓
+CSS
+    ↓
+¿Cómo se ven?
+    ↓
+JavaScript
+    ↓
+¿Qué hacen cuando ocurre algo?</div>
+
+        <h3>Ejemplo conceptual</h3>
+
+        <div class="ejemplo">&lt;button id="boton"&gt;Cambiar&lt;/button&gt;
+
+&lt;script&gt;
+    document.getElementById("boton").onclick = function() {
+        document.body.style.backgroundColor = "lightblue";
+    };
+&lt;/script&gt;</div>
+
+        <div class="resultado">
+            <p>Probá la interacción:</p>
+            <button onclick="cambiarFondo()">Cambiar fondo</button>
+            <button onclick="restaurarFondo()">Restaurar</button>
+        </div>
+    </section>
+
+    <!-- =========================================================
+         6. ACTIVIDAD PARA HACER EN CLASE
+         ========================================================= -->
+    <section id="actividad">
+        <h2>6. Actividad práctica</h2>
+
+        <h3>Parte A — HTML</h3>
+        <ol>
+            <li>Crear una página llamada <code>index.html</code>.</li>
+            <li>Agregar un título principal.</li>
+            <li>Agregar dos párrafos.</li>
+            <li>Agregar una lista de tres elementos.</li>
+            <li>Agregar una imagen con <code>src</code> y <code>alt</code>.</li>
+        </ol>
+
+        <h3>Parte B — CSS</h3>
+        <ol>
+            <li>Crear una carpeta llamada <code>css</code>.</li>
+            <li>Crear dentro un archivo <code>estilos.css</code>.</li>
+            <li>Conectar el CSS desde el HTML usando <code>&lt;link&gt;</code>.</li>
+            <li>Cambiar el color del título.</li>
+            <li>Cambiar el tamaño de los párrafos.</li>
+            <li>Agregar un color de fondo.</li>
+        </ol>
+
+        <h3>Parte C — JavaScript</h3>
+        <ol>
+            <li>Crear una carpeta llamada <code>js</code>.</li>
+            <li>Crear un archivo <code>script.js</code>.</li>
+            <li>Conectarlo con el HTML usando <code>&lt;script&gt;</code>.</li>
+            <li>Crear un botón.</li>
+            <li>Hacer que al presionarlo cambie un texto.</li>
+        </ol>
+
+        <div class="nota">
+            <strong>Desafío:</strong>
+            Agregá un segundo botón que cambie el color de fondo de la página.
+            No copies todo el código nuevamente: modificá tu propia solución.
+        </div>
+
+        <h3>Preguntas de cierre</h3>
+
+        <ol>
+            <li>¿Para qué sirve HTML?</li>
+            <li>¿Para qué sirve CSS?</li>
+            <li>¿Para qué sirve JavaScript?</li>
+            <li>¿Qué diferencia hay entre CSS interno y externo?</li>
+            <li>¿Cómo conectamos un archivo CSS externo?</li>
+            <li>¿Cómo conectamos un archivo JavaScript externo?</li>
+            <li>¿Qué ocurre cuando hacemos clic en un botón?</li>
+        </ol>
+    </section>
+
+</main>
+
+<footer>
+    <p>Repaso de HTML + CSS + JavaScript</p>
+    <p>La IA puede ayudar a generar código, pero debemos comprenderlo y poder modificarlo.</p>
+</footer>
+
+<script>
+    // ============================================================
+    // JavaScript de esta demostración
+    // ============================================================
+
+    function saludar() {
+        alert("¡Hola! Esto fue ejecutado por JavaScript.");
+    }
+
+    function cambiarTexto() {
+        document.getElementById("mensaje").textContent =
+            "¡El texto cambió utilizando JavaScript!";
+    }
+
+    function cambiarFondo() {
+        document.body.style.backgroundColor = "#e3f2fd";
+    }
+
+    function restaurarFondo() {
+        document.body.style.backgroundColor = "#f4f6f8";
+    }
+</script>
+
+</body>
+</html>

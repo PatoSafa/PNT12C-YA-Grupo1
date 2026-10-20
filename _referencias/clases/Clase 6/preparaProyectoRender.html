@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrimerMvc - Preparar para Render</title>
+<style>
+body{font-family:Arial,sans-serif;line-height:1.6;margin:0;background:#f4f6f8;color:#222}
+header{background:#263b73;color:#fff;text-align:center;padding:30px 20px}
+main{max-width:1050px;margin:auto;padding:20px}
+section{background:#fff;margin:20px 0;padding:24px;border-radius:10px;box-shadow:0 2px 8px #0001}
+h2{color:#263b73;border-bottom:2px solid #e5e9f2;padding-bottom:8px}
+h3{color:#3556a3}
+pre{background:#202633;color:#f4f4f4;padding:15px;border-radius:8px;overflow:auto}
+code{background:#eef1f6;padding:2px 5px;border-radius:4px}
+.note{background:#fff5d9;border-left:5px solid #d59b00;padding:12px}
+.ok{background:#eaf7ed;border-left:5px solid #3c9955;padding:12px}
+.danger{background:#fdecec;border-left:5px solid #c33;padding:12px}
+table{width:100%;border-collapse:collapse;margin:15px 0}
+th,td{border:1px solid #ccd3df;padding:10px;text-align:left;vertical-align:top}
+th{background:#e9edf7}
+li{margin:7px 0}
+</style>
+</head>
+<body>
+<header>
+<h1>PrimerMvc: preparar el proyecto para Render</h1>
+<p>Guía paso a paso para pasar de Docker + MySQL local a un despliegue en Render</p>
+</header>
+<main>
+
+<section>
+<h2>1. ¿Qué tenemos actualmente?</h2>
+<p>El repositorio <strong>PrimerMvc</strong> tiene el proyecto Maven dentro de la carpeta <code>primerMvc</code>.</p>
+<pre>PrimerMvc/
+└── primerMvc/
+    ├── pom.xml
+    ├── mvnw
+    └── src/
+        └── main/
+            ├── java/
+            └── resources/
+                ├── application.yaml
+                └── static/
+                    └── index.html</pre>
+<p>Actualmente utiliza Java 17, Spring Boot, Spring Data JPA y MySQL.</p>
+<div class="note"><strong>Problema principal:</strong> <code>application.yaml</code> apunta a <code>jdbc:mysql://localhost:3306/first</code>. En Render, <code>localhost</code> no representa tu computadora ni el MySQL de Docker.</div>
+</section>
+
+<section>
+<h2>2. Objetivo</h2>
+<table>
+<tr><th>Entorno</th><th>Aplicación</th><th>Base de datos</th></tr>
+<tr><td>Local</td><td>Spring Boot</td><td>MySQL en Docker</td></tr>
+<tr><td>Render</td><td>Spring Boot</td><td>PostgreSQL de Render</td></tr>
+</table>
+<div class="ok"><strong>Importante:</strong> no vamos a romper el entorno local. La aplicación tendrá una configuración para Docker/MySQL y otra para producción.</div>
+</section>
+
+<section>
+<h2>3. Paso 1 — Agregar PostgreSQL</h2>
+<p>En <code>pom.xml</code> hay actualmente una dependencia para MySQL. Para producción agregaremos PostgreSQL.</p>
+<pre>&lt;dependency&gt;
+    &lt;groupId&gt;org.postgresql&lt;/groupId&gt;
+    &lt;artifactId&gt;postgresql&lt;/artifactId&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;</pre>
+<p>El driver de MySQL puede mantenerse si queremos seguir ejecutando el proyecto localmente con Docker.</p>
+</section>
+
+<section>
+<h2>4. Paso 2 — Separar local y producción</h2>
+<p>Crear:</p>
+<pre>src/main/resources/
+├── application.yaml
+├── application-local.yaml
+└── application-prod.yaml</pre>
+
+<h3>application-local.yaml</h3>
+<pre>spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/first
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true</pre>
+
+<h3>application-prod.yaml</h3>
+<pre>spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false</pre>
+
+<p>Así, los datos de producción no quedan escritos directamente en el código.</p>
+</section>
+
+<section>
+<h2>5. Paso 3 — Configurar application.yaml</h2>
+<p>El archivo principal puede contener la configuración común:</p>
+<pre>spring:
+  application:
+    name: primerMvc
+
+server:
+  port: ${PORT:8080}</pre>
+<p><code>PORT</code> será proporcionado por Render. Si no existe, Spring utilizará 8080.</p>
+<p>En Render configuraremos:</p>
+<pre>SPRING_PROFILES_ACTIVE=prod</pre>
+</section>
+
+<section>
+<h2>6. Paso 4 — Variables de entorno</h2>
+<p>En lugar de guardar credenciales en GitHub, Spring las recibe mediante variables de entorno.</p>
+<table>
+<tr><th>Variable</th><th>Contenido</th><th>¿Subir al repositorio?</th></tr>
+<tr><td>DB_URL</td><td>URL JDBC de PostgreSQL</td><td>NO</td></tr>
+<tr><td>DB_USERNAME</td><td>Usuario de la base</td><td>NO</td></tr>
+<tr><td>DB_PASSWORD</td><td>Contraseña</td><td>NO</td></tr>
+<tr><td>SPRING_PROFILES_ACTIVE</td><td>prod</td><td>Se configura en Render</td></tr>
+</table>
+<div class="danger"><strong>Nunca subir contraseñas reales a GitHub.</strong></div>
+</section>
+
+<section>
+<h2>7. Paso 5 — Verificar Maven</h2>
+<p>El proyecto ya tiene el plugin de Spring Boot y Java 17. Antes de desplegar hay que comprobar el build.</p>
+<pre>mvnw.cmd clean package</pre>
+<p>En Linux/macOS:</p>
+<pre>./mvnw clean package</pre>
+<p>Debe generarse un JAR en <code>target/</code>.</p>
+</section>
+
+<section>
+<h2>8. Paso 6 — Probar primero en local</h2>
+<ol>
+<li>Levantar MySQL con Docker.</li>
+<li>Verificar la base <code>first</code>.</li>
+<li>Activar el perfil <code>local</code>.</li>
+<li>Ejecutar Spring Boot.</li>
+<li>Probar el login.</li>
+<li>Probar los endpoints de componentes.</li>
+</ol>
+<pre>SPRING_PROFILES_ACTIVE=local</pre>
+<p>O:</p>
+<pre>mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=local</pre>
+<div class="ok">Si la versión local funciona, recién entonces conviene pasar a Render.</div>
+</section>
+
+<section>
+<h2>9. Paso 7 — Crear PostgreSQL en Render</h2>
+<ol>
+<li>Entrar a Render.</li>
+<li>Crear una instancia PostgreSQL.</li>
+<li>Guardar los datos de conexión.</li>
+<li>Utilizar esos datos para configurar el Web Service.</li>
+</ol>
+<div class="note">La aplicación Spring Boot y PostgreSQL son servicios separados que se comunican mediante la conexión JDBC.</div>
+</section>
+
+<section>
+<h2>10. Paso 8 — Crear el Web Service</h2>
+<p>Conectar Render con el repositorio de GitHub.</p>
+<table>
+<tr><th>Configuración</th><th>Valor</th></tr>
+<tr><td>Repository</td><td><code>anabellamunoz-ort/PrimerMvc</code></td></tr>
+<tr><td>Root Directory</td><td><code>primerMvc</code></td></tr>
+<tr><td>Runtime</td><td>Java</td></tr>
+<tr><td>Build Command</td><td><code>./mvnw clean package</code></td></tr>
+<tr><td>Start Command</td><td><code>java -jar target/primerMvc-0.0.1-SNAPSHOT.jar</code></td></tr>
+</table>
+<div class="note"><strong>Root Directory es importante:</strong> el <code>pom.xml</code> está dentro de <code>primerMvc</code>, no en la raíz del repositorio.</div>
+</section>
+
+<section>
+<h2>11. Paso 9 — Configurar variables en Render</h2>
+<p>En Environment Variables del Web Service:</p>
+<pre>SPRING_PROFILES_ACTIVE=prod
+DB_URL=jdbc:postgresql://...
+DB_USERNAME=...
+DB_PASSWORD=...</pre>
+<p>Los valores reales se obtienen de la base PostgreSQL creada en Render.</p>
+</section>
+
+<section>
+<h2>12. Paso 10 — Revisar el frontend</h2>
+<p>El frontend está en:</p>
+<pre>src/main/resources/static/index.html</pre>
+<p>El login actual utiliza:</p>
+<pre>url: "/login"</pre>
+<p>Eso es correcto para producción porque es una ruta relativa.</p>
+<p><strong>No</strong> debemos convertirlo en:</p>
+<pre>url: "http://localhost:8080/login"</pre>
+<p>Las APIs también deberían utilizar rutas relativas como <code>/api/componente</code>.</p>
+</section>
+
+<section>
+<h2>13. Paso 11 — ¿Hace falta render.yaml?</h2>
+<p>No es obligatorio para el primer despliegue. Podemos configurar Render desde su panel.</p>
+<p>Más adelante se puede agregar un <code>render.yaml</code> para documentar la infraestructura como código.</p>
+<pre>services:
+  - type: web
+    name: primermvc
+    runtime: java
+    rootDir: primerMvc
+    buildCommand: ./mvnw clean package
+    startCommand: java -jar target/primerMvc-0.0.1-SNAPSHOT.jar</pre>
+<p>La configuración definitiva de base de datos y variables debe adaptarse a los servicios concretos creados en Render.</p>
+</section>
+
+<section>
+<h2>14. Paso 12 — Probar el despliegue</h2>
+<ol>
+<li>Esperar que termine el build.</li>
+<li>Abrir la URL pública de Render.</li>
+<li>Verificar que aparezca el login.</li>
+<li>Probar una autenticación.</li>
+<li>Probar las operaciones de componentes.</li>
+<li>Revisar los logs si aparece un error.</li>
+</ol>
+</section>
+
+<section>
+<h2>15. Errores frecuentes</h2>
+<table>
+<tr><th>Error</th><th>Posible causa</th><th>Qué revisar</th></tr>
+<tr><td>Connection refused</td><td>Se está usando localhost</td><td>DB_URL de Render</td></tr>
+<tr><td>Driver not found</td><td>Falta PostgreSQL</td><td>pom.xml</td></tr>
+<tr><td>No pom.xml</td><td>Directorio incorrecto</td><td>Root Directory = primerMvc</td></tr>
+<tr><td>Port timeout</td><td>Puerto incorrecto</td><td><code>server.port=${PORT:8080}</code></td></tr>
+<tr><td>Login falla</td><td>URL absoluta o backend</td><td>Usar rutas relativas y mirar logs</td></tr>
+<tr><td>Authentication failed</td><td>Credenciales incorrectas</td><td>Variables de entorno</td></tr>
+<tr><td>Tabla inexistente</td><td>Base nueva</td><td>JPA/ddl-auto o datos iniciales</td></tr>
+</table>
+</section>
+
+<section>
+<h2>16. Orden de trabajo recomendado</h2>
+<ol>
+<li>Agregar PostgreSQL al <code>pom.xml</code>.</li>
+<li>Crear perfiles <code>local</code> y <code>prod</code>.</li>
+<li>Dejar MySQL/Docker para local.</li>
+<li>Usar variables de entorno para producción.</li>
+<li>Probar localmente.</li>
+<li>Hacer commit y push.</li>
+<li>Crear PostgreSQL en Render.</li>
+<li>Crear Web Service.</li>
+<li>Configurar <code>Root Directory = primerMvc</code>.</li>
+<li>Configurar Build y Start.</li>
+<li>Configurar variables de entorno.</li>
+<li>Desplegar y probar.</li>
+</ol>
+</section>
+
+<section>
+<h2>17. Arquitectura final</h2>
+<pre>                  INTERNET
+                     |
+                     v
+              +--------------+
+              |    RENDER    |
+              | Spring Boot  |
+              +------+-------+
+                     |
+                     | JDBC
+                     v
+              +--------------+
+              | PostgreSQL   |
+              |    Render    |
+              +--------------+
+
+DESARROLLO LOCAL
+
++--------------+       +--------------+
+| Spring Boot  | ----> | MySQL Docker |
+| IntelliJ     |       | localhost    |
++--------------+       +--------------+</pre>
+</section>
+
+<section>
+<h2>18. Checklist final</h2>
+<table>
+<tr><th>Elemento</th><th>Resultado esperado</th></tr>
+<tr><td>Java</td><td>17</td></tr>
+<tr><td>Maven</td><td>Build exitoso</td></tr>
+<tr><td>Docker/MySQL</td><td>Sigue funcionando localmente</td></tr>
+<tr><td>PostgreSQL</td><td>Configurado para producción</td></tr>
+<tr><td>Secretos</td><td>No están en GitHub</td></tr>
+<tr><td>Puerto</td><td>Usa <code>PORT</code></td></tr>
+<tr><td>Root Directory</td><td><code>primerMvc</code></td></tr>
+<tr><td>Frontend</td><td>Rutas relativas</td></tr>
+<tr><td>Login</td><td>Funciona desde Render</td></tr>
+<tr><td>API</td><td>Responde desde Render</td></tr>
+</table>
+</section>
+
+<section>
+<h2>19. Concepto que deben aprender los alumnos</h2>
+<p>Desplegar una aplicación no significa simplemente subir el código. Hay que adaptar la configuración al ambiente donde se ejecutará.</p>
+<ul>
+<li><strong>Configuración por ambiente:</strong> local y producción pueden utilizar bases diferentes.</li>
+<li><strong>Variables de entorno:</strong> permiten separar secretos y configuración del código.</li>
+<li><strong>Servicios:</strong> la aplicación y la base de datos son componentes independientes.</li>
+</ul>
+</section>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "title": "CenaAPP",
+  "description": "This app assists users in meal preparation by providing personalized recipes, ingredient sourcing based on location, and accommodating dietary preferences.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

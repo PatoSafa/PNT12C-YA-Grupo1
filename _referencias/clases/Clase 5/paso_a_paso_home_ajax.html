@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paso a paso - Login AJAX + Home AJAX</title>
+<style>
+body{font-family:Arial,sans-serif;line-height:1.6;background:#f5f5f5;margin:0;padding:30px;color:#222}.container{max-width:1000px;margin:auto;background:#fff;padding:35px;border-radius:10px}h1,h2{color:#333}pre{background:#1e1e1e;color:#eee;padding:18px;overflow:auto;border-radius:8px}code{font-family:Consolas,monospace}.paso{border-left:5px solid #555;padding-left:20px;margin:30px 0}.nota{background:#eee;padding:15px;border-radius:8px}.flujo{font-weight:bold;background:#eee;padding:15px;border-radius:8px}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Guía: Login con AJAX → Home → listado con AJAX</h1>
+<p>Objetivo: construir un login que se comunique con Spring Boot mediante AJAX y, si las credenciales son correctas, redirigir a <strong>home.html</strong>. En Home se muestran los datos del usuario y se consulta mediante AJAX el endpoint <strong>GET /api/elemento</strong>.</p>
+
+<div class="flujo">Login → POST /login → OK → guardar usuario → /home.html → GET /api/elemento → llenar tabla</div>
+
+<div class="paso"><h2>1. Preparar el Home</h2>
+<p>Crear:</p><pre>src/main/resources/static/home.html</pre>
+<p>El archivo tendrá una sección para los datos del usuario y una tabla para los elementos.</p>
+<pre>&lt;div class="usuario"&gt;
+    &lt;p&gt;Email: &lt;span id="usuarioEmail"&gt;&lt;/span&gt;&lt;/p&gt;
+    &lt;p&gt;Nombre: &lt;span id="usuarioNombre"&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;table&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;ID&lt;/th&gt;
+            &lt;th&gt;Nombre&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody id="tablaBody"&gt;&lt;/tbody&gt;
+&lt;/table&gt;</pre>
+</div>
+
+<div class="paso"><h2>2. Incorporar jQuery</h2>
+<pre>&lt;script src="https://code.jquery.com/jquery-3.7.1.min.js"&gt;&lt;/script&gt;</pre>
+<p>Esto permite utilizar <code>$.ajax()</code> para realizar llamadas HTTP desde JavaScript.</p>
+</div>
+
+<div class="paso"><h2>3. Recibir los datos del usuario</h2>
+<p>En este ejemplo se utiliza <code>sessionStorage</code> para pasar temporalmente los datos desde el login al Home.</p>
+<p>El login debe guardar un objeto JSON:</p>
+<pre>sessionStorage.setItem("usuario", JSON.stringify(response.usuario));
+window.location.href = "/home.html";</pre>
+<p>Por ejemplo, si el backend devuelve:</p>
+<pre>{
+    "mensaje": "Login correcto",
+    "usuario": {
+        "email": "ana@mail.com",
+        "nombre": "Ana"
+    }
+}</pre>
+</div>
+
+<div class="paso"><h2>4. Recuperar el usuario en Home</h2>
+<pre>const usuario = JSON.parse(sessionStorage.getItem("usuario"));
+
+if (usuario) {
+    $("#usuarioEmail").text(usuario.email);
+    $("#usuarioNombre").text(usuario.nombre);
+}</pre>
+<p><strong>Importante:</strong> esto sirve para el ejercicio de AJAX. En una aplicación real, la autenticación no debería basarse solamente en datos almacenados en el navegador.</p>
+</div>
+
+<div class="paso"><h2>5. Crear el AJAX GET</h2>
+<p>Cuando Home carga, JavaScript realiza:</p>
+<pre>$.ajax({
+    url: "/api/elemento",
+    type: "GET",
+    success: function(elementos) {
+        // procesar respuesta
+    },
+    error: function() {
+        // mostrar error
+    }
+});</pre>
+</div>
+
+<div class="paso"><h2>6. Recorrer la respuesta</h2>
+<p>Suponiendo que el backend devuelve un listado como:</p>
+<pre>[
+    { "id": 1, "nombre": "Elemento 1" },
+    { "id": 2, "nombre": "Elemento 2" },
+    { "id": 3, "nombre": "Elemento 3" }
+]</pre>
+<p>Se puede recorrer con <code>forEach</code>:</p>
+<pre>elementos.forEach(function(elemento) {
+    const fila = `
+        &lt;tr&gt;
+            &lt;td&gt;${elemento.id}&lt;/td&gt;
+            &lt;td&gt;${elemento.nombre}&lt;/td&gt;
+        &lt;/tr&gt;`;
+
+    $("#tablaBody").append(fila);
+});</pre>
+</div>
+
+<div class="paso"><h2>7. Backend para GET /api/elemento</h2>
+<p>El controlador debe exponer un endpoint GET. Por ejemplo:</p>
+<pre>@GetMapping("/api/elemento")
+@ResponseBody
+public List&lt;Elemento&gt; listar() {
+    return service.listar();
+}</pre>
+<p>El endpoint debe devolver JSON para que JavaScript pueda recorrer la respuesta.</p>
+</div>
+
+<div class="paso"><h2>8. Redirección después del login</h2>
+<p>Como el login es AJAX, no se utiliza directamente:</p>
+<pre>return "redirect:/home";</pre>
+<p>La respuesta OK vuelve a JavaScript y JavaScript realiza la navegación:</p>
+<pre>success: function(response) {
+    sessionStorage.setItem("usuario", JSON.stringify(response.usuario));
+    window.location.href = "/home.html";
+}</pre>
+</div>
+
+<div class="paso"><h2>9. Ejemplo completo del AJAX del login</h2>
+<pre>$("#loginForm").submit(function(event) {
+    event.preventDefault();
+
+    const login = {
+        email: $("#email").val(),
+        clave: $("#clave").val()
+    };
+
+    $.ajax({
+        url: "/login",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(login),
+
+        success: function(response) {
+            sessionStorage.setItem(
+                "usuario",
+                JSON.stringify(response.usuario)
+            );
+
+            window.location.href = "/home.html";
+        },
+
+        error: function(xhr) {
+            $("#mensaje").text(xhr.responseText);
+        }
+    });
+});</pre>
+</div>
+
+<div class="paso"><h2>10. ¿Qué ocurre cuando todo funciona?</h2>
+<ol>
+<li>El alumno completa email y clave.</li>
+<li>JavaScript intercepta el submit.</li>
+<li>AJAX hace <strong>POST /login</strong>.</li>
+<li>Spring Boot recibe el JSON.</li>
+<li>El service verifica las credenciales.</li>
+<li>Si son correctas, el backend devuelve HTTP 200 y los datos del usuario.</li>
+<li>JavaScript guarda temporalmente el usuario en <code>sessionStorage</code>.</li>
+<li>JavaScript navega a <strong>/home.html</strong>.</li>
+<li>Home recupera los datos del usuario y los muestra.</li>
+<li>Home ejecuta un <strong>GET /api/elemento</strong>.</li>
+<li>Spring Boot devuelve el listado en JSON.</li>
+<li>JavaScript recorre el listado y genera las filas de la tabla.</li>
+</ol>
+</div>
+
+<div class="nota"><strong>Para probarlo con Postman:</strong> primero probar POST /login y comprobar que devuelve HTTP 200 y el usuario. Después probar GET /api/elemento y verificar que devuelve un array JSON de elementos.</div>
+</div>
+</body>
+</html>

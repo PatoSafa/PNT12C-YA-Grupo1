@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía completa: levantar y desplegar una aplicación Spring Boot</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; background:#f4f6f8; color:#222; }
+    header { background:#17324d; color:white; padding:32px 20px; }
+    main { max-width:1100px; margin:auto; padding:24px; }
+    section { background:white; margin-bottom:22px; padding:24px; border-radius:10px; box-shadow:0 2px 8px #0001; }
+    h1,h2,h3 { color:#17324d; }
+    header h1 { color:white; margin-top:0; }
+    code, pre { font-family: Consolas, monospace; }
+    code { background:#eef1f4; padding:2px 5px; border-radius:4px; }
+    pre { background:#1e1e1e; color:#f4f4f4; padding:16px; border-radius:8px; overflow:auto; }
+    .note { border-left:5px solid #3d7ea6; background:#eef7fc; padding:14px; }
+    .warning { border-left:5px solid #d48a00; background:#fff7df; padding:14px; }
+    .success { border-left:5px solid #398557; background:#eef9f1; padding:14px; }
+    table { width:100%; border-collapse:collapse; margin:14px 0; }
+    th,td { border:1px solid #ccc; padding:10px; text-align:left; }
+    th { background:#edf1f5; }
+    .step { margin:14px 0; padding:14px; border-radius:8px; background:#f7f9fb; }
+    ul,ol { padding-left:26px; }
+    footer { text-align:center; padding:25px; color:#666; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Guía completa: levantar, probar y desplegar una aplicación Spring Boot</h1>
+  <p>Desde el proyecto local hasta una aplicación publicada en un servidor como Render.</p>
+</header>
+
+<main>
+
+<section>
+  <h2>1. ¿Qué vamos a construir?</h2>
+  <p>La idea es que el alumno pueda tener una aplicación funcionando de punta a punta:</p>
+  <ul>
+    <li>Una <strong>vista</strong> con <code>index.html</code>.</li>
+    <li>Un <strong>backend Spring Boot</strong> que expone endpoints.</li>
+    <li>Una <strong>base de datos MySQL</strong>, inicialmente ejecutada con Docker.</li>
+    <li>Comunicación entre la vista y el backend mediante <code>fetch()</code>.</li>
+    <li>Un repositorio en <strong>GitHub</strong>.</li>
+    <li>Finalmente, un ejemplo de despliegue del backend en un servidor como <strong>Render</strong>.</li>
+  </ul>
+
+  <div class="note">
+    <strong>Idea central:</strong> en desarrollo todo puede ejecutarse en la computadora del alumno.
+    En producción, la aplicación debe ejecutarse en un servidor accesible por Internet y la configuración
+    debe adaptarse al entorno del servidor.
+  </div>
+</section>
+
+<section>
+  <h2>2. Estructura de carpetas</h2>
+  <p>Para una aplicación Spring Boot que sirve una página HTML estática, una estructura simple puede ser:</p>
+
+<pre>
+primerMvc/
+├── pom.xml
+├── src/
+│   └── main/
+│       ├── java/
+│       │   └── ort/
+│       │       └── edu/
+│       │           └── ar/
+│       │               └── primerMvc/
+│       │                   ├── PrimerMvcApplication.java
+│       │                   ├── controller/
+│       │                   │   └── MyFirstController.java
+│       │                   ├── model/
+│       │                   │   └── Elemento.java
+│       │                   └── repository/
+│       │                       └── ElementoRepository.java
+│       │
+│       └── resources/
+│           ├── application.yaml
+│           └── static/
+│               └── index.html
+│
+└── .gitignore
+</pre>
+
+  <div class="success">
+    <strong>Importante:</strong> si <code>index.html</code> está dentro de
+    <code>src/main/resources/static/</code>, Spring Boot puede servirlo como contenido estático.
+    La URL local será normalmente <code>http://localhost:8080/</code>, si la aplicación usa el puerto 8080.
+  </div>
+
+  <div class="warning">
+    <strong>No confundir carpetas:</strong> el HTML no debe colocarse dentro de
+    <code>src/main/java</code>. Para este ejemplo se utiliza <code>src/main/resources/static</code>.
+  </div>
+</section>
+
+<section>
+  <h2>3. ¿Qué hace cada parte?</h2>
+
+  <table>
+    <tr><th>Elemento</th><th>Función</th></tr>
+    <tr><td><code>index.html</code></td><td>Vista o página que ve el usuario.</td></tr>
+    <tr><td><code>controller</code></td><td>Recibe solicitudes HTTP y define endpoints.</td></tr>
+    <tr><td><code>repository</code></td><td>Permite trabajar con los datos persistidos.</td></tr>
+    <tr><td><code>application.yaml</code></td><td>Configuración de la aplicación y conexión a la base.</td></tr>
+    <tr><td>MySQL</td><td>Base de datos.</td></tr>
+    <tr><td>Docker</td><td>Permite ejecutar MySQL de manera aislada.</td></tr>
+    <tr><td>GitHub</td><td>Repositorio remoto del código.</td></tr>
+    <tr><td>Render</td><td>Ejemplo de plataforma para ejecutar la aplicación en Internet.</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>4. Variables que deben estar configuradas</h2>
+
+  <p>En el entorno local del ejercicio se pueden utilizar estos valores:</p>
+
+  <table>
+    <tr><th>Variable</th><th>Valor local</th><th>¿Para qué sirve?</th></tr>
+    <tr><td>Host MySQL</td><td><code>localhost</code></td><td>Indica que MySQL está en la computadora.</td></tr>
+    <tr><td>Puerto MySQL</td><td><code>3306</code></td><td>Puerto utilizado para acceder a MySQL.</td></tr>
+    <tr><td>Base de datos</td><td><code>clase</code></td><td>Nombre de la base.</td></tr>
+    <tr><td>Usuario</td><td><code>alumno</code></td><td>Usuario de conexión.</td></tr>
+    <tr><td>Contraseña</td><td><code>alumno</code></td><td>Contraseña del usuario.</td></tr>
+    <tr><td>Puerto Spring Boot</td><td><code>8080</code></td><td>Puerto donde queda disponible el backend.</td></tr>
+  </table>
+
+  <p>En <code>application.yaml</code>:</p>
+
+<pre>
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/clase
+    username: alumno
+    password: alumno
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+</pre>
+
+  <div class="warning">
+    <strong>Atención:</strong> el puerto <code>3306</code> corresponde a MySQL.
+    El puerto <code>8080</code> corresponde a Spring Boot. Son servicios diferentes.
+  </div>
+</section>
+
+<section>
+  <h2>5. Levantar MySQL con Docker</h2>
+
+  <p>Desde la carpeta donde se encuentra el archivo <code>compose.yaml</code> o
+  <code>docker-compose.yml</code>, ejecutar:</p>
+
+<pre>
+docker compose up -d
+</pre>
+
+  <p>Comprobar que el contenedor está funcionando:</p>
+
+<pre>
+docker ps
+</pre>
+
+  <p>La configuración utilizada en el ejercicio puede ser:</p>
+
+<pre>
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: mysql-clase
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: clase
+      MYSQL_USER: alumno
+      MYSQL_PASSWORD: alumno
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
+</pre>
+</section>
+
+<section>
+  <h2>6. Crear la página de inicio</h2>
+
+  <p>Crear:</p>
+
+<pre>
+src/main/resources/static/index.html
+</pre>
+
+  <p>Ejemplo mínimo:</p>
+
+<pre>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="es"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;Página de inicio&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+  &lt;h1&gt;Bienvenidos a mi aplicación&lt;/h1&gt;
+  &lt;p&gt;Esta página es servida por Spring Boot.&lt;/p&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+</section>
+
+<section>
+  <h2>7. Levantar Spring Boot localmente</h2>
+
+  <div class="step">
+    <strong>Paso 1.</strong> Abrir el proyecto en IntelliJ IDEA.
+  </div>
+
+  <div class="step">
+    <strong>Paso 2.</strong> Verificar que MySQL esté funcionando en Docker.
+  </div>
+
+  <div class="step">
+    <strong>Paso 3.</strong> Verificar el <code>application.yaml</code>.
+  </div>
+
+  <div class="step">
+    <strong>Paso 4.</strong> Ejecutar la clase principal:
+<pre>
+PrimerMvcApplication.java
+</pre>
+    que contiene el método <code>main</code> y la anotación
+    <code>@SpringBootApplication</code>.
+  </div>
+
+  <div class="step">
+    <strong>Paso 5.</strong> Esperar en la consola de IntelliJ hasta que Spring Boot termine de iniciar.
+  </div>
+
+  <div class="step">
+    <strong>Paso 6.</strong> Abrir el navegador y entrar a:
+<pre>
+http://localhost:8080/
+</pre>
+  </div>
+
+  <div class="success">
+    Si todo está correctamente configurado, debería aparecer el <code>index.html</code>.
+  </div>
+</section>
+
+<section>
+  <h2>8. ¿Por qué no alcanza con abrir el index.html haciendo doble clic?</h2>
+
+  <p>Un archivo HTML puede abrirse directamente desde el explorador de archivos. Sin embargo,
+  para este proyecto conviene que la vista sea servida por Spring Boot.</p>
+
+  <p>De esta manera, la arquitectura queda:</p>
+
+<pre>
+Navegador
+    |
+    | HTTP
+    v
+Spring Boot :8080
+    |
+    | API REST
+    v
+MySQL :3306
+</pre>
+
+  <p>Además, la vista y el backend quedan dentro de una misma aplicación durante el desarrollo,
+  lo que simplifica el flujo para los alumnos.</p>
+</section>
+
+<section>
+  <h2>9. Conectar la vista con el backend</h2>
+
+  <p>Supongamos que el backend tiene un endpoint:</p>
+
+<pre>
+GET /elementos
+</pre>
+
+  <p>Desde el <code>index.html</code> podemos consumirlo con JavaScript:</p>
+
+<pre>
+&lt;script&gt;
+  fetch("/elementos")
+    .then(response =&gt; response.json())
+    .then(data =&gt; {
+      console.log(data);
+    })
+    .catch(error =&gt; {
+      console.error("Error:", error);
+    });
+&lt;/script&gt;
+</pre>
+
+  <div class="note">
+    <strong>Ventaja de usar una URL relativa:</strong> si el HTML y el backend están siendo servidos
+    por la misma aplicación, <code>fetch("/elementos")</code> apunta al mismo servidor que entregó
+    el HTML. No hace falta escribir <code>http://localhost:8080</code> en cada llamada.
+  </div>
+
+  <p>Por ejemplo, si el servidor está en:</p>
+
+<pre>
+http://localhost:8080/
+</pre>
+
+  <p>entonces:</p>
+
+<pre>
+fetch("/elementos")
+</pre>
+
+  <p>equivale a solicitar:</p>
+
+<pre>
+http://localhost:8080/elementos
+</pre>
+</section>
+
+<section>
+  <h2>10. Flujo completo en local</h2>
+
+  <ol>
+    <li>Encender Docker Desktop.</li>
+    <li>Ejecutar MySQL con <code>docker compose up -d</code>.</li>
+    <li>Comprobar el contenedor con <code>docker ps</code>.</li>
+    <li>Abrir el proyecto en IntelliJ.</li>
+    <li>Verificar <code>application.yaml</code>.</li>
+    <li>Ejecutar Spring Boot.</li>
+    <li>Abrir <code>http://localhost:8080/</code>.</li>
+    <li>Comprobar que aparece el <code>index.html</code>.</li>
+    <li>Probar los endpoints con Postman.</li>
+    <li>Probar desde el HTML las llamadas mediante <code>fetch()</code>.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>11. Subir el proyecto a GitHub con Git Bash</h2>
+
+  <p>Abrir Git Bash dentro de la carpeta del proyecto.</p>
+
+  <p>Comprobar Git:</p>
+
+<pre>
+git --version
+</pre>
+
+  <p>Comprobar el estado:</p>
+
+<pre>
+git status
+</pre>
+
+  <p>Agregar los cambios:</p>
+
+<pre>
+git add .
+</pre>
+
+  <p>Crear el commit:</p>
+
+<pre>
+git commit -m "Agrega pagina de inicio y configuracion"
+</pre>
+
+  <p>Subir a GitHub:</p>
+
+<pre>
+git push
+</pre>
+
+  <div class="warning">
+    <strong>No subir secretos reales:</strong> contraseñas, claves privadas, tokens y credenciales
+    de producción no deberían quedar escritos en el repositorio.
+  </div>
+</section>
+
+<section>
+  <h2>12. ¿Qué cambia cuando pasamos de local a producción?</h2>
+
+  <p>En local tenemos algo similar a:</p>
+
+<pre>
+Navegador
+   |
+   v
+localhost:8080
+   |
+   v
+Spring Boot
+   |
+   v
+localhost:3306
+   |
+   v
+MySQL Docker
+</pre>
+
+  <p>En producción, la aplicación se ejecuta en un servidor remoto:</p>
+
+<pre>
+Usuario
+   |
+   | Internet
+   v
+Servidor / plataforma cloud
+   |
+   v
+Spring Boot
+   |
+   v
+Base de datos de producción
+</pre>
+
+  <div class="warning">
+    <strong>Importante:</strong> <code>localhost</code> siempre significa "esta máquina".
+    Por eso, una configuración que funciona en la computadora del alumno no necesariamente
+    funciona igual cuando la aplicación se ejecuta en un servidor.
+  </div>
+</section>
+
+<section>
+  <h2>13. Ejemplo de despliegue utilizando Render</h2>
+
+  <p>Render puede utilizarse como ejemplo de plataforma cloud para desplegar una aplicación web.
+  El flujo general es:</p>
+
+<pre>
+Código local
+    |
+    v
+GitHub
+    |
+    v
+Render
+    |
+    v
+Aplicación Spring Boot publicada
+</pre>
+
+  <p>El ejemplo supone que el proyecto ya está en GitHub y que puede construirse correctamente
+  con Maven.</p>
+
+  <h3>Paso 1 — Preparar el proyecto</h3>
+
+  <p>Antes de desplegar:</p>
+  <ul>
+    <li>El proyecto debe compilar correctamente.</li>
+    <li><code>pom.xml</code> debe estar en la raíz.</li>
+    <li>La aplicación debe poder iniciarse correctamente.</li>
+    <li>El código debe estar subido a GitHub.</li>
+  </ul>
+
+  <h3>Paso 2 — No fijar obligatoriamente el puerto 8080 en producción</h3>
+
+  <p>En un entorno cloud, la plataforma puede proporcionar el puerto mediante una variable de entorno.
+  Por eso es conveniente configurar Spring Boot para utilizar <code>PORT</code> cuando exista:</p>
+
+<pre>
+server:
+  port: ${PORT:8080}
+</pre>
+
+  <p>Esto significa:</p>
+  <ul>
+    <li>Si existe la variable <code>PORT</code>, se utiliza su valor.</li>
+    <li>Si no existe, se utiliza <code>8080</code>.</li>
+  </ul>
+
+  <h3>Paso 3 — Crear el servicio web en Render</h3>
+
+  <ol>
+    <li>Ingresar a Render.</li>
+    <li>Crear un nuevo servicio web.</li>
+    <li>Conectar la cuenta/repositorio de GitHub.</li>
+    <li>Seleccionar el repositorio del proyecto.</li>
+    <li>Configurar el entorno de construcción.</li>
+    <li>Indicar el comando para construir la aplicación.</li>
+    <li>Indicar el comando para iniciar Spring Boot.</li>
+    <li>Realizar el deploy.</li>
+  </ol>
+
+  <h3>Ejemplo conceptual de comandos Maven</h3>
+
+<pre>
+Build:
+./mvnw clean package -DskipTests
+
+Start:
+java -jar target/primerMvc-0.0.1-SNAPSHOT.jar
+</pre>
+
+  <div class="warning">
+    El nombre exacto del archivo <code>.jar</code> depende del proyecto. Revisar el nombre generado
+    dentro de la carpeta <code>target</code>.
+  </div>
+
+  <h3>Paso 4 — Configurar las variables de entorno</h3>
+
+  <p>En producción no conviene utilizar las credenciales locales del ejemplo. La base de datos
+  debe ser una base accesible desde el servidor y sus credenciales deben configurarse mediante
+  variables de entorno.</p>
+
+  <p>Un esquema posible es:</p>
+
+<pre>
+DB_HOST
+DB_PORT
+DB_NAME
+DB_USER
+DB_PASSWORD
+</pre>
+
+  <p>Y el <code>application.yaml</code> puede leerlas:</p>
+
+<pre>
+server:
+  port: ${PORT:8080}
+
+spring:
+  datasource:
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+</pre>
+
+  <div class="note">
+    <strong>Concepto importante:</strong> la aplicación no debería depender de
+    <code>localhost:3306</code> para la base de datos cuando está desplegada en Internet.
+    El host de la base será el servidor o servicio de base de datos correspondiente al entorno
+    de producción.
+  </div>
+</section>
+
+<section>
+  <h2>14. ¿Y el index.html cuando se despliega?</h2>
+
+  <p>Si el archivo continúa ubicado en:</p>
+
+<pre>
+src/main/resources/static/index.html
+</pre>
+
+  <p>Spring Boot puede servirlo desde la aplicación.</p>
+
+  <p>En local:</p>
+
+<pre>
+http://localhost:8080/
+</pre>
+
+  <p>En producción:</p>
+
+<pre>
+https://DOMINIO-ASIGNADO-POR-LA-PLATAFORMA/
+</pre>
+
+  <p>La dirección exacta dependerá del dominio que proporcione la plataforma.</p>
+
+  <div class="success">
+    La ventaja de mantener el <code>index.html</code> dentro de <code>static</code> es que,
+    en este ejemplo, la vista viaja junto con la aplicación Spring Boot.
+  </div>
+</section>
+
+<section>
+  <h2>15. ¿Qué pasa con fetch() en producción?</h2>
+
+  <p>Si la vista y el backend están en la misma aplicación, conviene mantener:</p>
+
+<pre>
+fetch("/elementos")
+</pre>
+
+  <p>en lugar de:</p>
+
+<pre>
+fetch("http://localhost:8080/elementos")
+</pre>
+
+  <p>La primera opción se adapta automáticamente al dominio desde el cual se está ejecutando
+  la aplicación.</p>
+
+  <p>Por ejemplo:</p>
+
+<pre>
+Local:
+http://localhost:8080/elementos
+
+Producción:
+https://mi-aplicacion.example/elementos
+</pre>
+
+  <p>El código JavaScript puede seguir siendo:</p>
+
+<pre>
+fetch("/elementos")
+</pre>
+</section>
+
+<section>
+  <h2>16. Diferencia entre desarrollo y producción</h2>
+
+  <table>
+    <tr>
+      <th>Concepto</th>
+      <th>Desarrollo local</th>
+      <th>Producción</th>
+    </tr>
+    <tr>
+      <td>Aplicación</td>
+      <td>PC del alumno</td>
+      <td>Servidor/cloud</td>
+    </tr>
+    <tr>
+      <td>URL</td>
+      <td><code>localhost:8080</code></td>
+      <td>Dominio público</td>
+    </tr>
+    <tr>
+      <td>MySQL</td>
+      <td>Docker local</td>
+      <td>Base de datos accesible desde el servidor</td>
+    </tr>
+    <tr>
+      <td>Credenciales</td>
+      <td>Valores de clase</td>
+      <td>Variables de entorno / secretos</td>
+    </tr>
+    <tr>
+      <td>Puerto</td>
+      <td>8080</td>
+      <td>Puerto proporcionado por el entorno</td>
+    </tr>
+    <tr>
+      <td>Código</td>
+      <td>Proyecto local</td>
+      <td>Repositorio GitHub + build del servidor</td>
+    </tr>
+  </table>
+</section>
+
+<section>
+  <h2>17. Errores frecuentes</h2>
+
+  <h3>La página no abre en localhost:8080</h3>
+  <ul>
+    <li>Spring Boot no está iniciado.</li>
+    <li>El puerto 8080 está ocupado.</li>
+    <li>La aplicación tiene un error de configuración.</li>
+    <li><code>index.html</code> no está dentro de <code>resources/static</code>.</li>
+  </ul>
+
+  <h3>Spring Boot no conecta con MySQL</h3>
+  <ul>
+    <li>El contenedor MySQL no está iniciado.</li>
+    <li>El puerto 3306 está ocupado o mal configurado.</li>
+    <li>El nombre de la base no coincide.</li>
+    <li>El usuario o contraseña no coinciden.</li>
+    <li>La URL JDBC está mal escrita.</li>
+  </ul>
+
+  <h3>El fetch devuelve error</h3>
+  <ul>
+    <li>El endpoint no existe.</li>
+    <li>La URL es incorrecta.</li>
+    <li>El backend no está iniciado.</li>
+    <li>El endpoint devuelve un error del servidor.</li>
+    <li>Si frontend y backend están separados, puede existir un problema de CORS.</li>
+  </ul>
+
+  <h3>Funciona localmente pero falla al desplegar</h3>
+  <ul>
+    <li>Se está usando <code>localhost</code> para una base que no está en el mismo servidor.</li>
+    <li>El puerto no está configurado para el entorno cloud.</li>
+    <li>Faltan variables de entorno.</li>
+    <li>El comando de build o start es incorrecto.</li>
+    <li>El archivo JAR generado tiene otro nombre.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>18. Checklist final del alumno</h2>
+
+  <h3>Local</h3>
+  <ul>
+    <li>☐ Proyecto abre correctamente en IntelliJ.</li>
+    <li>☐ Docker Desktop está funcionando.</li>
+    <li>☐ MySQL está ejecutándose.</li>
+    <li>☐ Puerto MySQL: <code>3306</code>.</li>
+    <li>☐ Base: <code>clase</code>.</li>
+    <li>☐ Usuario: <code>alumno</code>.</li>
+    <li>☐ <code>application.yaml</code> configurado.</li>
+    <li>☐ Puerto Spring Boot: <code>8080</code>.</li>
+    <li>☐ <code>index.html</code> está en <code>src/main/resources/static/</code>.</li>
+    <li>☐ Spring Boot inicia sin errores.</li>
+    <li>☐ <code>http://localhost:8080/</code> muestra la página.</li>
+    <li>☐ Postman puede consultar los endpoints.</li>
+    <li>☐ El <code>fetch()</code> funciona desde la vista.</li>
+    <li>☐ Cambios subidos a GitHub.</li>
+  </ul>
+
+  <h3>Producción</h3>
+  <ul>
+    <li>☐ Proyecto subido a GitHub.</li>
+    <li>☐ Build configurado.</li>
+    <li>☐ Start configurado.</li>
+    <li>☐ Puerto preparado para variable <code>PORT</code>.</li>
+    <li>☐ Variables de entorno configuradas.</li>
+    <li>☐ Base de datos de producción disponible.</li>
+    <li>☐ Aplicación desplegada.</li>
+    <li>☐ URL pública probada.</li>
+    <li>☐ Página de inicio visible.</li>
+    <li>☐ Endpoints probados desde la aplicación desplegada.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>19. Resumen visual</h2>
+
+<pre>
+                    DESARROLLO LOCAL
+
+             ┌─────────────────────┐
+             │     index.html      │
+             │       Vista         │
+             └──────────┬──────────┘
+                        │
+                     fetch()
+                        │
+                        v
+             ┌─────────────────────┐
+             │    Spring Boot      │
+             │     :8080           │
+             └──────────┬──────────┘
+                        │
+                     JDBC
+                        │
+                        v
+             ┌─────────────────────┐
+             │       MySQL         │
+             │     :3306           │
+             │      Docker         │
+             └─────────────────────┘
+
+
+                    PRODUCCIÓN
+
+             ┌─────────────────────┐
+             │       Usuario       │
+             │      Internet       │
+             └──────────┬──────────┘
+                        │
+                        v
+             ┌─────────────────────┐
+             │   Plataforma Cloud  │
+             │       Render        │
+             │    Spring Boot      │
+             └──────────┬──────────┘
+                        │
+                        v
+             ┌─────────────────────┐
+             │ Base de datos       │
+             │ de producción       │
+             └─────────────────────┘
+</pre>
+</section>
+
+<section>
+  <h2>20. Idea que deben llevarse</h2>
+
+  <p>El objetivo no es solamente "hacer que funcione". El alumno debe poder identificar
+  qué componente está ejecutando cada parte de la aplicación:</p>
+
+  <ol>
+    <li><strong>HTML/JavaScript:</strong> interfaz y comunicación con el backend.</li>
+    <li><strong>Spring Boot:</strong> servidor y lógica de backend.</li>
+    <li><strong>API REST:</strong> comunicación entre la vista y el backend.</li>
+    <li><strong>MySQL:</strong> persistencia de datos.</li>
+    <li><strong>Docker:</strong> ejecución local de la base de datos.</li>
+    <li><strong>GitHub:</strong> almacenamiento y versionado del código.</li>
+    <li><strong>Render:</strong> ejemplo de ejecución de la aplicación en un entorno cloud.</li>
+  </ol>
+
+  <div class="success">
+    <strong>Objetivo final:</strong> poder pasar de
+    <code>index.html → Spring Boot → MySQL</code> funcionando en la computadora,
+    a una aplicación publicada mediante un servicio cloud, comprendiendo qué configuración
+    cambia entre ambos ambientes.
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Guía didáctica — Spring Boot, HTML, MySQL, Docker, GitHub y despliegue cloud
+</footer>
+
+</body>
+</html>

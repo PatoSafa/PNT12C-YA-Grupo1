@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX, API Gateway y Backend</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        header {
+            background: #1f2937;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        section {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+        }
+
+        h2 {
+            color: #2563eb;
+        }
+
+        .flujo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 25px 0;
+        }
+
+        .caja {
+            padding: 18px;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 150px;
+            font-weight: bold;
+        }
+
+        .frontend {
+            background: #dbeafe;
+        }
+
+        .gateway {
+            background: #fef3c7;
+        }
+
+        .backend {
+            background: #dcfce7;
+        }
+
+        .flecha {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        pre {
+            background: #111827;
+            color: #e5e7eb;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: Consolas, monospace;
+        }
+
+        .ejemplo {
+            border-left: 5px solid #2563eb;
+            padding: 15px;
+            background: #eff6ff;
+            margin: 15px 0;
+        }
+
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        input {
+            width: 250px;
+        }
+
+        button {
+            cursor: pointer;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #resultado {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .pregunta {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>AJAX, API Gateway y Backend</h1>
+    <p>¿Cómo se comunica una página web con un servidor?</p>
+</header>
+
+<main>
+
+    <section>
+        <h2>1. El problema</h2>
+
+        <p>
+            Cuando trabajamos con una aplicación web, muchas veces necesitamos
+            enviar información desde el navegador hacia un servidor.
+        </p>
+
+        <p>
+            Por ejemplo, cuando un usuario completa un formulario y presiona
+            "Guardar", el navegador necesita enviar esos datos al backend.
+        </p>
+
+        <p>
+            Una forma habitual de realizar esta comunicación desde JavaScript
+            es mediante una llamada HTTP utilizando <strong>AJAX</strong>.
+        </p>
+    </section>
+
+
+    <section>
+        <h2>2. ¿Qué significa AJAX?</h2>
+
+        <p>
+            AJAX significa <strong>Asynchronous JavaScript and XML</strong>.
+        </p>
+
+        <p>
+            El concepto de AJAX permite que JavaScript realice una petición
+            al servidor sin necesidad de recargar toda la página.
+        </p>
+
+        <div class="ejemplo">
+            <strong>Importante:</strong>
+            actualmente no necesariamente utilizamos XML.
+            Es muy común trabajar con <strong>JSON</strong>.
+        </div>
+
+        <p>
+            En aplicaciones modernas, las llamadas AJAX suelen realizarse
+            mediante la función <code>fetch()</code> de JavaScript.
+        </p>
+    </section>
+
+
+    <section>
+        <h2>3. ¿Qué ocurre cuando hacemos una llamada?</h2>
+
+        <div class="flujo">
+
+            <div class="caja frontend">
+                FRONTEND<br>
+                HTML + CSS + JS
+            </div>
+
+            <div class="flecha">→</div>
+
+            <div class="caja gateway">
+                API GATEWAY<br>
+                Entrada a las APIs
+            </div>
+
+            <div class="flecha">→</div>
+
+            <div class="caja backend">
+                BACKEND<br>
+                Lógica del sistema
+            </div>
+
+        </div>
+
+        <p>
+            El flujo básico es:
+        </p>
+
+        <ol>
+            <li>El usuario realiza una acción.</li>
+            <li>JavaScript obtiene los datos.</li>
+            <li>JavaScript realiza una petición HTTP.</li>
+            <li>La petición llega al API Gateway.</li>
+            <li>El API Gateway determina a qué servicio/backend enviarla.</li>
+            <li>El backend procesa la solicitud.</li>
+            <li>El backend devuelve una respuesta.</li>
+            <li>JavaScript recibe la respuesta y actualiza la página.</li>
+        </ol>
+    </section>
+
+
+    <section>
+        <h2>4. ¿Qué es un API Gateway?</h2>
+
+        <p>
+            Un <strong>API Gateway</strong> funciona como un punto de entrada
+            para las solicitudes que llegan a diferentes APIs o servicios
+            del backend.
+        </p>
+
+        <p>
+            Por ejemplo, imaginemos que tenemos estos endpoints:
+        </p>
+
+        <pre><code>GET  /api/usuarios
+POST /api/usuarios
+GET  /api/productos
+POST /api/productos
+GET  /api/pedidos</code></pre>
+
+        <p>
+            El frontend no necesariamente necesita conocer cómo están
+            organizados internamente todos los servicios.
+            Puede comunicarse con el Gateway, que luego dirige cada solicitud
+            al servicio correspondiente.
+        </p>
+    </section>
+
+
+    <section>
+        <h2>5. Una llamada AJAX con fetch()</h2>
+
+        <p>
+            Supongamos que nuestro backend expone el siguiente endpoint:
+        </p>
+
+        <pre><code>GET http://localhost:8080/api/usuarios</code></pre>
+
+        <p>
+            Desde JavaScript podemos realizar una petición:
+        </p>
+
+        <pre><code>fetch("http://localhost:8080/api/usuarios")
+    .then(response =&gt; response.json())
+    .then(data =&gt; {
+        console.log(data);
+    })
+    .catch(error =&gt; {
+        console.error(error);
+    });</code></pre>
+
+        <p>
+            En este ejemplo:
+        </p>
+
+        <ul>
+            <li><code>fetch()</code> realiza la petición HTTP.</li>
+            <li><code>response.json()</code> convierte la respuesta a un objeto JavaScript.</li>
+            <li><code>data</code> contiene los datos recibidos.</li>
+            <li><code>catch()</code> permite manejar errores.</li>
+        </ul>
+    </section>
+
+
+    <section>
+        <h2>6. ¿Y si queremos enviar información?</h2>
+
+        <p>
+            Supongamos que queremos crear un usuario.
+        </p>
+
+        <p>
+            Nuestro backend tiene:
+        </p>
+
+        <pre><code>POST /api/usuarios</code></pre>
+
+        <p>
+            Podemos enviar un objeto JSON:
+        </p>
+
+        <pre><code>const usuario = {
+    nombre: "Ana",
+    email: "ana@email.com"
+};
+
+fetch("/api/usuarios", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(usuario)
+})
+.then(response =&gt; response.json())
+.then(data =&gt; {
+    console.log(data);
+});</code></pre>
+
+        <p>
+            Acá aparecen algunos conceptos nuevos:
+        </p>
+
+        <ul>
+            <li><strong>method:</strong> indica el método HTTP.</li>
+            <li><strong>headers:</strong> informa características de la petición.</li>
+            <li><strong>Content-Type:</strong> indica que estamos enviando JSON.</li>
+            <li><strong>body:</strong> contiene la información enviada.</li>
+            <li><strong>JSON.stringify():</strong> transforma el objeto JavaScript en texto JSON.</li>
+        </ul>
+    </section>
+
+
+    <section>
+        <h2>7. Ejemplo completo: formulario + AJAX</h2>
+
+        <p>
+            El siguiente ejemplo toma un nombre desde un formulario y realiza
+            una petición al backend.
+        </p>
+
+        <form id="formUsuario">
+
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" required>
+
+            <button type="submit">Enviar</button>
+
+        </form>
+
+        <p id="resultado"></p>
+
+        <pre><code>const formulario = document.getElementById("formUsuario");
+
+formulario.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const nombre = document.getElementById("nombre").value;
+
+    fetch("/api/usuarios", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            nombre: nombre
+        })
+    })
+    .then(response =&gt; response.json())
+    .then(data =&gt; {
+        document.getElementById("resultado").innerText =
+            "Usuario agregado correctamente";
+    })
+    .catch(error =&gt; {
+        document.getElementById("resultado").innerText =
+            "Ocurrió un error";
+    });
+
+});</code></pre>
+    </section>
+
+
+    <section>
+        <h2>8. ¿Dónde interviene cada tecnología?</h2>
+
+        <table border="1" cellpadding="10" width="100%">
+            <tr>
+                <th>Tecnología</th>
+                <th>Responsabilidad</th>
+            </tr>
+
+            <tr>
+                <td>HTML</td>
+                <td>Define la estructura y los elementos de la página.</td>
+            </tr>
+
+            <tr>
+                <td>CSS</td>
+                <td>Define la apariencia visual.</td>
+            </tr>
+
+            <tr>
+                <td>JavaScript</td>
+                <td>Permite agregar comportamiento e interacción.</td>
+            </tr>
+
+            <tr>
+                <td>AJAX / fetch()</td>
+                <td>Permite realizar peticiones HTTP desde el navegador sin recargar toda la página.</td>
+            </tr>
+
+            <tr>
+                <td>API Gateway</td>
+                <td>Recibe solicitudes y las dirige hacia los servicios/API correspondientes.</td>
+            </tr>
+
+            <tr>
+                <td>Backend</td>
+                <td>Procesa la solicitud, ejecuta la lógica y devuelve una respuesta.</td>
+            </tr>
+        </table>
+    </section>
+
+
+    <section>
+        <h2>9. Actividad para los alumnos</h2>
+
+        <div class="pregunta">
+            <strong>Actividad 1:</strong>
+            Modificá el formulario para solicitar nombre y email.
+        </div>
+
+        <div class="pregunta">
+            <strong>Actividad 2:</strong>
+            Modificá el objeto JSON enviado al backend para incluir ambos datos.
+        </div>
+
+        <div class="pregunta">
+            <strong>Actividad 3:</strong>
+            Cambiá el endpoint para representar un recurso diferente.
+            Por ejemplo:
+            <code>/api/productos</code>.
+        </div>
+
+        <div class="pregunta">
+            <strong>Actividad 4:</strong>
+            Mostrá en la página los datos recibidos en la respuesta.
+            No utilices solamente <code>console.log()</code>.
+        </div>
+
+        <div class="pregunta">
+            <strong>Actividad 5:</strong>
+            Agregá un mensaje diferente para una respuesta exitosa
+            y para un error.
+        </div>
+
+        <div class="pregunta">
+            <strong>Actividad 6:</strong>
+            Identificá qué parte de la aplicación corresponde al frontend,
+            cuál al API Gateway y cuál al backend.
+        </div>
+    </section>
+
+
+    <section>
+        <h2>10. Preguntas de comprensión</h2>
+
+        <ol>
+            <li>¿Qué problema resuelve AJAX?</li>
+            <li>¿Qué diferencia hay entre enviar información mediante GET y POST?</li>
+            <li>¿Qué función cumple el API Gateway?</li>
+            <li>¿Qué información viaja en el body de una petición POST?</li>
+            <li>¿Por qué utilizamos JSON.stringify()?</li>
+            <li>¿Qué ocurre si el backend devuelve un error?</li>
+            <li>¿Por qué podemos actualizar una parte de la página sin recargarla completamente?</li>
+            <li>¿Qué responsabilidad tiene el frontend y cuál tiene el backend?</li>
+        </ol>
+    </section>
+
+
+    <section>
+        <h2>11. Desafío</h2>
+
+        <p>
+            Imaginá que el sistema tiene tres servicios:
+        </p>
+
+        <pre><code>/api/usuarios
+/api/productos
+/api/pedidos</code></pre>
+
+        <p>
+            Dibujá el flujo de una petición desde que el usuario presiona
+            un botón hasta que recibe la respuesta.
+        </p>
+
+        <p>
+            Luego explicá qué responsabilidad tendría el API Gateway
+            dentro de ese flujo.
+        </p>
+    </section>
+
+</main>
+
+<script>
+    /*
+     * EJEMPLO INTERACTIVO
+     *
+     * Este ejemplo NO realiza una llamada real a un backend.
+     * Solamente permite visualizar qué datos se prepararían
+     * antes de realizar una petición AJAX.
+     */
+
+    const formulario = document.getElementById("formUsuario");
+
+    formulario.addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+        const nombre = document.getElementById("nombre").value;
+
+        const usuario = {
+            nombre: nombre
+        };
+
+        document.getElementById("resultado").innerText =
+            "Datos preparados para enviar: " + JSON.stringify(usuario);
+
+        /*
+         * En una aplicación real podríamos hacer:
+         *
+         * fetch("/api/usuarios", {
+         *     method: "POST",
+         *     headers: {
+         *         "Content-Type": "application/json"
+         *     },
+         *     body: JSON.stringify(usuario)
+         * })
+         * .then(response => response.json())
+         * .then(data => {
+         *     console.log(data);
+         * })
+         * .catch(error => {
+         *     console.error(error);
+         * });
+         */
+    });
+</script>
+
+</body>
+</html>

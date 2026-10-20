@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spring Boot + Gradle + Java + Docker + GitHub</title>
+<style>
+    :root {
+        --bg: #f4f7fb;
+        --card: #ffffff;
+        --text: #172033;
+        --muted: #5d687a;
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --green: #16803c;
+        --orange: #d97706;
+        --red: #c62828;
+        --border: #dbe2ea;
+        --code: #111827;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+    }
+
+    header {
+        background: linear-gradient(135deg, #172554, #1d4ed8);
+        color: white;
+        padding: 55px 20px;
+        text-align: center;
+    }
+
+    header h1 {
+        margin: 0 0 12px;
+        font-size: clamp(30px, 5vw, 52px);
+    }
+
+    header p {
+        max-width: 850px;
+        margin: auto;
+        font-size: 18px;
+        opacity: .94;
+    }
+
+    main {
+        max-width: 1050px;
+        margin: 35px auto;
+        padding: 0 20px 60px;
+    }
+
+    section {
+        background: var(--card);
+        margin: 24px 0;
+        padding: 30px;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        box-shadow: 0 4px 15px rgba(15, 23, 42, .06);
+    }
+
+    h2 {
+        color: var(--primary-dark);
+        margin-top: 0;
+    }
+
+    h3 {
+        color: #334155;
+    }
+
+    .step {
+        display: inline-flex;
+        width: 38px;
+        height: 38px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: var(--primary);
+        color: white;
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+    .flow {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin: 30px 0;
+    }
+
+    .box {
+        min-width: 155px;
+        padding: 18px;
+        text-align: center;
+        border-radius: 12px;
+        border: 2px solid var(--border);
+        font-weight: bold;
+        background: #f8fafc;
+    }
+
+    .box.java { border-color: #dc2626; }
+    .box.spring { border-color: #16a34a; }
+    .box.gradle { border-color: #0284c7; }
+    .box.docker { border-color: #2563eb; }
+    .box.db { border-color: #7c3aed; }
+    .box.github { border-color: #111827; }
+
+    .arrow {
+        font-size: 28px;
+        font-weight: bold;
+        color: var(--muted);
+    }
+
+    .image-card {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        padding: 18px;
+        border-radius: 12px;
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        margin: 18px 0;
+    }
+
+    .image-card img {
+        width: 100px;
+        height: 100px;
+        flex: 0 0 100px;
+    }
+
+    pre {
+        background: var(--code);
+        color: #e5e7eb;
+        padding: 20px;
+        border-radius: 10px;
+        overflow-x: auto;
+        font-size: 14px;
+    }
+
+    code {
+        font-family: Consolas, "Courier New", monospace;
+    }
+
+    .inline-code {
+        background: #eef2ff;
+        color: #3730a3;
+        padding: 2px 6px;
+        border-radius: 5px;
+        font-family: Consolas, monospace;
+    }
+
+    .note, .warning, .success {
+        padding: 16px 18px;
+        border-radius: 9px;
+        margin: 18px 0;
+    }
+
+    .note {
+        background: #eff6ff;
+        border-left: 5px solid var(--primary);
+    }
+
+    .warning {
+        background: #fff7ed;
+        border-left: 5px solid var(--orange);
+    }
+
+    .success {
+        background: #f0fdf4;
+        border-left: 5px solid var(--green);
+    }
+
+    a {
+        color: var(--primary-dark);
+        font-weight: bold;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+
+    th, td {
+        padding: 12px;
+        border: 1px solid var(--border);
+        text-align: left;
+    }
+
+    th {
+        background: #eff6ff;
+    }
+
+    .checklist {
+        padding-left: 0;
+        list-style: none;
+    }
+
+    .checklist li {
+        margin: 10px 0;
+        padding: 10px 12px;
+        background: #f8fafc;
+        border-radius: 8px;
+    }
+
+    .challenge {
+        background: linear-gradient(135deg, #172554, #312e81);
+        color: white;
+        border: none;
+    }
+
+    .challenge h2, .challenge h3 {
+        color: white;
+    }
+
+    .challenge a {
+        color: #bfdbfe;
+    }
+
+    .small {
+        color: var(--muted);
+        font-size: 14px;
+    }
+
+    .timeline {
+        border-left: 4px solid var(--primary);
+        padding-left: 20px;
+    }
+
+    footer {
+        text-align: center;
+        padding: 30px;
+        color: var(--muted);
+    }
+
+    @media (max-width: 650px) {
+        section { padding: 20px; }
+        .image-card { flex-direction: column; text-align: center; }
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Crear un proyecto Spring Boot desde cero</h1>
+    <p>
+        Java + Spring Boot + Gradle + MySQL en Docker + GitHub
+    </p>
+</header>
+
+<main>
+
+<section>
+    <h2>🎯 Objetivo de la clase</h2>
+    <p>
+        En esta guía vamos a crear una aplicación backend utilizando
+        <strong>Java y Spring Boot</strong>, administrando las dependencias
+        con <strong>Gradle</strong> y utilizando <strong>MySQL dentro de Docker</strong>
+        como base de datos.
+    </p>
+
+    <p>Al finalizar tendremos:</p>
+
+    <ul>
+        <li>Un proyecto Spring Boot funcionando.</li>
+        <li>Un proyecto Java administrado con Gradle.</li>
+        <li>Una base de datos MySQL ejecutándose en un contenedor Docker.</li>
+        <li>Una API REST para consultar y guardar alumnos.</li>
+        <li>El código versionado y publicado en GitHub.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>🧩 ¿Qué tecnologías vamos a utilizar?</h2>
+
+    <div class="flow">
+        <div class="box java">☕ Java<br>Lenguaje</div>
+        <div class="arrow">→</div>
+        <div class="box spring">🌱 Spring Boot<br>Backend</div>
+        <div class="arrow">→</div>
+        <div class="box.gradle">Gradle<br>Build</div>
+        <div class="arrow">→</div>
+        <div class="box docker">🐳 Docker<br>Contenedor</div>
+        <div class="arrow">→</div>
+        <div class="box db">🗄️ MySQL<br>Base de datos</div>
+    </div>
+
+    <p>
+        Finalmente utilizaremos <strong>Git y GitHub</strong> para guardar
+        y compartir nuestro proyecto.
+    </p>
+
+    <div class="image-card">
+        <img alt="Diagrama Java Spring Docker MySQL"
+             src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='20' fill='%23eff6ff'/%3E%3Ctext x='100' y='65' text-anchor='middle' font-size='42'%3E☕%3C/text%3E%3Ctext x='100' y='105' text-anchor='middle' font-family='Arial' font-size='18' fill='%231d4ed8'%3EJava + Spring%3C/text%3E%3Ctext x='100' y='135' text-anchor='middle' font-family='Arial' font-size='18' fill='%231d4ed8'%3E%2B Docker%3C/text%3E%3Ctext x='100' y='165' text-anchor='middle' font-family='Arial' font-size='18' fill='%231d4ed8'%3E%2B MySQL%3C/text%3E%3C/svg%3E">
+        <div>
+            <strong>Idea general:</strong>
+            Java contiene nuestra lógica, Spring Boot organiza el backend,
+            Gradle administra la construcción y dependencias, Docker ejecuta
+            MySQL de forma aislada y GitHub almacena nuestro código.
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>🔗 Paso 0 — Recursos oficiales</h2>
+
+    <p>Antes de comenzar, guardá estos sitios:</p>
+
+    <ul>
+        <li>
+            <a href="https://start.spring.io/" target="_blank">Spring Initializr</a>
+            — crear el proyecto.
+        </li>
+        <li>
+            <a href="https://spring.io/guides/gs/spring-boot/" target="_blank">Spring Boot — Getting Started</a>
+            — guía oficial.
+        </li>
+        <li>
+            <a href="https://docs.spring.io/spring-boot/" target="_blank">Documentación oficial de Spring Boot</a>.
+        </li>
+        <li>
+            <a href="https://gradle.org/" target="_blank">Gradle</a>
+            — sitio oficial.
+        </li>
+        <li>
+            <a href="https://docs.gradle.org/current/userguide/installation.html" target="_blank">Instalación de Gradle</a>.
+        </li>
+        <li>
+            <a href="https://www.docker.com/products/docker-desktop/" target="_blank">Docker Desktop</a>.
+        </li>
+        <li>
+            <a href="https://docs.docker.com/desktop/setup/install/windows-install/" target="_blank">Docker Desktop para Windows</a>.
+        </li>
+        <li>
+            <a href="https://dev.mysql.com/downloads/" target="_blank">MySQL</a>.
+        </li>
+        <li>
+            <a href="https://github.com/" target="_blank">GitHub</a>.
+        </li>
+        <li>
+            <a href="https://docs.github.com/en/get-started/start-your-journey/creating-a-repository-for-your-project-on-github"
+               target="_blank">Guía oficial para crear un repositorio GitHub</a>.
+        </li>
+    </ul>
+
+    <div class="note">
+        <strong>Nota:</strong> Spring Boot actualmente requiere Java 17 o superior.
+        En esta clase trabajaremos con Java 17 para mantener el ejemplo sencillo.
+        Gradle también requiere Java 17 o superior en sus versiones actuales.
+    </div>
+</section>
+
+<section>
+    <h2><span class="step">1</span>Instalar Java</h2>
+
+    <p>
+        Primero necesitamos un JDK instalado en nuestra computadora.
+    </p>
+
+    <p>Comprobá si Java ya está instalado:</p>
+
+    <pre><code>java -version</code></pre>
+
+    <p>También podemos verificar el compilador:</p>
+
+    <pre><code>javac -version</code></pre>
+
+    <div class="warning">
+        Si el comando no existe o la versión es inferior a Java 17,
+        debemos instalar un JDK compatible.
+    </div>
+
+    <p>
+        Para descargar un JDK podés utilizar
+        <a href="https://adoptium.net/temurin/releases/" target="_blank">Eclipse Temurin</a>
+        u otra distribución compatible.
+    </p>
+</section>
+
+<section>
+    <h2><span class="step">2</span>Instalar Docker Desktop</h2>
+
+    <p>
+        Docker nos permitirá ejecutar MySQL dentro de un contenedor,
+        sin tener que instalar y configurar MySQL directamente en Windows.
+    </p>
+
+    <ol>
+        <li>Descargá Docker Desktop.</li>
+        <li>Instalalo.</li>
+        <li>Iniciá Docker Desktop.</li>
+        <li>Esperá a que Docker indique que está funcionando.</li>
+    </ol>
+
+    <p>
+        En Windows, Docker recomienda utilizar WSL 2 como backend para la
+        mayoría de los escenarios.
+    </p>
+
+    <p>
+        <a href="https://docs.docker.com/desktop/setup/install/windows-install/"
+           target="_blank">Ver instalación oficial de Docker Desktop en Windows →</a>
+    </p>
+
+    <p>Comprobá la instalación:</p>
+
+    <pre><code>docker --version
+docker compose version</code></pre>
+</section>
+
+<section>
+    <h2><span class="step">3</span>Crear el proyecto con Spring Initializr</h2>
+
+    <p>
+        Vamos a utilizar Spring Initializr para generar la estructura inicial.
+    </p>
+
+    <p>
+        Abrí:
+        <a href="https://start.spring.io/" target="_blank">https://start.spring.io/</a>
+    </p>
+
+    <h3>Configuración</h3>
+
+    <table>
+        <tr><th>Campo</th><th>Valor</th></tr>
+        <tr><td>Project</td><td>Gradle - Groovy</td></tr>
+        <tr><td>Language</td><td>Java</td></tr>
+        <tr><td>Spring Boot</td><td>4.1.x estable</td></tr>
+        <tr><td>Group</td><td>com.example</td></tr>
+        <tr><td>Artifact</td><td>alumnos-api</td></tr>
+        <tr><td>Name</td><td>alumnos-api</td></tr>
+        <tr><td>Packaging</td><td>Jar</td></tr>
+        <tr><td>Java</td><td>17</td></tr>
+    </table>
+
+    <h3>Dependencias</h3>
+
+    <p>Agregá:</p>
+
+    <ul>
+        <li>Spring Web</li>
+        <li>Spring Data JPA</li>
+        <li>MySQL Driver</li>
+        <li>Validation</li>
+    </ul>
+
+    <p>
+        Presioná <strong>Generate</strong> y descargá el ZIP.
+        Descomprimilo en una carpeta de trabajo.
+    </p>
+
+    <div class="success">
+        Spring Initializr genera gran parte de la estructura inicial y configura
+        el proyecto para que podamos comenzar a programar.
+    </div>
+</section>
+
+<section>
+    <h2><span class="step">4</span>Abrir el proyecto en IntelliJ</h2>
+
+    <p>
+        Abrí IntelliJ IDEA y seleccioná:
+    </p>
+
+    <pre><code>File → Open</code></pre>
+
+    <p>
+        Elegí la carpeta que contiene el proyecto.
+    </p>
+
+    <p>
+        IntelliJ debería reconocer que es un proyecto Gradle.
+        Esperá a que finalice la sincronización.
+    </p>
+
+    <h3>Estructura esperada</h3>
+
+    <pre><code>alumnos-api/
+│
+├── gradle/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/example/
+│   │   │       └── alumnosapi/
+│   │   │           └── AlumnosApiApplication.java
+│   │   │
+│   │   └── resources/
+│   │       └── application.properties
+│   │
+│   └── test/
+│
+├── build.gradle
+├── settings.gradle
+├── gradlew
+├── gradlew.bat
+└── .gitignore</code></pre>
+
+    <div class="note">
+        <strong>Importante:</strong> si el proyecto tiene
+        <code>gradlew</code> y <code>gradlew.bat</code>, podemos utilizar
+        el Gradle Wrapper y no necesitamos instalar Gradle globalmente
+        para ejecutar ese proyecto.
+    </div>
+</section>
+
+<section>
+    <h2><span class="step">5</span>Entender Gradle</h2>
+
+    <p>
+        El archivo principal de configuración es:
+    </p>
+
+    <pre><code>build.gradle</code></pre>
+
+    <p>
+        Allí encontramos plugins, dependencias y configuración del proyecto.
+    </p>
+
+    <p>Podemos probar que el proyecto compila ejecutando:</p>
+
+    <pre><code>.\gradlew.bat build</code></pre>
+
+    <p>Para ejecutar Spring Boot:</p>
+
+    <pre><code>.\gradlew.bat bootRun</code></pre>
+
+    <p>
+        En Linux/macOS se utiliza normalmente:
+    </p>
+
+    <pre><code>./gradlew build
+./gradlew bootRun</code></pre>
+
+    <p>
+        El Wrapper permite utilizar la versión de Gradle configurada para
+        el proyecto.
+    </p>
+</section>
+
+<section>
+    <h2><span class="step">6</span>Crear la base de datos con Docker</h2>
+
+    <p>
+        En lugar de instalar MySQL directamente en nuestra computadora,
+        vamos a ejecutarlo dentro de un contenedor.
+    </p>
+
+    <p>
+        En la raíz del proyecto creá:
+    </p>
+
+    <pre><code>compose.yaml</code></pre>
+
+    <p>Colocá:</p>
+
+    <pre><code>services:
+  mysql:
+    image: mysql:8.4
+    container_name: alumnos-mysql
+    environment:
+      MYSQL_DATABASE: alumnosdb
+      MYSQL_USER: alumno
+      MYSQL_PASSWORD: alumno123
+      MYSQL_ROOT_PASSWORD: root123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:</code></pre>
+
+    <p>Desde la carpeta del proyecto ejecutá:</p>
+
+    <pre><code>docker compose up -d</code></pre>
+
+    <p>Comprobá que el contenedor esté ejecutándose:</p>
+
+    <pre><code>docker ps</code></pre>
+
+    <div class="success">
+        Si aparece <strong>alumnos-mysql</strong> con estado
+        <strong>Up</strong>, MySQL está funcionando dentro del contenedor.
+    </div>
+
+    <h3>¿Qué acabamos de hacer?</h3>
+
+    <div class="flow">
+        <div class="box docker">🐳 Docker</div>
+        <div class="arrow">→</div>
+        <div class="box db">🗄️ MySQL</div>
+        <div class="arrow">→</div>
+        <div class="box">Puerto 3306</div>
+    </div>
+</section>
+
+<section>
+    <h2><span class="step">7</span>Configurar Spring Boot para conectarse a MySQL</h2>
+
+    <p>
+        Abrí:
+    </p>
+
+    <pre><code>src/main/resources/application.properties</code></pre>
+
+    <p>Agregá:</p>
+
+    <pre><code>spring.datasource.url=jdbc:mysql://localhost:3306/alumnosdb?useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true
+spring.datasource.username=alumno
+spring.datasource.password=alumno123
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+server.port=8080</code></pre>
+
+    <p>
+        Ahora el flujo es:
+    </p>
+
+    <div class="flow">
+        <div class="box spring">🌱 Spring Boot</div>
+        <div class="arrow">→</div>
+        <div class="box docker">🐳 Docker</div>
+        <div class="arrow">→</div>
+        <div class="box db">🗄️ MySQL</div>
+    </div>
+
+    <div class="warning">
+        <strong>Seguridad:</strong> estas credenciales son solamente para
+        una práctica local. En proyectos reales no debemos guardar
+        contraseñas reales directamente en el repositorio.
+    </div>
+</section>
+
+<section>
+    <h2><span class="step">8</span>Crear nuestra primera entidad</h2>
+
+    <p>
+        Vamos a representar un alumno mediante una clase Java.
+    </p>
+
+    <p>Creá:</p>
+
+    <pre><code>src/main/java/com/example/alumnosapi/model/Alumno.java</code></pre>
+
+    <pre><code>package com.example.alumnosapi.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
+public class Alumno {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String nombre;
+    private String email;
+
+    public Alumno() {
+    }
+
+    public Alumno(String nombre, String email) {
+        this.nombre = nombre;
+        this.email = email;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+}</code></pre>
+
+    <h3>¿Qué estamos haciendo?</h3>
+
+    <ul>
+        <li><code>@Entity</code> indica que la clase será persistida.</li>
+        <li><code>@Id</code> identifica la clave primaria.</li>
+        <li><code>@GeneratedValue</code> permite generar el ID automáticamente.</li>
+    </ul>
+</section>
+
+<section>
+    <h2><span class="step">9</span>Crear el Repository</h2>
+
+    <p>Creá:</p>
+
+    <pre><code>repository/AlumnoRepository.java</code></pre>
+
+    <pre><code>package com.example.alumnosapi.repository;
+
+import com.example.alumnosapi.model.Alumno;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AlumnoRepository
+        extends JpaRepository&lt;Alumno, Long&gt; {
+}</code></pre>
+
+    <p>
+        Spring Data JPA nos permite trabajar con la entidad utilizando
+        operaciones de persistencia sin tener que escribir manualmente
+        todas las consultas básicas.
+    </p>
+</section>
+
+<section>
+    <h2><span class="step">10</span>Crear nuestro Controller</h2>
+
+    <p>Creá:</p>
+
+    <pre><code>controller/AlumnoController.java</code></pre>
+
+    <pre><code>package com.example.alumnosapi.controller;
+
+import com.example.alumnosapi.model.Alumno;
+import com.example.alumnosapi.repository.AlumnoRepository;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/alumnos")
+public class AlumnoController {
+
+    private final AlumnoRepository repository;
+
+    public AlumnoController(AlumnoRepository repository) {
+        this.repository = repository;
+    }
+
+    @GetMapping
+    public List&lt;Alumno&gt; obtenerTodos() {
+        return repository.findAll();
+    }
+
+    @PostMapping
+    public Alumno crear(@RequestBody Alumno alumno) {
+        return repository.save(alumno);
+    }
+}</code></pre>
+
+    <p>
+        Ahora tenemos dos operaciones:
+    </p>
+
+    <table>
+        <tr>
+            <th>Método</th>
+            <th>Endpoint</th>
+            <th>Acción</th>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/api/alumnos</td>
+            <td>Obtener alumnos</td>
+        </tr>
+        <tr>
+            <td>POST</td>
+            <td>/api/alumnos</td>
+            <td>Crear alumno</td>
+        </tr>
+    </table>
+</section>
+
+<section>
+    <h2><span class="step">11</span>Ejecutar todo</h2>
+
+    <p>Primero iniciamos MySQL:</p>
+
+    <pre><code>docker compose up -d</code></pre>
+
+    <p>Después ejecutamos Spring Boot:</p>
+
+    <pre><code>.\gradlew.bat bootRun</code></pre>
+
+    <p>
+        Si todo funciona, Spring Boot quedará escuchando normalmente en:
+    </p>
+
+    <pre><code>http://localhost:8080</code></pre>
+
+    <p>
+        Podemos probar:
+    </p>
+
+    <pre><code>GET http://localhost:8080/api/alumnos</code></pre>
+
+    <p>
+        Inicialmente debería devolver una lista vacía:
+    </p>
+
+    <pre><code>[]</code></pre>
+
+    <h3>Crear un alumno</h3>
+
+    <p>Con Postman, Insomnia o una herramienta equivalente, realizar:</p>
+
+    <pre><code>POST http://localhost:8080/api/alumnos
+
+Content-Type: application/json
+
+{
+    "nombre": "Ana",
+    "email": "ana@email.com"
+}</code></pre>
+
+    <p>
+        Después repetí el GET:
+    </p>
+
+    <pre><code>GET http://localhost:8080/api/alumnos</code></pre>
+
+    <p>
+        Ahora debería aparecer el alumno guardado.
+    </p>
+</section>
+
+<section>
+    <h2><span class="step">12</span>Comprender el recorrido completo</h2>
+
+    <div class="flow">
+        <div class="box">Cliente<br>Postman / Frontend</div>
+        <div class="arrow">→</div>
+        <div class="box spring">🌱 Controller</div>
+        <div class="arrow">→</div>
+        <div class="box">Repository</div>
+        <div class="arrow">→</div>
+        <div class="box docker">🐳 MySQL</div>
+    </div>
+
+    <p>
+        Cuando realizamos un POST:
+    </p>
+
+    <ol>
+        <li>El cliente envía una petición HTTP.</li>
+        <li>Spring recibe la petición en el Controller.</li>
+        <li><code>@RequestBody</code> transforma el JSON en un objeto Java.</li>
+        <li>El Controller utiliza el Repository.</li>
+        <li>JPA realiza la operación contra MySQL.</li>
+        <li>La base de datos almacena el registro.</li>
+        <li>Spring devuelve una respuesta HTTP.</li>
+    </ol>
+</section>
+
+<section>
+    <h2><span class="step">13</span>Git: guardar nuestro proyecto</h2>
+
+    <p>
+        Desde la carpeta raíz del proyecto:
+    </p>
+
+    <pre><code>git init -b main
+
+git status
+
+git add .
+
+git commit -m "Primer commit del proyecto"</code></pre>
+
+    <p>
+        Recordá que Git permite registrar la evolución de nuestro código.
+    </p>
+</section>
+
+<section>
+    <h2><span class="step">14</span>Crear el repositorio en GitHub</h2>
+
+    <ol>
+        <li>Ingresá a GitHub.</li>
+        <li>Seleccioná <strong>New repository</strong>.</li>
+        <li>Colocá un nombre para el proyecto.</li>
+        <li>Elegí la visibilidad solicitada por el docente.</li>
+        <li>Creá el repositorio.</li>
+    </ol>
+
+    <p>
+        Para un proyecto local que ya tiene commits, GitHub recomienda crear
+        el repositorio remoto y luego asociarlo con el proyecto local.
+    </p>
+
+    <p>
+        <a href="https://docs.github.com/en/migrations/importing-source-code/using-the-command-line-to-import-source-code/adding-locally-hosted-code-to-github"
+           target="_blank">Ver procedimiento oficial para subir código local a GitHub →</a>
+    </p>
+</section>
+
+<section>
+    <h2><span class="step">15</span>Conectar el proyecto con GitHub</h2>
+
+    <p>
+        Copiá la URL de tu repositorio y ejecutá:
+    </p>
+
+    <pre><code>git remote add origin URL_DE_TU_REPOSITORIO</code></pre>
+
+    <p>Comprobá:</p>
+
+    <pre><code>git remote -v</code></pre>
+
+    <p>Finalmente:</p>
+
+    <pre><code>git push -u origin main</code></pre>
+
+    <div class="warning">
+        <strong>Muy importante:</strong> nunca subas contraseñas, API keys,
+        tokens u otros secretos al repositorio.
+    </div>
+</section>
+
+<section>
+    <h2>📁 Estructura final del proyecto</h2>
+
+    <pre><code>alumnos-api/
+│
+├── .gitignore
+├── build.gradle
+├── settings.gradle
+├── compose.yaml
+├── gradlew
+├── gradlew.bat
+│
+└── src/
+    ├── main/
+    │   ├── java/
+    │   │   └── com/example/alumnosapi/
+    │   │       ├── AlumnosApiApplication.java
+    │   │       ├── controller/
+    │   │       │   └── AlumnoController.java
+    │   │       ├── model/
+    │   │       │   └── Alumno.java
+    │   │       └── repository/
+    │   │           └── AlumnoRepository.java
+    │   │
+    │   └── resources/
+    │       └── application.properties
+    │
+    └── test/</code></pre>
+</section>
+
+<section>
+    <h2>✅ Checklist antes de continuar</h2>
+
+    <ul class="checklist">
+        <li>☑ Java 17 o superior instalado.</li>
+        <li>☑ Docker Desktop instalado y funcionando.</li>
+        <li>☑ Proyecto creado con Spring Initializr.</li>
+        <li>☑ Proyecto configurado con Gradle.</li>
+        <li>☑ Dependencias agregadas.</li>
+        <li>☑ MySQL ejecutándose en Docker.</li>
+        <li>☑ Spring Boot conectado a MySQL.</li>
+        <li>☑ Entidad Alumno creada.</li>
+        <li>☑ Repository creado.</li>
+        <li>☑ Controller creado.</li>
+        <li>☑ GET funcionando.</li>
+        <li>☑ POST funcionando.</li>
+        <li>☑ Git inicializado.</li>
+        <li>☑ Proyecto publicado en GitHub.</li>
+    </ul>
+</section>
+
+<section class="challenge">
+    <h2>🚀 DESAFÍO FINAL — Ahora lo hacés vos</h2>
+
+    <p>
+        Hasta este punto trabajamos siguiendo una guía.
+        Ahora deberás demostrar que podés construir un proyecto similar
+        <strong>sin seguir paso a paso el código de esta página</strong>.
+    </p>
+
+    <h3>Consigna</h3>
+
+    <p>
+        Crear desde cero una API REST utilizando:
+    </p>
+
+    <ul>
+        <li>Java</li>
+        <li>Spring Boot</li>
+        <li>Gradle</li>
+        <li>Spring Data JPA</li>
+        <li>MySQL</li>
+        <li>Docker / Docker Compose</li>
+        <li>Git / GitHub</li>
+    </ul>
+
+    <h3>Dominio</h3>
+
+    <p>
+        No utilizar "Alumno".
+        Elegí uno de los siguientes dominios:
+    </p>
+
+    <ul>
+        <li>Productos</li>
+        <li>Películas</li>
+        <li>Libros</li>
+        <li>Videojuegos</li>
+        <li>Recetas</li>
+        <li>Eventos</li>
+        <li>Vehículos</li>
+        <li>Otro dominio aprobado por el docente</li>
+    </ul>
+
+    <h3>Requisitos mínimos</h3>
+
+    <ol>
+        <li>Crear el proyecto desde Spring Initializr.</li>
+        <li>Utilizar Gradle.</li>
+        <li>Configurar una base MySQL mediante Docker Compose.</li>
+        <li>Crear al menos una entidad.</li>
+        <li>Crear un Repository.</li>
+        <li>Crear un Controller REST.</li>
+        <li>Implementar un GET para obtener todos los registros.</li>
+        <li>Implementar un GET para obtener un registro por ID.</li>
+        <li>Implementar un POST para crear registros.</li>
+        <li>Implementar un DELETE para eliminar un registro.</li>
+        <li>Conectar correctamente Spring Boot con MySQL.</li>
+        <li>Probar los endpoints.</li>
+        <li>Inicializar Git.</li>
+        <li>Crear un repositorio en GitHub.</li>
+        <li>Subir el proyecto a GitHub.</li>
+    </ol>
+
+    <h3>⭐ Requisito de comprensión</h3>
+
+    <p>
+        No alcanza con que el proyecto funcione.
+        Durante la corrección se podrá pedir que expliques:
+    </p>
+
+    <ul>
+        <li>Qué hace <code>build.gradle</code>.</li>
+        <li>Qué función cumple Docker.</li>
+        <li>Cómo se conecta Spring Boot con MySQL.</li>
+        <li>Qué hace <code>@Entity</code>.</li>
+        <li>Qué hace <code>@RestController</code>.</li>
+        <li>Qué función cumple el Repository.</li>
+        <li>Qué diferencia hay entre GET, POST y DELETE.</li>
+        <li>Qué ocurre cuando llega una petición al Controller.</li>
+    </ul>
+
+    <h3>📤 Entrega</h3>
+
+    <p>
+        La entrega será el <strong>link al repositorio de GitHub</strong>.
+    </p>
+
+    <p>El repositorio deberá contener:</p>
+
+    <ul>
+        <li>Código fuente.</li>
+        <li><code>build.gradle</code>.</li>
+        <li><code>compose.yaml</code>.</li>
+        <li>Configuración necesaria para ejecutar el proyecto.</li>
+        <li>README.md.</li>
+        <li>Un ejemplo de cómo ejecutar el proyecto.</li>
+        <li>Ejemplos de los endpoints disponibles.</li>
+    </ul>
+
+    <div class="warning">
+        <strong>No subir:</strong> contraseñas reales, tokens, claves privadas
+        ni información sensible.
+    </div>
+
+    <h3>💡 Desafío extra</h3>
+
+    <p>
+        Si terminaste todo, agregá una segunda entidad y establecé una relación
+        entre ambas. Por ejemplo:
+    </p>
+
+    <pre><code>Producto
+    ↓
+Categoría</code></pre>
+
+    <p>
+        El objetivo es que puedas explicar qué relación existe y cómo
+        se representa en Java/JPA.
+    </p>
+</section>
+
+<section>
+    <h2>📚 Documentación recomendada</h2>
+
+    <ul>
+        <li>
+            <a href="https://docs.spring.io/spring-boot/" target="_blank">
+                Spring Boot Documentation
+            </a>
+        </li>
+        <li>
+            <a href="https://spring.io/guides/gs/spring-boot/" target="_blank">
+                Spring Boot — Getting Started
+            </a>
+        </li>
+        <li>
+            <a href="https://docs.spring.io/spring-boot/how-to/docker-compose.html" target="_blank">
+                Spring Boot — Docker Compose
+            </a>
+        </li>
+        <li>
+            <a href="https://docs.gradle.org/current/userguide/getting_started.html" target="_blank">
+                Gradle — Getting Started
+            </a>
+        </li>
+        <li>
+            <a href="https://docs.docker.com/desktop/setup/install/windows-install/" target="_blank">
+                Docker Desktop — Windows
+            </a>
+        </li>
+        <li>
+            <a href="https://docs.github.com/en/migrations/importing-source-code/using-the-command-line-to-import-source-code/adding-locally-hosted-code-to-github"
+               target="_blank">
+                GitHub — subir un proyecto local
+            </a>
+        </li>
+    </ul>
+</section>
+
+</main>
+
+<footer>
+    Material didáctico — Spring Boot + Gradle + Docker + MySQL + GitHub
+</footer>
+
+</body>
+</html>
