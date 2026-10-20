@@ -1,5 +1,6 @@
-# Material de referencia temporal (clases, export de Figma). No se sube.
-_referencias/
+# _referencias/ (clases, export de Figma) se sube de forma temporal: se borra antes de la entrega final.
+# Excluye dependencias que se generen al probar el export de Figma.
+_referencias/**/node_modules/
 
 # .NET
 bin/

@@ -41,3 +41,7 @@ Para apagar la base: `docker compose down` (los datos se conservan en el volumen
 - `docs/funcional/` — documentación funcional del sistema.
 - `docs/DECISIONES.md` — decisiones de arquitectura.
 - `docs/ARQUITECTURA.md` — capas y carpetas.
+- `docs/CONSIGNA.md` — requisitos del enunciado como checklist.
+- `docs/TECNOLOGIAS.md` — stack y equivalencias con lo visto en clase.
+- `docs/DISENO.md` — pantallas, rutas, paleta y componentes del prototipo.
+- `docs/CONFLICTOS.md` — diferencias entre enunciado, documentación funcional, prototipo y stack.

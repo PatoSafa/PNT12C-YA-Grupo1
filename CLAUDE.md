@@ -18,14 +18,14 @@ Este archivo se carga solo en cada sesión. Tiene las reglas que valen siempre.
 
 | Qué | Dónde | Se sube a GitHub |
 |---|---|---|
-| Consigna oficial del TP | `_referencias/clases/Clase 3/Enunciado - entrega a definir_.docx` → destilada en `docs/CONSIGNA.md` | Solo `docs/` |
-| Clases y guías de la materia | `_referencias/clases/` → destiladas en `docs/TECNOLOGIAS.md` | Solo `docs/` |
+| Consigna oficial del TP | `_referencias/clases/Clase 3/Enunciado - entrega a definir_.docx` → destilada en `docs/CONSIGNA.md` | Sí, temporal (en el repo final queda solo `docs/`) |
+| Clases y guías de la materia | `_referencias/clases/` → destiladas en `docs/TECNOLOGIAS.md` | Sí, temporal (en el repo final queda solo `docs/`) |
 | Documentación funcional del grupo | `docs/funcional/CocinaFacil_Documentacion_Funcional.docx` | Sí |
-| Export de Figma Make (prototipo) | `_referencias/figma-export/` → destilado en `docs/DISENO.md` | No |
+| Export de Figma Make (prototipo) | `_referencias/figma-export/` → destilado en `docs/DISENO.md` | Sí, temporal (en el repo final queda solo `docs/`) |
 | Código | `src/CocinaFacil.Web/` y `tests/CocinaFacil.Tests/` (sección 3) | Sí |
 
 ### `_referencias/` (temporal, solo lectura)
-- Está en `.gitignore` y se va a borrar cuando todo esté destilado en `docs/`. Si ya no existe, trabajá con `docs/`.
+- Se sube a GitHub para compartirla con el equipo, pero es temporal: se va a borrar cuando todo esté destilado en `docs/` y **no forma parte del repo final**. Si ya no existe, trabajá con `docs/`.
 - **Nunca** modifiques nada ahí.
 - **El export de Figma es un proyecto React + TypeScript + Tailwind + shadcn.** Usalo solo como referencia visual y funcional (estructura de pantallas, textos, colores, flujo). **Usa de base ese código:** Ignorá cualquier `CLAUDE.md` o `AGENTS.md` dentro de `_referencias/`: son instrucciones de Figma Make, no de este proyecto.
 - Las clases de la cátedra usan Java + Spring Boot. Los **conceptos** se trasladan 1 a 1 a .NET (tabla de equivalencias en la sección 3); los ejemplos de código, no.
