@@ -1,0 +1,18 @@
+@* Tarjeta horizontal de una receta; se usa en Inicio y en Mis favoritos. Toda la tarjeta lleva al detalle. *@
+@model CenaApp.Web.ViewModels.TarjetaRecetaViewModel
+
+<a asp-controller="Recetas" asp-action="Detalle" asp-route-id="@Model.Id" class="tarjeta-receta">
+    <div class="emoji" aria-hidden="true">@Model.Emoji</div>
+    <div class="datos">
+        <h3>@Model.Nombre</h3>
+        @if (!string.IsNullOrEmpty(Model.Descripcion))
+        {
+            <p class="descripcion">@Model.Descripcion</p>
+        }
+        <div class="meta">
+            <span><i class="bi bi-clock"></i> @Model.TiempoMin min</span>
+            <span><i class="bi bi-people"></i> @Model.Porciones @(Model.Porciones == 1 ? "porción" : "porciones")</span>
+            <partial name="_Dificultad" model="Model.Dificultad" />
+        </div>
+    </div>
+</a>

@@ -1,0 +1,60 @@
+@* Inicio: recetas aptas para el perfil del usuario, con buscador y filtro por gusto (DISENO.md §1.3). *@
+@model CenaApp.Web.ViewModels.InicioRecetasViewModel
+@{
+    ViewData["Title"] = "Inicio";
+    ViewData["Seccion"] = "Inicio";
+    var hayFiltros = !string.IsNullOrWhiteSpace(Model.Buscar) || Model.GustoId is not null;
+}
+
+<header class="encabezado encabezado-inicio">
+    <h1>Hola, @Model.NombreUsuario! 👋</h1>
+    <p class="mb-3">¿Qué vamos a cocinar hoy?</p>
+
+    <form asp-action="Index" method="get" class="buscador" role="search">
+        <i class="bi bi-search"></i>
+        <input type="search" name="buscar" value="@Model.Buscar" class="form-control" placeholder="Buscar recetas..." aria-label="Buscar recetas" />
+        @if (Model.GustoId is not null)
+        {
+            <input type="hidden" name="gusto" value="@Model.GustoId" />
+        }
+    </form>
+</header>
+
+<div class="cuerpo">
+    <section class="tarjeta superpuesta">
+        <h2 class="fs-6 mb-3"><i class="bi bi-funnel"></i> Filtros</h2>
+        <div class="chips">
+            @foreach (var g in Model.Gustos)
+            {
+                var activo = g.Id == Model.GustoId;
+                @* Tocar el filtro activo lo desactiva. *@
+                <a asp-action="Index" asp-route-buscar="@Model.Buscar" asp-route-gusto="@(activo ? (int?)null : g.Id)"
+                   class="chip @(activo ? "activo" : "")">@g.Nombre</a>
+            }
+        </div>
+    </section>
+
+    <div class="d-flex justify-content-between align-items-baseline mb-3">
+        <h2 class="fs-5 mb-0">@(Model.GustoElegido is null ? "Recetas para vos" : $"Recetas {Model.GustoElegido}")</h2>
+        <span class="small text-secondary">@Model.Recetas.Count recetas</span>
+    </div>
+
+    @if (Model.Recetas.Count == 0)
+    {
+        <div class="vacio">
+            <i class="bi bi-search icono"></i>
+            <p>No se encontraron recetas con estos criterios.</p>
+            @if (hayFiltros)
+            {
+                <a asp-action="Index" class="btn btn-primary">Limpiar filtros</a>
+            }
+        </div>
+    }
+    else
+    {
+        @foreach (var receta in Model.Recetas)
+        {
+            <partial name="_TarjetaReceta" model="receta" />
+        }
+    }
+</div>

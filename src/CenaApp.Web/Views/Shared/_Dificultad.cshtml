@@ -1,0 +1,11 @@
+@* Badge de dificultad con su color (verde / amarillo / rojo). *@
+@model CenaApp.Web.Models.Dificultad
+@{
+    var texto = Model switch
+    {
+        CenaApp.Web.Models.Dificultad.Facil => "Fácil",
+        CenaApp.Web.Models.Dificultad.Media => "Media",
+        _ => "Difícil",
+    };
+}
+<span class="dificultad dificultad-@Model">@texto</span>
