@@ -94,7 +94,7 @@ Content-Type: application/json
 }
 ```
 
-Respuesta `201 Created`, con el encabezado `Location: /api/recetas/33`:
+`gustosIds` es opcional (por ejemplo `"gustosIds": [5, 9]`). Respuesta `201 Created`, con el encabezado `Location: /api/recetas/33`:
 ```json
 {
   "id": 33,

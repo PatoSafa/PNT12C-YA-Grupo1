@@ -71,6 +71,9 @@ public class RecetaCrearDto
     // VAL-19: al menos un paso.
     [MinLength(1, ErrorMessage = "La receta necesita al menos un paso.")]
     public List<string> Pasos { get; set; } = [];
+
+    // Opcional: gustos a los que corresponde (Italiana, Rápido...).
+    public List<int> GustosIds { get; set; } = [];
 }
 
 public class IngredienteCrearDto

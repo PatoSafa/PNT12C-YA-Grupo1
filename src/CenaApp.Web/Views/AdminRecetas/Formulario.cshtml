@@ -1,0 +1,140 @@
+@* Alta y edición de una receta (la misma vista para las dos). Los ingredientes van en filas
+   (js/admin-receta.js agrega y quita filas) y los pasos en un textarea, uno por línea. *@
+@using CenaApp.Web.Models
+@using CenaApp.Web.ViewModels
+@model RecetaFormularioViewModel
+@{
+    var esAlta = Model.Id is null;
+    ViewData["Title"] = esAlta ? "Nueva receta" : $"Editar {Model.Datos.Nombre}";
+    ViewData["OcultarBarra"] = true;
+
+    // Filas: las que ya tiene + 3 vacías para agregar sin JavaScript.
+    var filas = Model.Datos.Ingredientes.Concat(Enumerable.Range(0, 3).Select(_ => new IngredienteCrearDto())).ToList();
+}
+
+<partial name="_AdminEncabezado" />
+
+<form asp-action="@(esAlta ? "Crear" : "Editar")" asp-route-id="@Model.Id" method="post" class="cuerpo" novalidate>
+    <section class="tarjeta superpuesta">
+        <h2 class="fs-5 mb-3">@(esAlta ? "Nueva receta" : "Editar receta")</h2>
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2"></div>
+
+        <div class="row g-2 mb-3">
+            <div class="col-9">
+                <label asp-for="Datos.Nombre" class="form-label">Nombre</label>
+                <input asp-for="Datos.Nombre" class="form-control" />
+                <span asp-validation-for="Datos.Nombre" class="text-danger small"></span>
+            </div>
+            <div class="col-3">
+                <label asp-for="Datos.Emoji" class="form-label">Emoji</label>
+                <input asp-for="Datos.Emoji" class="form-control text-center" placeholder="🍽️" />
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Datos.Descripcion" class="form-label">Descripción</label>
+            <textarea asp-for="Datos.Descripcion" class="form-control" rows="2"></textarea>
+            <span asp-validation-for="Datos.Descripcion" class="text-danger small"></span>
+        </div>
+
+        <div class="row g-2 mb-3">
+            <div class="col-6">
+                <label asp-for="Datos.CategoriaId" class="form-label">Categoría</label>
+                <select asp-for="Datos.CategoriaId" class="form-select"
+                        asp-items="@(new SelectList(Model.Categorias, nameof(Categoria.Id), nameof(Categoria.Nombre)))">
+                    <option value="0">Elegí…</option>
+                </select>
+                <span asp-validation-for="Datos.CategoriaId" class="text-danger small"></span>
+            </div>
+            <div class="col-6">
+                <label asp-for="Datos.Dificultad" class="form-label">Dificultad</label>
+                <select asp-for="Datos.Dificultad" class="form-select" asp-items="Html.GetEnumSelectList<Dificultad>()">
+                    <option value="">Elegí…</option>
+                </select>
+                <span asp-validation-for="Datos.Dificultad" class="text-danger small"></span>
+            </div>
+        </div>
+
+        <div class="row g-2">
+            <div class="col-4">
+                <label asp-for="Datos.TiempoMin" class="form-label">Minutos</label>
+                <input asp-for="Datos.TiempoMin" class="form-control" type="number" min="1" />
+            </div>
+            <div class="col-4">
+                <label asp-for="Datos.Porciones" class="form-label">Porciones</label>
+                <input asp-for="Datos.Porciones" class="form-control" type="number" min="1" />
+            </div>
+            <div class="col-4">
+                <label asp-for="Datos.Calorias" class="form-label">Kcal</label>
+                <input asp-for="Datos.Calorias" class="form-control" type="number" min="0" />
+            </div>
+        </div>
+        <span asp-validation-for="Datos.TiempoMin" class="text-danger small d-block"></span>
+        <span asp-validation-for="Datos.Porciones" class="text-danger small d-block"></span>
+        <span asp-validation-for="Datos.Calorias" class="text-danger small d-block"></span>
+    </section>
+
+    <section class="tarjeta">
+        <h2 class="fs-6"><i class="bi bi-heart text-danger"></i> Gustos</h2>
+        <div class="chips">
+            @foreach (var g in Model.Gustos)
+            {
+                <input type="checkbox" class="btn-check" name="Datos.GustosIds" value="@g.Id" id="gusto-@g.Id" checked="@Model.Datos.GustosIds.Contains(g.Id)" />
+                <label class="chip chip-gusto" for="gusto-@g.Id">@g.Nombre</label>
+            }
+        </div>
+    </section>
+
+    <section class="tarjeta">
+        <h2 class="fs-6"><i class="bi bi-basket"></i> Ingredientes</h2>
+        @if (Model.AlergenosCalculados.Count > 0)
+        {
+            <p class="small alerta-alergenos py-2">Alérgenos calculados (según lo guardado): @string.Join(", ", Model.AlergenosCalculados)</p>
+        }
+        <span asp-validation-for="Datos.Ingredientes" class="text-danger small d-block mb-2"></span>
+        <p class="small text-secondary">Dejá la cantidad vacía para "a gusto". Las filas sin ingrediente no se guardan.</p>
+
+        @* "Datos.Ingredientes.Index" le dice al model binder qué número tiene cada fila,
+           así se pueden borrar filas del medio sin que se pierdan las siguientes. *@
+        <div id="filas-ingredientes">
+            @for (var i = 0; i < filas.Count; i++)
+            {
+                <div class="fila-ingrediente-admin">
+                    <input type="hidden" name="Datos.Ingredientes.Index" value="@i" />
+                    <select name="Datos.Ingredientes[@i].IngredienteId" class="form-select" aria-label="Ingrediente">
+                        <option value="0">— Ingrediente —</option>
+                        @foreach (var ing in Model.Ingredientes)
+                        {
+                            <option value="@ing.Id" selected="@(ing.Id == filas[i].IngredienteId)">@ing.Nombre</option>
+                        }
+                    </select>
+                    <input name="Datos.Ingredientes[@i].Cantidad" value="@filas[i].Cantidad?.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)" type="number" step="any" min="0" class="form-control" placeholder="Cant." aria-label="Cantidad" />
+                    <select name="Datos.Ingredientes[@i].Unidad" class="form-select" aria-label="Unidad">
+                        <option value=""></option>
+                        @foreach (var u in RecetaFormularioViewModel.Unidades)
+                        {
+                            <option value="@u" selected="@(u == filas[i].Unidad)">@u</option>
+                        }
+                    </select>
+                    <button type="button" class="btn btn-outline-danger btn-sm quitar-fila" aria-label="Quitar fila"><i class="bi bi-x-lg"></i></button>
+                </div>
+            }
+        </div>
+        <button type="button" id="agregar-fila" class="btn btn-outline-primary btn-sm mt-2"><i class="bi bi-plus"></i> Agregar ingrediente</button>
+    </section>
+
+    <section class="tarjeta">
+        <label asp-for="PasosTexto" class="form-label fs-6"><i class="bi bi-list-ol"></i> Pasos (uno por línea)</label>
+        <textarea asp-for="PasosTexto" class="form-control" rows="7" placeholder="Picar la cebolla.&#10;Rehogarla en aceite..."></textarea>
+        <span asp-validation-for="Datos.Pasos" class="text-danger small"></span>
+    </section>
+
+    <div class="d-flex gap-2 mb-4">
+        <a asp-action="Index" class="btn btn-outline-primary">Cancelar</a>
+        <button type="submit" class="btn btn-primary flex-grow-1">@(esAlta ? "Crear receta" : "Guardar cambios")</button>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="~/js/admin-receta.js" asp-append-version="true"></script>
+}

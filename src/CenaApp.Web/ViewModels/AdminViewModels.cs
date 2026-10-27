@@ -46,3 +46,40 @@ public class IngredienteFormularioViewModel
     public List<Restriccion> Restricciones { get; set; } = [];
     public List<string> Grupos { get; set; } = [];
 }
+
+// ---------- Recetas ----------
+
+public class RecetaFilaViewModel
+{
+    public int Id { get; set; }
+    public string Nombre { get; set; } = "";
+    public string Emoji { get; set; } = "";
+    public string Categoria { get; set; } = "";
+    public int TiempoMin { get; set; }
+}
+
+// Formulario de alta y edición. Los datos son el mismo DTO que recibe la API (POST /api/recetas),
+// así las validaciones y el alta están en un solo lugar (RecetaService).
+public class RecetaFormularioViewModel
+{
+    // Unidades permitidas para las cantidades (VAL-18).
+    public static readonly string[] Unidades = ["g", "kg", "ml", "l", "ud", "cda", "cdita", "taza", "pizca"];
+
+    // null = alta; con valor = edición.
+    public int? Id { get; set; }
+
+    public RecetaCrearDto Datos { get; set; } = new();
+
+    // Los pasos se escriben en un textarea, uno por línea; el controller los separa en Datos.Pasos.
+    [Display(Name = "Pasos (uno por línea)")]
+    public string PasosTexto { get; set; } = "";
+
+    // Solo en edición: alérgenos que resultan de los ingredientes guardados (vista previa, RF8).
+    public List<string> AlergenosCalculados { get; set; } = [];
+
+    // Opciones para dibujar el formulario (las carga el controller).
+    public List<Categoria> Categorias { get; set; } = [];
+    public List<Gusto> Gustos { get; set; } = [];
+    public List<Ingrediente> Ingredientes { get; set; } = [];
+}
+

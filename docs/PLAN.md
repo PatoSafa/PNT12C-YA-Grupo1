@@ -58,7 +58,7 @@ Tareas chicas y ordenadas para llegar a la entrega del **lunes 2 de noviembre de
 | ✓ | # | Tarea | Depende | Diseño | Commit sugerido | Resp. |
 |---|---|---|---|---|---|---|
 | [x] | T18 | Admin de ingredientes: listado, alta, edición, baja (no se borra si está en uso, VN-21) | T09 | estructura de §5 | `feat: admin de ingredientes` | |
-| [ ] | T19 | Admin de recetas: listado, alta/edición con ingredientes en filas y pasos en textarea, baja con confirmación | T18, T11 | estructura de §5 | `feat: admin de recetas` | |
+| [x] | T19 | Admin de recetas: listado, alta/edición con ingredientes en filas y pasos en textarea, baja con confirmación | T18, T11 | estructura de §5 | `feat: admin de recetas` | |
 
 ## Etapa 6 · Entrega (domingo 1)
 

@@ -1,4 +1,5 @@
 // Configura la aplicación: servicios (inyección de dependencias), base de datos y rutas MVC.
+using System.Globalization;
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
@@ -7,6 +8,12 @@ using CenaApp.Web.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.WebEncoders;
 using Microsoft.EntityFrameworkCore;
+
+// Números con punto decimal en formularios y JSON, igual en cualquier máquina: un <input type="number">
+// manda "0.5", y con la configuración regional en español se leería como 5. Los textos que se muestran
+// con coma ("0,5 ud") se formatean explícitamente con es-AR.
+CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
 
 var builder = WebApplication.CreateBuilder(args);
 

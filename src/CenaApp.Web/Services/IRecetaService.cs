@@ -14,9 +14,13 @@ public interface IRecetaService
 
     // Controla las reglas que las Data Annotations no pueden ver (nombre repetido, categoría o
     // ingredientes inexistentes, ingredientes repetidos). Devuelve los errores por campo; vacío = todo bien.
-    Task<Dictionary<string, string>> ValidarAsync(RecetaCrearDto datos);
+    // excluirId: al editar, la propia receta no cuenta como "nombre repetido".
+    Task<Dictionary<string, string>> ValidarAsync(RecetaCrearDto datos, int? excluirId = null);
 
     Task<Receta> CrearAsync(RecetaCrearDto datos);
+
+    // false si la receta no existe.
+    Task<bool> ActualizarAsync(int id, RecetaCrearDto datos);
 
     // false si la receta no existe.
     Task<bool> EliminarAsync(int id);

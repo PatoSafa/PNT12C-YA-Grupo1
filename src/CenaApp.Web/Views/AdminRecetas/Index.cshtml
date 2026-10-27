@@ -1,0 +1,46 @@
+@* Administración de recetas: buscar, crear, editar y eliminar con confirmación (CU-13). *@
+@model List<CenaApp.Web.ViewModels.RecetaFilaViewModel>
+@{
+    ViewData["Title"] = "Recetas";
+    ViewData["OcultarBarra"] = true;
+}
+
+<partial name="_AdminEncabezado" />
+
+<div class="cuerpo">
+    <section class="tarjeta superpuesta">
+        <div class="d-flex gap-2">
+            <form asp-action="Index" method="get" class="buscador flex-grow-1" role="search">
+                <i class="bi bi-search"></i>
+                <input type="search" name="buscar" value="@ViewData["Buscar"]" class="form-control borde" placeholder="Buscar por nombre..." aria-label="Buscar recetas" />
+            </form>
+            <a asp-action="Crear" class="btn btn-primary text-nowrap"><i class="bi bi-plus-lg"></i> Nueva</a>
+        </div>
+    </section>
+
+    <partial name="_Avisos" />
+
+    <p class="small text-secondary">@Model.Count recetas</p>
+
+    @foreach (var r in Model)
+    {
+        <article class="tarjeta fila-admin align-items-center">
+            <span class="fs-2" aria-hidden="true">@r.Emoji</span>
+            <div class="flex-grow-1 min-w-0">
+                <h2 class="fs-6 mb-0">@r.Nombre</h2>
+                <span class="small text-secondary">@r.Categoria · @r.TiempoMin min</span>
+            </div>
+            <div class="d-flex flex-column gap-1">
+                <a asp-action="Editar" asp-route-id="@r.Id" class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil"></i> Editar</a>
+                <form asp-action="Eliminar" asp-route-id="@r.Id" method="post"
+                      data-confirmar="¿Eliminar la receta @r.Nombre? También se quita de los favoritos de los usuarios.">
+                    <button type="submit" class="btn btn-outline-danger btn-sm w-100"><i class="bi bi-trash"></i> Eliminar</button>
+                </form>
+            </div>
+        </article>
+    }
+</div>
+
+@section Scripts {
+    <script src="~/js/confirmar.js" asp-append-version="true"></script>
+}

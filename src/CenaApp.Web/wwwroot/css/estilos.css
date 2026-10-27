@@ -834,3 +834,11 @@ h1, h2, h3, h4 {
 .min-w-0 {
     min-width: 0;
 }
+
+.fila-ingrediente-admin {
+    display: grid;
+    grid-template-columns: 1fr 5rem 4.5rem auto;
+    gap: .35rem;
+    align-items: center;
+    margin-bottom: .35rem;
+}

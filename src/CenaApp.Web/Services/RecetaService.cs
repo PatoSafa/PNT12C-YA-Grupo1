@@ -40,13 +40,13 @@ public class RecetaService : IRecetaService
             .FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    public async Task<Dictionary<string, string>> ValidarAsync(RecetaCrearDto datos)
+    public async Task<Dictionary<string, string>> ValidarAsync(RecetaCrearDto datos, int? excluirId = null)
     {
         var errores = new Dictionary<string, string>();
 
         // VAL-15: nombre único (sin distinguir mayúsculas ni espacios de los costados).
         var nombre = datos.Nombre.Trim().ToLower();
-        if (await _db.Recetas.AnyAsync(r => r.Nombre.ToLower() == nombre))
+        if (await _db.Recetas.AnyAsync(r => r.Nombre.ToLower() == nombre && r.Id != excluirId))
         {
             errores[nameof(datos.Nombre)] = "Ya existe una receta con ese nombre.";
         }
@@ -99,11 +99,62 @@ public class RecetaService : IRecetaService
                 Unidad = i.Unidad,
             }).ToList(),
             Pasos = datos.Pasos.Select((texto, i) => new Paso { Orden = i + 1, Texto = texto.Trim() }).ToList(),
+            Gustos = await _db.Gustos.Where(g => datos.GustosIds.Contains(g.Id)).ToListAsync(),
         };
 
         _db.Recetas.Add(receta);
         await _db.SaveChangesAsync();
         return receta;
+    }
+
+    public async Task<bool> ActualizarAsync(int id, RecetaCrearDto datos)
+    {
+        var receta = await _db.Recetas
+            .Include(r => r.Ingredientes)
+            .Include(r => r.Pasos)
+            .Include(r => r.Gustos)
+            .AsSplitQuery()
+            .FirstOrDefaultAsync(r => r.Id == id);
+        if (receta is null)
+        {
+            return false;
+        }
+
+        receta.Nombre = datos.Nombre.Trim();
+        receta.Descripcion = datos.Descripcion?.Trim();
+        receta.Emoji = string.IsNullOrWhiteSpace(datos.Emoji) ? "🍽️" : datos.Emoji.Trim();
+        receta.TiempoMin = datos.TiempoMin;
+        receta.Porciones = datos.Porciones;
+        receta.Calorias = datos.Calorias;
+        receta.Dificultad = datos.Dificultad!.Value;
+        receta.CategoriaId = datos.CategoriaId;
+        receta.Gustos = await _db.Gustos.Where(g => datos.GustosIds.Contains(g.Id)).ToListAsync();
+
+        // Ingredientes: se actualizan en el lugar (la clave es receta + ingrediente, así que borrar y volver
+        // a agregar el mismo en un solo guardado no se puede): se quitan los que ya no están, se actualizan
+        // los que siguen y se agregan los nuevos.
+        var nuevos = datos.Ingredientes.ToDictionary(i => i.IngredienteId);
+        receta.Ingredientes.RemoveAll(ri => !nuevos.ContainsKey(ri.IngredienteId));
+        foreach (var (ingredienteId, dato) in nuevos)
+        {
+            var existente = receta.Ingredientes.FirstOrDefault(ri => ri.IngredienteId == ingredienteId);
+            if (existente is null)
+            {
+                receta.Ingredientes.Add(new RecetaIngrediente { IngredienteId = ingredienteId, Cantidad = dato.Cantidad, Unidad = dato.Unidad });
+            }
+            else
+            {
+                existente.Cantidad = dato.Cantidad;
+                existente.Unidad = dato.Unidad;
+            }
+        }
+
+        // Pasos: se reemplazan todos (cada paso tiene su propio Id, no hay choque de claves).
+        receta.Pasos.Clear();
+        receta.Pasos.AddRange(datos.Pasos.Select((texto, i) => new Paso { Orden = i + 1, Texto = texto.Trim() }));
+
+        await _db.SaveChangesAsync();
+        return true;
     }
 
     public async Task<bool> EliminarAsync(int id)
