@@ -1,0 +1,106 @@
+@* Formulario de perfil: onboarding (primera vez) y edición. Las opciones salen de los catálogos de la base (D-03, punto 10). *@
+@using CenaApp.Web.Models
+@model CenaApp.Web.ViewModels.PerfilFormularioViewModel
+@{
+    ViewData["Title"] = Model.EsOnboarding ? "Bienvenida" : "Editar perfil";
+    ViewData["Seccion"] = "Perfil";
+    ViewData["OcultarBarra"] = Model.EsOnboarding;
+
+    var niveles = new (Nivel Valor, string Descripcion)[]
+    {
+        (Nivel.Principiante, "Recién empiezo"),
+        (Nivel.Intermedio, "Tengo experiencia básica"),
+        (Nivel.Avanzado, "Soy experimentado"),
+    };
+}
+
+@if (Model.EsOnboarding)
+{
+    <div class="cuerpo pt-5">
+        <partial name="_Marca" />
+        <p class="text-center mb-4">Contanos un poco sobre vos para recomendarte recetas a tu medida.</p>
+    </div>
+}
+else
+{
+    <header class="encabezado encabezado-perfil">
+        <h1>Editar perfil</h1>
+        <p>Tus preferencias filtran y ordenan las recetas.</p>
+    </header>
+}
+
+<form asp-action="Editar" method="post" class="cuerpo" novalidate>
+    <input type="hidden" asp-for="EsOnboarding" />
+
+    <section class="tarjeta @(Model.EsOnboarding ? "" : "superpuesta")">
+        <label asp-for="Nombre" class="form-label h3 fs-5"></label>
+        <input asp-for="Nombre" class="form-control" placeholder="Tu nombre" autocomplete="given-name" />
+        <span asp-validation-for="Nombre" class="text-danger small"></span>
+    </section>
+
+    <section class="tarjeta">
+        <h2 class="fs-5"><i class="bi bi-slash-circle text-warning"></i> ¿Tenés restricciones alimentarias?</h2>
+        <p class="small text-secondary">Solo vas a ver recetas aptas para todas las que marques.</p>
+        <div class="chips">
+            @foreach (var r in Model.Restricciones)
+            {
+                <input type="checkbox" class="btn-check" name="RestriccionesIds" value="@r.Id" id="restriccion-@r.Id"
+                       checked="@Model.RestriccionesIds.Contains(r.Id)" />
+                <label class="chip" for="restriccion-@r.Id" title="@r.Descripcion">@r.Nombre</label>
+            }
+        </div>
+    </section>
+
+    <section class="tarjeta">
+        <h2 class="fs-5"><i class="bi bi-exclamation-triangle text-danger"></i> ¿Tenés alguna alergia?</h2>
+        <p class="small text-secondary">Las recetas que tengan estos alérgenos no se van a mostrar.</p>
+        <div class="chips">
+            @foreach (var a in Model.Alergenos)
+            {
+                <input type="checkbox" class="btn-check" name="AlergenosIds" value="@a.Id" id="alergeno-@a.Id"
+                       checked="@Model.AlergenosIds.Contains(a.Id)" />
+                <label class="chip chip-alergia" for="alergeno-@a.Id">@a.Nombre</label>
+            }
+        </div>
+    </section>
+
+    <section class="tarjeta">
+        <h2 class="fs-5"><i class="bi bi-heart text-danger"></i> ¿Qué te gusta comer?</h2>
+        <p class="small text-secondary">Las recetas que coincidan aparecen primero.</p>
+        <div class="chips">
+            @foreach (var g in Model.Gustos)
+            {
+                <input type="checkbox" class="btn-check" name="GustosIds" value="@g.Id" id="gusto-@g.Id"
+                       checked="@Model.GustosIds.Contains(g.Id)" />
+                <label class="chip chip-gusto" for="gusto-@g.Id">@g.Nombre</label>
+            }
+        </div>
+    </section>
+
+    <section class="tarjeta">
+        <h2 class="fs-5"><i class="bi bi-mortarboard"></i> ¿Cuál es tu nivel de cocina?</h2>
+        @foreach (var (valor, descripcion) in niveles)
+        {
+            <input type="radio" class="btn-check" name="Nivel" value="@valor" id="nivel-@valor"
+                   checked="@(Model.Nivel == valor)" />
+            <label class="opcion" for="nivel-@valor">
+                <span class="fw-medium">@valor</span>
+                <small>@descripcion</small>
+            </label>
+        }
+    </section>
+
+    <div class="d-flex gap-2 mb-4">
+        @if (!Model.EsOnboarding)
+        {
+            <a asp-action="Index" class="btn btn-outline-primary">Cancelar</a>
+        }
+        <button type="submit" class="btn btn-primary flex-grow-1">
+            @(Model.EsOnboarding ? "Comenzar" : "Guardar") <i class="bi bi-arrow-right"></i>
+        </button>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

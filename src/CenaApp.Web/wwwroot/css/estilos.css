@@ -512,3 +512,23 @@ h1, h2, h3, h4 {
 .marca p {
     color: var(--color-texto-secundario);
 }
+
+/* ---------- 14. Perfil ---------- */
+.avatar {
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .2);
+    font-size: 2.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.consejo {
+    background: linear-gradient(90deg, #FAF5FF, #FDF2F8); /* purple-50 → pink-50 */
+    border: 2px solid #E9D5FF;                             /* purple-200 */
+    border-radius: var(--radio);
+    padding: 1rem 1.25rem;
+}
