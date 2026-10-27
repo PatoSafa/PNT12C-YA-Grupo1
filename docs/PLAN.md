@@ -25,7 +25,7 @@ Tareas chicas y ordenadas para llegar a la entrega del **lunes 2 de noviembre de
 | [x] | T03 | Diseño de la entidad `Receta` antes de programar: tabla atributo/tipo + justificación (Parte 3, Evidencia 1) en `docs/DISENO_ENTIDADES.md` | — | — | `docs: diseño de entidades` | |
 | [x] | T04 | Entidades (`Models/`), enums, `AppDbContext` con las relaciones (D-08) y migración `Inicial` | T02, T03 | — | `feat: entidades, DbContext y migración inicial` | |
 | [x] | T05 | Datos iniciales: 5 restricciones, 5 alérgenos, 12 gustos, 7 categorías, ingredientes, ~30 recetas con pasos, usuario admin. Claude redacta el borrador; **el equipo lo revisa** (pendiente: tiempos, dificultad, calorías y pasos en `Data/DatosIniciales.cs`) | T04 | — | `feat: datos iniciales` | |
-| [ ] | T06 | `RecetaService` (listar, buscar, crear, eliminar) + `Api/RecetasApiController` (`GET`, `GET/{id}`, `POST`, `DELETE`) con DTO, validaciones VAL-15/VAL-16 y 404 con mensaje. Archivo `recetas.http` para probar (Partes 7–12) | T05 | — | `feat: API REST de recetas` | |
+| [x] | T06 | `RecetaService` (listar, buscar, crear, eliminar) + `Api/RecetasApiController` (`GET`, `GET/{id}`, `POST`, `DELETE`) con DTO, validaciones VAL-15/VAL-16 y 404 con mensaje. Archivo `recetas.http` para probar (Partes 7–12) | T05 | — | `feat: API REST de recetas` | |
 | [ ] | T07 | `README.md` inicial (cómo correr) y `docs/ERRORES.md` con el formato de la Parte 13 | T06 | — | `docs: README y registro de errores` | |
 
 ## Etapa 2 · Layout y cuentas (miércoles 28)

@@ -1,10 +1,17 @@
 // Configura la aplicación: servicios (inyección de dependencias), base de datos y rutas MVC.
+using System.Text.Json.Serialization;
 using CenaApp.Web.Data;
+using CenaApp.Web.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();
+// Los enum viajan en el JSON como texto ("Facil") en vez de número (0).
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
+// Services: una instancia por petición HTTP (igual que el AppDbContext que usan).
+builder.Services.AddScoped<IRecetaService, RecetaService>();
 
 // La cadena de conexión sale de appsettings.Development.json en local
 // y de la variable de entorno ConnectionStrings__CenaApp en producción.

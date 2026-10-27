@@ -1,0 +1,77 @@
+# Pruebas de la API /api/recetas (Partes 8 a 12 del enunciado).
+# En VS Code: abrir este archivo y hacer clic en "Send Request" arriba de cada petición
+# (con la app corriendo: dotnet run --project src/CenaApp.Web).
+
+@base = http://localhost:5224/api/recetas
+
+### 1. Listar todas las recetas
+GET {{base}}
+
+### 2. Buscar por nombre (contiene "papa", sin distinguir mayúsculas)
+GET {{base}}?nombre=papa
+
+### 3. Ver una receta (con ingredientes, pasos y alérgenos calculados)
+GET {{base}}/1
+
+### 4. ID inexistente → 404 con mensaje (Parte 10)
+GET {{base}}/9999
+
+### 5. Crear una receta → 201 con la receta creada
+# CategoriaId 2 = Ensalada; IngredienteId: ver los Id con la petición 3 o en la base.
+POST {{base}}
+Content-Type: application/json
+
+{
+  "nombre": "Ensalada de prueba",
+  "descripcion": "Creada desde recetas.http",
+  "emoji": "🥗",
+  "tiempoMin": 10,
+  "porciones": 2,
+  "calorias": 150,
+  "dificultad": "Facil",
+  "categoriaId": 2,
+  "ingredientes": [
+    { "ingredienteId": 10, "cantidad": 100, "unidad": "g" },
+    { "ingredienteId": 12, "cantidad": 50, "unidad": "g" }
+  ],
+  "pasos": [
+    "Lavar y cortar las verduras.",
+    "Mezclar y servir."
+  ]
+}
+
+### 6. Crear con datos inválidos → 400 con los errores (Parte 12: validaciones VAL-15 y VAL-16)
+POST {{base}}
+Content-Type: application/json
+
+{
+  "nombre": "",
+  "tiempoMin": 0,
+  "porciones": -2,
+  "calorias": 100,
+  "dificultad": "Facil",
+  "categoriaId": 1,
+  "ingredientes": [],
+  "pasos": []
+}
+
+### 7. Crear con nombre repetido → 400 "Ya existe una receta con ese nombre."
+POST {{base}}
+Content-Type: application/json
+
+{
+  "nombre": "Risotto de hongos",
+  "tiempoMin": 30,
+  "porciones": 1,
+  "calorias": 400,
+  "dificultad": "Media",
+  "categoriaId": 1,
+  "ingredientes": [ { "ingredienteId": 1, "cantidad": 100, "unidad": "g" } ],
+  "pasos": [ "Cocinar." ]
+}
+
+### 8. Eliminar (cambiar el id por el que devolvió la petición 5) → 204
+DELETE {{base}}/33
+
+### 9. Eliminar un id inexistente → 404
+DELETE {{base}}/9999

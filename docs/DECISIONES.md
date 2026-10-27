@@ -168,3 +168,10 @@ Formato: **fecha · decisión · alternativas · motivo**.
 - **Alternativas:** `HasData` de EF Core (los datos quedan dentro de una migración, pero con relaciones N:M hay que escribir a mano cada fila de las tablas intermedias con sus Id); script SQL aparte.
 - **Motivo:** el código de carga se lee como una lista ("este ingrediente tiene gluten y no es apto para Sin gluten"), y se puede corregir sin tocar migraciones. Aplicar las migraciones al arrancar es lo que necesita el deploy en Render (T20). `dotnet ef database update` sigue funcionando igual en local.
 - **Contraseñas de los usuarios de prueba:** salen de la configuración (`DatosIniciales:ClaveAdmin` y `DatosIniciales:ClaveDemo`): en local, de `appsettings.Development.json` (solo valores de desarrollo); en producción, de variables de entorno. Si no están, no se crean.
+
+## D-17 · ID inexistente: 404 con un mensaje claro (Parte 10 del enunciado)
+- **Fecha:** 2026-10-26
+- **Decisión:** si se pide, o se intenta borrar, una receta que no existe, la API responde **404 Not Found** con un JSON `{ "mensaje": "No existe una receta con id 9999." }`. En las pantallas (T13) se muestra una vista "Receta no encontrada" con un botón para volver al inicio, también con código 404.
+- **Alternativas:** dejar que la app falle (500, no aceptado por el enunciado); responder 200 con `null` (el cliente no se entera de que algo salió mal); 400 Bad Request (incorrecto: el pedido está bien formado, lo que no existe es el recurso).
+- **Motivo:** 404 es el código HTTP que significa justamente "ese recurso no existe", así que cualquier cliente (Postman, `fetch`, el navegador) lo entiende sin leer el cuerpo. El mensaje dice qué id se buscó, para que el error se entienda sin mirar el código. Además, `{id:int}` en la ruta hace que `/api/recetas/abc` también dé 404 en vez de un error.
+- **Validaciones (Parte 12):** los datos inválidos del POST responden **400** con la lista de errores por campo. Las dos reglas propias del dominio son VAL-15 (nombre obligatorio, hasta 80 caracteres, único) y VAL-16 (tiempo y porciones mayores a 0, calorías mayores o iguales a 0); su justificación está en `DISENO_ENTIDADES.md`.

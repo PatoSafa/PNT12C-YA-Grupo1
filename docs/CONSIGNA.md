@@ -10,65 +10,65 @@ Requisitos del enunciado "Práctica integradora — Java + Spring Boot + Gradle 
 - El enunciado está pensado para **una entidad con una API REST**. Lo que pide es el piso: CenaAPP implementa la documentación funcional completa (D-03), pero todo lo de este checklist tiene que estar cumplido.
 
 ## Parte 1 — Preparación del proyecto
-- [ ] Proyecto ASP.NET Core MVC (en lugar de Spring Boot) con EF Core, Npgsql y validación (Data Annotations, incluidas en el framework).
-- [ ] Nombre relacionado con el dominio: `CenaApp` (`CenaApp.sln`, `src/CenaApp.Web`).
+- [x] Proyecto ASP.NET Core MVC (en lugar de Spring Boot) con EF Core, Npgsql y validación (Data Annotations, incluidas en el framework).
+- [x] Nombre relacionado con el dominio: `CenaApp` (`CenaApp.sln`, `src/CenaApp.Web`).
 
 ## Parte 2 — Elegir un dominio
 - [x] Dominio: **Recetas** (está en la lista de la cátedra).
-- [ ] Permite guardar información en una base de datos, con atributos decididos por el grupo.
+- [x] Permite guardar información en una base de datos, con atributos decididos por el grupo.
 
 ## Parte 3 — Diseñar antes de programar (→ Evidencia 1)
-- [ ] Nombre de la entidad.
-- [ ] Atributos.
-- [ ] Tabla Atributo | Tipo (en C#: `int`, `string`, `int?`, `decimal`…).
-- [ ] Justificación: por qué esos atributos y si alguno sobra.
-- [ ] Hacerlo **antes** de programar.
+- [x] Nombre de la entidad.
+- [x] Atributos.
+- [x] Tabla Atributo | Tipo (en C#: `int`, `string`, `int?`, `decimal`…).
+- [x] Justificación: por qué esos atributos y si alguno sobra.
+- [x] Hacerlo **antes** de programar.
 
 ## Parte 4 — Base de datos con Docker
-- [ ] `compose.yaml` en la raíz con imagen oficial de PostgreSQL (en lugar de MySQL).
-- [ ] Define nombre de base, usuario y contraseña (solo de desarrollo).
-- [ ] Expone el puerto (`5432:5432`).
-- [ ] Usa un volumen para no perder los datos.
-- [ ] Funciona con `docker compose up -d` y se detiene con `docker compose down`.
+- [x] `compose.yaml` en la raíz con imagen oficial de PostgreSQL (en lugar de MySQL).
+- [x] Define nombre de base, usuario y contraseña (solo de desarrollo).
+- [x] Expone el puerto (`5432:5432`).
+- [x] Usa un volumen para no perder los datos.
+- [x] Funciona con `docker compose up -d` y se detiene con `docker compose down`.
 - [ ] **Evidencia:** captura del contenedor corriendo.
 
 ## Parte 5 — Configuración
-- [ ] Conexión a la base de Docker en `appsettings.Development.json` (equivale a `application.yaml`).
-- [ ] EF Core configurado en `Program.cs`.
-- [ ] **Sin contraseñas reales en GitHub:** variables de entorno o User Secrets.
+- [x] Conexión a la base de Docker en `appsettings.Development.json` (equivale a `application.yaml`).
+- [x] EF Core configurado en `Program.cs`.
+- [x] **Sin contraseñas reales en GitHub:** variables de entorno o User Secrets.
 
 ## Parte 6 — Crear la entidad
-- [ ] Clase C# registrada como `DbSet<T>` en el `DbContext`, con `Id` autogenerado.
-- [ ] Atributos del diseño de la Parte 3. No copiar una entidad de ejemplo.
-- [ ] Poder explicar: por qué es una entidad, cuál es el identificador, qué relación hay entre la clase y la tabla.
-- [ ] Migración creada (`dotnet ef migrations add ...`).
+- [x] Clase C# registrada como `DbSet<T>` en el `DbContext`, con `Id` autogenerado.
+- [x] Atributos del diseño de la Parte 3. No copiar una entidad de ejemplo.
+- [x] Poder explicar: por qué es una entidad, cuál es el identificador, qué relación hay entre la clase y la tabla.
+- [x] Migración creada (`dotnet ef migrations add ...`).
 
 ## Parte 7 — Repository
-- [ ] Obtener todos, obtener por ID, guardar, eliminar (con `DbContext` o una capa Repository, según la decisión de arquitectura).
+- [x] Obtener todos, obtener por ID, guardar, eliminar (con `DbContext` o una capa Repository, según la decisión de arquitectura).
 - [ ] Poder responder: "¿Qué problema nos evita resolver JpaRepository?" (en .NET: qué nos resuelve EF Core / `DbSet`).
 
 ## Parte 8 — API REST
-- [ ] `GET /api/recetas`
-- [ ] `GET /api/recetas/{id}`
-- [ ] `POST /api/recetas`
-- [ ] `DELETE /api/recetas/{id}`
+- [x] `GET /api/recetas`
+- [x] `GET /api/recetas/{id}`
+- [x] `POST /api/recetas`
+- [x] `DELETE /api/recetas/{id}`
 
 > Aunque las pantallas sean vistas Razor, el enunciado pide estos endpoints JSON. Hay que tener ambas cosas.
 
 ## Parte 9 — Crear registros
-- [ ] El `POST` recibe JSON y el registro queda guardado en PostgreSQL.
+- [x] El `POST` recibe JSON y el registro queda guardado en PostgreSQL.
 
 ## Parte 10 — Consultar registros
-- [ ] `GET /api/recetas` devuelve todos; `GET /api/recetas/{id}` devuelve uno.
-- [ ] **ID inexistente:** no puede romper la app. Decidir cómo se maneja (404 con mensaje claro / vista "no encontrado") y **explicar la decisión**.
+- [x] `GET /api/recetas` devuelve todos; `GET /api/recetas/{id}` devuelve uno.
+- [x] **ID inexistente:** no puede romper la app. Decidir cómo se maneja (404 con mensaje claro / vista "no encontrado") y **explicar la decisión**.
 
 ## Parte 11 — Eliminar
-- [ ] `DELETE /api/recetas/{id}`.
-- [ ] Verificar que el registro existe, que se puede eliminar y que después no aparece en el `GET`.
+- [x] `DELETE /api/recetas/{id}`.
+- [x] Verificar que el registro existe, que se puede eliminar y que después no aparece en el `GET`.
 
 ## Parte 12 — Validación
-- [ ] Validar los datos que llegan (nombre no vacío, email válido si hay, números válidos) con Data Annotations.
-- [ ] **Al menos dos reglas propias del dominio**, con su justificación. Candidatas de la doc funcional:
+- [x] Validar los datos que llegan (nombre no vacío, email válido si hay, números válidos) con Data Annotations.
+- [x] **Al menos dos reglas propias del dominio**, con su justificación. Candidatas de la doc funcional:
   - VAL-15: nombre de receta obligatorio, máx. 80 caracteres, único.
   - VAL-16: tiempo y porciones enteros > 0; calorías enteras ≥ 0.
 
@@ -81,7 +81,7 @@ Requisitos del enunciado "Práctica integradora — Java + Spring Boot + Gradle 
   - ¿Qué estaba provocando el error?
   - ¿Cómo lo solucioné?
   - ¿Cómo comprobé que quedó solucionado?
-- [ ] Usar el mismo formato para los errores reales que aparezcan durante el desarrollo (→ Evidencia 3).
+- [x] Usar el mismo formato para los errores reales que aparezcan durante el desarrollo (→ Evidencia 3).
 
 ## Parte 14 — Cambio de requisitos (→ Evidencia 4)
 El docente asigna uno, sin dar la solución:
