@@ -198,6 +198,9 @@ docs/                       consigna, decisiones, errores, arquitectura, diseño
 | [`docs/DECISIONES.md`](docs/DECISIONES.md) | Decisiones técnicas con alternativas y motivo (Evidencia 2) |
 | [`docs/DISENO_ENTIDADES.md`](docs/DISENO_ENTIDADES.md) | Diseño de las entidades antes de programar (Evidencia 1) |
 | [`docs/ERRORES.md`](docs/ERRORES.md) | Errores reales del desarrollo y cómo se resolvieron (Evidencia 3) |
+| [`docs/EVIDENCIAS.md`](docs/EVIDENCIAS.md) | Índice de las 6 evidencias de la Parte 18 |
+| [`docs/DEFENSA.md`](docs/DEFENSA.md) | Guía para la defensa oral y la prueba sorpresa |
+| [`docs/REFLEXION.md`](docs/REFLEXION.md) | Reflexión final (Parte 20) |
 | [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md) | Capas, carpetas y modelo de datos |
 | [`docs/PLAN.md`](docs/PLAN.md) | Tareas y avance |
 | [`docs/TECNOLOGIAS.md`](docs/TECNOLOGIAS.md) | Stack y equivalencias con Spring Boot |
