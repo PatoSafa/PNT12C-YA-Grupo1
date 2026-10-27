@@ -58,6 +58,30 @@ Al arrancar por primera vez, la app carga los datos iniciales: 32 recetas, 81 in
 - Tests: `dotnet test`
 - Apagar la base: `docker compose down`. Los datos se conservan en el volumen `cenaapp-datos`; para borrarlos, `docker compose down -v`.
 
+## Despliegue en Render (Docker)
+
+Render no tiene runtime nativo de .NET, así que la app se despliega como contenedor con el [`Dockerfile`](Dockerfile) de la raíz.
+
+1. **Base de datos:** en Render, *New → PostgreSQL* (plan Free). Ojo: la base gratuita vence a los 30 días, conviene crearla cerca de la entrega. De la sección *Connections* anotar Hostname (interno), Database, Username y Password.
+2. **Web Service:** *New → Web Service* → este repositorio → *Language: Docker* (usa el `Dockerfile` de la raíz) → plan Free.
+3. **Variables de entorno** del Web Service (nunca en el repositorio):
+
+   | Variable | Valor |
+   |---|---|
+   | `ConnectionStrings__CenaApp` | `Host=<hostname>;Port=5432;Database=<database>;Username=<username>;Password=<password>` |
+   | `DatosIniciales__ClaveAdmin` | contraseña que elija el equipo para `admin@cenaapp.com` |
+   | `DatosIniciales__ClaveDemo` | contraseña para `demo@cenaapp.com` |
+
+   `PORT` la define Render: la app la lee al arrancar (`Program.cs`), igual que `server.port: ${PORT:8080}` en Spring.
+4. **Deploy.** En el primer arranque la app aplica las migraciones y carga los datos iniciales. En el log aparece una vez `fail: ... Failed executing DbCommand ... __EFMigrationsHistory`. Es normal: EF Core busca la tabla de historial antes de crearla.
+
+**Probar la imagen en local**, igual que en Render:
+```bash
+docker build -t cenaapp .
+docker run --rm -p 10000:10000 -e PORT=10000   -e "ConnectionStrings__CenaApp=Host=host.docker.internal;Port=5432;Database=cenaapp;Username=cenaapp;Password=cenaapp_dev"   cenaapp
+# http://localhost:10000
+```
+
 ## API REST
 
 Base: `http://localhost:5224/api/recetas`. Todas las pruebas están listas para ejecutar en [`src/CenaApp.Web/recetas.http`](src/CenaApp.Web/recetas.http).

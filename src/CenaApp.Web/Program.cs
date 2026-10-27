@@ -6,6 +6,7 @@ using System.Text.Unicode;
 using CenaApp.Web.Data;
 using CenaApp.Web.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.WebEncoders;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,23 @@ CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
 CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Render indica en la variable PORT en qué puerto escuchar. Es lo mismo que server.port: ${PORT:8080} en Spring (Clase 6).
+// En local no existe, y se usa el de launchSettings.json (5224).
+var puerto = Environment.GetEnvironmentVariable("PORT");
+if (!string.IsNullOrEmpty(puerto))
+{
+    builder.WebHost.UseUrls($"http://0.0.0.0:{puerto}");
+}
+
+// En Render la app está detrás de un proxy que atiende el HTTPS. Estos encabezados le avisan a la app que
+// la petición original era https (si no, creería que es http y la redirección a HTTPS no terminaría nunca).
+builder.Services.Configure<ForwardedHeadersOptions>(opciones =>
+{
+    opciones.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    opciones.KnownIPNetworks.Clear();
+    opciones.KnownProxies.Clear();
+});
 
 // Los enum viajan en el JSON como texto ("Facil") en vez de número (0).
 builder.Services.AddControllersWithViews()
@@ -60,6 +78,8 @@ using (var scope = app.Services.CreateScope())
     db.Database.Migrate();
     DatosIniciales.Cargar(db, app.Configuration);
 }
+
+app.UseForwardedHeaders();
 
 if (!app.Environment.IsDevelopment())
 {
