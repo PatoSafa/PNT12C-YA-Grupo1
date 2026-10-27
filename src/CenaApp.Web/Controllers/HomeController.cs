@@ -1,11 +1,11 @@
 // Pantalla de inicio provisoria: confirma que la app está corriendo y que llega a la base.
 using System.Diagnostics;
-using CocinaFacil.Web.Data;
-using CocinaFacil.Web.Models;
-using CocinaFacil.Web.ViewModels;
+using CenaApp.Web.Data;
+using CenaApp.Web.Models;
+using CenaApp.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CocinaFacil.Web.Controllers;
+namespace CenaApp.Web.Controllers;
 
 public class HomeController : Controller
 {

@@ -2,6 +2,8 @@
 
 Tareas chicas y ordenadas para llegar a la entrega del **lunes 2 de noviembre de 2026**. Las etapas 1 y 6 cubren todo lo que exige el enunciado; el resto es la app según D-04.
 
+> T01 quedó cubierta por el esqueleto del 19/10, renombrado a CenaApp (D-12).
+
 **Cómo usarlo**
 - Cada tarea es un cambio chico que termina en **un commit** (el enunciado pide ≥ 4 significativos; acá hay ~22).
 - Completen la columna **Resp.** con quién la toma. Las tareas sin dependencia entre sí se pueden hacer en paralelo.
@@ -18,8 +20,8 @@ Tareas chicas y ordenadas para llegar a la entrega del **lunes 2 de noviembre de
 
 | ✓ | # | Tarea | Depende | Diseño | Commit sugerido | Resp. |
 |---|---|---|---|---|---|---|
-| [ ] | T01 | Crear `CenaApp.sln`, `src/CenaApp.Web` (`dotnet new mvc`), `tests/CenaApp.Tests` (xUnit) y `.gitignore` de .NET | T00 | — | `chore: inicializar solución ASP.NET Core MVC` | |
-| [ ] | T02 | `compose.yaml` con PostgreSQL + volumen; cadena de conexión en `appsettings.Development.json` (solo valores de desarrollo). Captura del contenedor corriendo (Parte 4) | T01 | — | `chore: PostgreSQL con Docker Compose` | |
+| [x] | T01 | Crear `CenaApp.sln`, `src/CenaApp.Web` (`dotnet new mvc`), `tests/CenaApp.Tests` (xUnit) y `.gitignore` de .NET | T00 | — | `chore: inicializar solución ASP.NET Core MVC` | |
+| [ ] | T02 | ~~`compose.yaml` con PostgreSQL + volumen; cadena de conexión en `appsettings.Development.json`~~ (hecho en el esqueleto del 19/10). **Falta:** levantarlo y sacar la captura del contenedor corriendo (Parte 4) | T01 | — | `chore: PostgreSQL con Docker Compose` | |
 | [ ] | T03 | Diseño de la entidad `Receta` antes de programar: tabla atributo/tipo + justificación (Parte 3, Evidencia 1) en `docs/DISENO_ENTIDADES.md` | — | — | `docs: diseño de entidades` | |
 | [ ] | T04 | Entidades (`Models/`), enums, `AppDbContext` con las relaciones (D-08) y migración `Inicial` | T02, T03 | — | `feat: entidades, DbContext y migración inicial` | |
 | [ ] | T05 | Datos iniciales: 5 restricciones, 5 alérgenos, 12 gustos, 7 categorías, ingredientes, ~30 recetas con pasos, usuario admin. Claude redacta el borrador; **el equipo lo revisa** | T04 | — | `feat: datos iniciales` | |

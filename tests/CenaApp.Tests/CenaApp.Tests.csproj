@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\CocinaFacil.Web\CocinaFacil.Web.csproj" />
+    <ProjectReference Include="..\..\src\CenaApp.Web\CenaApp.Web.csproj" />
   </ItemGroup>
 
 </Project>

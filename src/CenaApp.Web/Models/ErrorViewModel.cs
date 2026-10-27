@@ -1,4 +1,4 @@
-namespace CocinaFacil.Web.Models;
+namespace CenaApp.Web.Models;
 
 public class ErrorViewModel
 {

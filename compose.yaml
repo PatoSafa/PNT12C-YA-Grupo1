@@ -3,20 +3,20 @@
 services:
   postgres:
     image: postgres:17
-    container_name: cocinafacil-postgres
+    container_name: cenaapp-postgres
     environment:
-      POSTGRES_DB: cocinafacil
-      POSTGRES_USER: cocinafacil
-      POSTGRES_PASSWORD: cocinafacil_dev
+      POSTGRES_DB: cenaapp
+      POSTGRES_USER: cenaapp
+      POSTGRES_PASSWORD: cenaapp_dev
     ports:
       - "5432:5432"
     volumes:
-      - cocinafacil-datos:/var/lib/postgresql/data
+      - cenaapp-datos:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U cocinafacil -d cocinafacil"]
+      test: ["CMD-SHELL", "pg_isready -U cenaapp -d cenaapp"]
       interval: 5s
       timeout: 3s
       retries: 10
 
 volumes:
-  cocinafacil-datos:
+  cenaapp-datos:

@@ -1,7 +1,7 @@
 // Contexto de EF Core: la puerta de entrada a la base de datos PostgreSQL.
 using Microsoft.EntityFrameworkCore;
 
-namespace CocinaFacil.Web.Data;
+namespace CenaApp.Web.Data;
 
 public class AppDbContext : DbContext
 {

@@ -1,8 +1,8 @@
-# PNT12C-YA-Grupo1 · CocinaFácil
+# PNT12C-YA-Grupo1 · CenaAPP
 
 Repositorio que se utilizará para la materia PNT1 - 2C - YA - ORT.
 
-CocinaFácil es una app web móvil de recetas personalizadas según el perfil del usuario (restricciones, alergias y gustos), con despensa virtual y búsqueda de comercios cercanos.
+CenaAPP es una app web móvil de recetas personalizadas según el perfil del usuario (restricciones, alergias y gustos), con despensa virtual y búsqueda de comercios cercanos.
 
 ## Tecnologías
 
@@ -24,17 +24,17 @@ docker compose up -d
 dotnet tool restore
 
 # 3. Aplicar las migraciones (cuando existan)
-dotnet ef database update --project src/CocinaFacil.Web
+dotnet ef database update --project src/CenaApp.Web
 
 # 4. Correr la app
-dotnet run --project src/CocinaFacil.Web
+dotnet run --project src/CenaApp.Web
 ```
 
 Abrir http://localhost:5224. La página de inicio indica si la app se conectó a la base de datos.
 
 Para correr los tests: `dotnet test`.
 
-Para apagar la base: `docker compose down` (los datos se conservan en el volumen `cocinafacil-datos`).
+Para apagar la base: `docker compose down` (los datos se conservan en el volumen `cenaapp-datos`).
 
 ## Documentación
 

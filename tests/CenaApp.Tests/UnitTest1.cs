@@ -1,5 +1,5 @@
 // Test de ejemplo para verificar que el proyecto de tests corre. Se reemplaza por tests de los Services.
-namespace CocinaFacil.Tests;
+namespace CenaApp.Tests;
 
 public class UnitTest1
 {
