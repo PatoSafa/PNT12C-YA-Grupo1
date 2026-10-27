@@ -776,3 +776,33 @@ h1, h2, h3, h4 {
     background: #fff;
     font-size: .875rem;
 }
+
+/* ---------- 18. Tiendas ---------- */
+.mapa {
+    height: 300px;
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    overflow: hidden;
+    z-index: 0; /* que no tape la barra inferior */
+}
+
+.tarjeta-comercio {
+    transition: box-shadow var(--transicion);
+}
+
+.tarjeta-comercio.elegido {
+    box-shadow: 0 0 0 2px var(--color-exito), var(--sombra);
+}
+
+.distancia {
+    padding: .15rem .6rem;
+    border-radius: 999px;
+    font-size: .875rem;
+    background: var(--color-exito-suave);
+    color: var(--color-exito-texto);
+    white-space: nowrap;
+}
+
+.btn-outline-success {
+    border-width: 2px;
+}

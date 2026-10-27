@@ -158,7 +158,7 @@ Formato: **fecha · decisión · alternativas · motivo**.
 
 ## D-15 · Zona de los comercios fijos: Almagro (ORT Yatay)
 - **Fecha:** 2026-10-26
-- **Decisión:** los ~6 comercios fijos de `ComercioService` (D-11) se ubican alrededor de la sede de ORT en Almagro, y el mapa se centra ahí. Son datos de ejemplo para la demo: nombres ficticios en calles reales de la zona.
+- **Decisión:** los ~6 comercios fijos de `ComercioService` (D-11) se ubican alrededor de la sede de ORT en Almagro, y el mapa se centra ahí. Son datos de ejemplo para la demo: nombres ficticios en direcciones reales de la zona. Las coordenadas de cada dirección (y de ORT, Yatay 240) se buscaron en OpenStreetMap (Nominatim) para que los marcadores caigan donde dice la dirección. Las distancias se calculan en línea recta desde ORT (fórmula del haversine), porque la ubicación del usuario quedó fuera de alcance (D-04).
 - **Alternativas:** Belgrano (ORT Belgrano); centro (como el prototipo).
 - **Motivo:** zona conocida por todo el equipo y el docente, la demo resulta natural.
 

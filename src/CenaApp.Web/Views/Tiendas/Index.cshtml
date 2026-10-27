@@ -1,0 +1,86 @@
+@* Tiendas cercanas (DISENO.md §1.6): filtro por tipo, mapa con un marcador por comercio y la lista. *@
+@using System.Globalization
+@model CenaApp.Web.ViewModels.TiendasViewModel
+@{
+    ViewData["Title"] = "Tiendas";
+    ViewData["Seccion"] = "Tiendas";
+    var ar = CultureInfo.GetCultureInfo("es-AR");
+
+    // Lo que necesita js/tiendas.js para dibujar el mapa.
+    var datosMapa = new
+    {
+        centro = new { lat = Model.Centro.Lat, lng = Model.Centro.Lng, nombre = Model.Centro.Nombre },
+        comercios = Model.Comercios.Select(c => new { c.Id, c.Nombre, c.Emoji, c.Direccion, c.Horario, c.Lat, c.Lng }),
+    };
+}
+
+@section Estilos {
+    @* Leaflet + OpenStreetMap, complementaria aprobada (D-11). integrity: el navegador rechaza el archivo si alguien lo modificó. *@
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+}
+
+<header class="encabezado encabezado-tiendas">
+    <h1>Tiendas Cercanas</h1>
+    <p>Encontrá dónde comprar tus ingredientes.</p>
+</header>
+
+<div class="cuerpo">
+    <section class="tarjeta superpuesta">
+        <p class="small text-secondary mb-2"><i class="bi bi-cursor"></i> Comercios de ejemplo cerca de @Model.Centro.Nombre</p>
+        <div class="chips">
+            <a asp-action="Index" class="chip chip-tiendas @(Model.Tipo is null ? "activo" : "")">Todas</a>
+            @foreach (var tipo in Model.Tipos)
+            {
+                <a asp-action="Index" asp-route-tipo="@tipo" class="chip chip-tiendas @(tipo == Model.Tipo ? "activo" : "")">@tipo</a>
+            }
+        </div>
+    </section>
+
+    <div id="mapa" class="mapa mb-3" aria-label="Mapa de comercios"></div>
+    <p id="mapa-error" class="alert alert-warning small" hidden>No se pudo cargar el mapa. Igual podés ver los comercios en la lista.</p>
+
+    @if (Model.Comercios.Count == 0)
+    {
+        <div class="vacio">
+            <p>No se encontraron tiendas de este tipo.</p>
+            <a asp-action="Index" class="btn btn-success">Ver todas las tiendas</a>
+        </div>
+    }
+
+    @foreach (var c in Model.Comercios)
+    {
+        <article class="tarjeta tarjeta-comercio" data-comercio="@c.Id">
+            <div class="d-flex align-items-center gap-3">
+                <span class="fs-3" aria-hidden="true">@c.Emoji</span>
+                <div class="flex-grow-1 min-w-0">
+                    <h2 class="fs-6 mb-0 text-truncate">@c.Nombre</h2>
+                    <span class="small text-secondary">@c.Tipo</span>
+                </div>
+                <span class="distancia">@c.DistanciaKm.ToString("0.0", ar) km</span>
+            </div>
+            <ul class="list-unstyled small my-3">
+                <li><i class="bi bi-geo-alt text-success"></i> @c.Direccion</li>
+                <li><i class="bi bi-clock text-success"></i> @c.Horario</li>
+            </ul>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-outline-success flex-grow-1 ver-en-mapa" data-comercio="@c.Id">
+                    <i class="bi bi-map"></i> Ver en el mapa
+                </button>
+                @* RF21: la ruta a pie se abre en la app de mapas del celular. *@
+                <a class="btn btn-success flex-grow-1" target="_blank" rel="noopener"
+                   href="https://www.google.com/maps/dir/?api=1&destination=@c.Lat.ToString(CultureInfo.InvariantCulture),@c.Lng.ToString(CultureInfo.InvariantCulture)&travelmode=walking">
+                    <i class="bi bi-sign-turn-right"></i> Cómo llegar
+                </a>
+            </div>
+        </article>
+    }
+</div>
+
+<script id="datos-mapa" type="application/json">@Json.Serialize(datosMapa)</script>
+
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="~/js/tiendas.js" asp-append-version="true"></script>
+}

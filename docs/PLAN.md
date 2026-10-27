@@ -51,7 +51,7 @@ Tareas chicas y ordenadas para llegar a la entrega del **lunes 2 de noviembre de
 |---|---|---|---|---|---|---|
 | [x] | T15 | `DespensaService`: agregar/quitar/vaciar, porcentaje por receta, "Podés cocinar" / "Casi listas" (≥ 50 %). **Tests xUnit** | T11 | — | `feat: lógica de despensa + tests` | |
 | [x] | T16 | Vista Despensa: formulario con `fetch` que reemplaza la vista parcial de resultados (Parte 15) | T15, T08 | §1.5 | `feat: pantalla de despensa con AJAX` | |
-| [ ] | T17 | Tiendas: `ComercioService` con ~6 comercios fijos, lista con filtro por tipo, mapa Leaflet, "Cómo llegar" | T08 | §1.6 | `feat: tiendas con mapa` | |
+| [x] | T17 | Tiendas: `ComercioService` con ~6 comercios fijos, lista con filtro por tipo, mapa Leaflet, "Cómo llegar" | T08 | §1.6 | `feat: tiendas con mapa` | |
 
 ## Etapa 5 · Administración (sábado 31)
 
