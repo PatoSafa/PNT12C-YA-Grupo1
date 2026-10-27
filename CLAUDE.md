@@ -111,9 +111,12 @@ Detalle, alternativas y motivos en `docs/DECISIONES.md`. Las del 26/10 reemplaza
 - **D-11 Mapa:** Leaflet + OpenStreetMap con comercios fijos (complementaria).
 - **D-12 Integración:** nombre CenaApp en el código; se conserva el esqueleto del 19/10.
 
+- **D-13 Idioma del código:** español (lo del framework, como viene).
+- **D-14 jQuery:** se mantiene solo para la validación del cliente; el JS propio usa `fetch`.
+- **D-15 Comercios fijos:** zona Almagro (ORT Yatay).
+
 ### Decisiones pendientes
-- Idioma del código (sección 5).
-- jQuery: viene con la plantilla MVC para la validación del lado del cliente. Decidir si se mantiene o se quita.
+Ninguna. Las nuevas se plantean según los pasos de arriba.
 
 ### Estructura de referencia
 ```
@@ -142,7 +145,7 @@ Se ajusta según las decisiones pendientes 2 y 3.
 - **Simple antes que ingenioso:** código legible, sin abstracciones ni patrones innecesarios.
 - **Cambios chicos:** una idea por cambio.
 - **Comentarios:** solo donde algo no es obvio. Cada archivo nuevo arranca con una línea: qué hace.
-- **Idioma del código:** `<<español / inglés>>`, consistente.
+- **Idioma del código:** español, consistente (D-13). Lo del framework queda como viene.
 - **No hagas commit ni push** sin que te lo pidan. El enunciado exige commits frecuentes y significativos: cuando cierres algo, sugerí el mensaje de commit.
 - **No borres ni muevas archivos** sin confirmar.
 - **Migraciones:** cada cambio en las entidades lleva su migración (`dotnet ef migrations add <Nombre>`), con un nombre que describa el cambio.

@@ -143,3 +143,21 @@ Formato: **fecha · decisión · alternativas · motivo**.
 - **Se conserva** el esqueleto del 19/10: se renombra a `CenaApp` y cubre las tareas T01 y parte de T02 del plan.
 - **Siguen pendientes** (planteadas el 19/10): idioma del código y si se mantiene jQuery.
 - **Motivo:** las decisiones del 26/10 incorporan la documentación funcional final y el recorte de alcance por plazo.
+
+## D-13 · Idioma del código: español
+- **Fecha:** 2026-10-26
+- **Decisión:** clases, propiedades, métodos y variables propias en español (`Receta`, `ObtenerAptas()`, `tiempoMin`). Lo que es del framework queda como viene (`Controller`, `View`, `DbContext`, `IActionResult`).
+- **Alternativas:** inglés (`Recipe`, `GetSuitable()`).
+- **Motivo:** coincide con la documentación funcional, las vistas y las decisiones; el equipo lo explica con las mismas palabras que el dominio.
+
+## D-14 · jQuery: se mantiene solo para la validación del cliente
+- **Fecha:** 2026-10-26
+- **Decisión:** se conservan jQuery y jQuery Validation Unobtrusive que trae la plantilla MVC, solo para que las Data Annotations (`[Required]`, `[Range]`…) también se validen en el navegador. El JavaScript propio (favoritos, despensa, mapa) usa `fetch` nativo, no jQuery.
+- **Alternativas:** quitarlo y validar solo en el servidor.
+- **Motivo:** la validación en el navegador sale gratis (sin escribir JS) y el usuario ve el error antes de enviar el formulario. La validación del servidor (`ModelState.IsValid`) se mantiene igual: es la que garantiza los datos.
+
+## D-15 · Zona de los comercios fijos: Almagro (ORT Yatay)
+- **Fecha:** 2026-10-26
+- **Decisión:** los ~6 comercios fijos de `ComercioService` (D-11) se ubican alrededor de la sede de ORT en Almagro, y el mapa se centra ahí. Son datos de ejemplo para la demo: nombres ficticios en calles reales de la zona.
+- **Alternativas:** Belgrano (ORT Belgrano); centro (como el prototipo).
+- **Motivo:** zona conocida por todo el equipo y el docente, la demo resulta natural.
