@@ -26,3 +26,28 @@ public class InicioRecetasViewModel
     public List<Gusto> Gustos { get; set; } = [];
     public List<TarjetaRecetaViewModel> Recetas { get; set; } = [];
 }
+
+// Pantalla de detalle de una receta.
+public class DetalleRecetaViewModel
+{
+    public int Id { get; set; }
+    public string Nombre { get; set; } = "";
+    public string? Descripcion { get; set; }
+    public string Emoji { get; set; } = "";
+    public string Categoria { get; set; } = "";
+    public int TiempoMin { get; set; }
+    public int Porciones { get; set; }
+    public int Calorias { get; set; }
+    public Dificultad Dificultad { get; set; }
+
+    // Calculados desde los ingredientes (RF8).
+    public List<string> Alergenos { get; set; } = [];
+    public List<string> AptaPara { get; set; } = [];
+
+    // Alérgenos de la receta que además tiene el usuario: se resaltan en el aviso (RF14).
+    public List<string> AlergenosDelUsuario { get; set; } = [];
+
+    public List<(string Nombre, string Cantidad)> Ingredientes { get; set; } = [];
+    public List<string> Pasos { get; set; } = [];
+    public bool EsFavorita { get; set; }
+}

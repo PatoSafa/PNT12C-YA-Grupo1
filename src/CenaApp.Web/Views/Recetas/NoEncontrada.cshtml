@@ -1,0 +1,15 @@
+@* Se muestra con código 404 cuando se pide una receta que no existe (D-17). El modelo es el id buscado. *@
+@model int
+@{
+    ViewData["Title"] = "Receta no encontrada";
+    ViewData["Seccion"] = "Inicio";
+}
+
+<div class="cuerpo pt-5">
+    <section class="tarjeta vacio">
+        <span class="icono">🍽️</span>
+        <h1 class="h4 text-body">Receta no encontrada</h1>
+        <p>No existe una receta con el número @Model. Puede que la hayan eliminado.</p>
+        <a asp-action="Index" class="btn btn-primary">Volver al inicio</a>
+    </section>
+</div>

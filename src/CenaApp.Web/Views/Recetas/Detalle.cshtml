@@ -1,0 +1,91 @@
+@* Detalle de una receta: datos, aviso de alérgenos, ingredientes y pasos con checklist (DISENO.md §1.4). *@
+@model CenaApp.Web.ViewModels.DetalleRecetaViewModel
+@{
+    ViewData["Title"] = Model.Nombre;
+}
+
+<div class="hero">
+    <a asp-action="Index" class="boton-volver" aria-label="Volver al inicio"><i class="bi bi-arrow-left"></i></a>
+    <span aria-hidden="true">@Model.Emoji</span>
+</div>
+
+<div class="cuerpo">
+    <article class="hoja">
+        <p class="small text-secondary mb-1">@Model.Categoria</p>
+        <h1 class="fs-3 mb-2">@Model.Nombre</h1>
+        @if (!string.IsNullOrEmpty(Model.Descripcion))
+        {
+            <p class="text-secondary">@Model.Descripcion</p>
+        }
+
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+            <span class="pill-dato pill-tiempo"><i class="bi bi-clock"></i> @Model.TiempoMin min</span>
+            <span class="pill-dato pill-porciones"><i class="bi bi-people"></i> @Model.Porciones @(Model.Porciones == 1 ? "porción" : "porciones")</span>
+            <span class="pill-dato pill-calorias"><i class="bi bi-fire"></i> @Model.Calorias kcal</span>
+            <partial name="_Dificultad" model="Model.Dificultad" />
+        </div>
+
+        @if (Model.Alergenos.Count > 0)
+        {
+            <div class="alerta-alergenos mb-3" role="alert">
+                <strong>⚠️ Contiene alérgenos:</strong> @string.Join(", ", Model.Alergenos)
+                @if (Model.AlergenosDelUsuario.Count > 0)
+                {
+                    <div class="mt-1 fw-semibold">Atención: tenés alergia a @string.Join(", ", Model.AlergenosDelUsuario).</div>
+                }
+            </div>
+        }
+
+        @if (Model.AptaPara.Count > 0)
+        {
+            <p class="small mb-3"><i class="bi bi-check-circle text-success"></i> Apta para: @string.Join(", ", Model.AptaPara)</p>
+        }
+
+        <ul class="nav nav-tabs pestanas mb-3" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#ingredientes" type="button" role="tab">Ingredientes</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#pasos" type="button" role="tab">Pasos</button>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <section class="tab-pane fade show active" id="ingredientes" role="tabpanel">
+                <ul class="list-unstyled">
+                    @foreach (var (nombre, cantidad) in Model.Ingredientes)
+                    {
+                        <li class="fila-ingrediente">
+                            <span>@nombre</span>
+                            <span class="small text-secondary fw-medium">@cantidad</span>
+                        </li>
+                    }
+                </ul>
+                <a asp-controller="Tiendas" asp-action="Index" class="btn btn-success w-100">
+                    <i class="bi bi-cart"></i> Ver dónde comprar
+                </a>
+            </section>
+
+            <section class="tab-pane fade" id="pasos" role="tabpanel">
+                @* Marcar un paso es solo visual: no se guarda (la doc funcional no modela pasos completados). *@
+                @for (var i = 0; i < Model.Pasos.Count; i++)
+                {
+                    <input type="checkbox" class="btn-check paso-check" id="paso-@i" autocomplete="off" />
+                    <label class="paso" for="paso-@i">
+                        <span class="numero">@(i + 1)</span>
+                        <span class="texto">@Model.Pasos[i]</span>
+                    </label>
+                }
+                <div id="felicitaciones" class="felicitaciones" hidden>
+                    <div class="fs-1">🎉</div>
+                    <h2 class="fs-5">¡Felicitaciones!</h2>
+                    <p class="mb-0">Completaste la receta.</p>
+                </div>
+            </section>
+        </div>
+    </article>
+</div>
+
+@section Scripts {
+    <script src="~/js/receta.js" asp-append-version="true"></script>
+}

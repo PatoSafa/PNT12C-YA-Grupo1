@@ -532,3 +532,114 @@ h1, h2, h3, h4 {
     border-radius: var(--radio);
     padding: 1rem 1.25rem;
 }
+
+/* ---------- 15. Detalle de receta ---------- */
+.hero {
+    position: relative;
+    height: 16rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 6rem;
+    background: linear-gradient(135deg, #FED7AA, #FDE68A); /* orange-200 → amber-200 */
+}
+
+.boton-volver {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: var(--sombra);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    color: var(--color-texto);
+}
+
+/* Hoja blanca que sube sobre el hero. */
+.hoja {
+    position: relative;
+    margin-top: -1.5rem;
+    margin-bottom: 1rem;
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 1.5rem;
+    box-shadow: var(--sombra);
+}
+
+.pestanas .nav-link {
+    color: var(--color-texto-apagado);
+    border: none;
+    border-bottom: 2px solid transparent;
+}
+
+.pestanas .nav-link.active {
+    color: var(--color-primario-hover);
+    border-bottom-color: var(--color-primario-hover);
+}
+
+.fila-ingrediente {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: .75rem;
+    margin-bottom: .5rem;
+    background: var(--color-superficie-clara);
+    border-radius: var(--radio-chico);
+}
+
+/* Paso clickeable (label de un checkbox oculto). */
+.paso {
+    display: flex;
+    gap: .75rem;
+    align-items: flex-start;
+    padding: 1rem;
+    margin-bottom: .75rem;
+    border: 2px solid var(--color-borde);
+    border-radius: var(--radio-chico);
+    cursor: pointer;
+    transition: border-color var(--transicion), background var(--transicion);
+}
+
+.paso:hover {
+    border-color: #FDBA74;
+}
+
+.paso .numero {
+    flex: 0 0 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--color-primario);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .875rem;
+}
+
+.btn-check:checked + .paso {
+    border-color: var(--color-exito);
+    background: var(--color-exito-claro);
+}
+
+.btn-check:checked + .paso .numero {
+    background: var(--color-exito);
+}
+
+.btn-check:checked + .paso .texto {
+    text-decoration: line-through;
+    color: var(--color-texto-apagado);
+}
+
+.felicitaciones {
+    text-align: center;
+    padding: 1.5rem;
+    border: 2px solid var(--color-exito);
+    border-radius: var(--radio);
+    background: var(--color-exito-claro);
+    color: #166534;
+}

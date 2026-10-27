@@ -1,5 +1,7 @@
-// Pantallas de recetas del usuario: Inicio (recetas aptas para su perfil).
+// Pantallas de recetas del usuario: Inicio (recetas aptas para su perfil) y Detalle.
+using System.Globalization;
 using CenaApp.Web.Data;
+using CenaApp.Web.Models;
 using CenaApp.Web.Services;
 using CenaApp.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -53,5 +55,55 @@ public class RecetasController : Controller
             }).ToList(),
         };
         return View(modelo);
+    }
+
+    // GET /Recetas/Detalle/5 → la receta, o la vista "no encontrada" con código 404 (D-17).
+    [HttpGet]
+    public async Task<IActionResult> Detalle(int id)
+    {
+        var receta = await _recetas.ObtenerAsync(id);
+        if (receta is null)
+        {
+            Response.StatusCode = StatusCodes.Status404NotFound;
+            return View("NoEncontrada", id);
+        }
+
+        var usuario = await _db.Usuarios
+            .Include(u => u.Alergenos)
+            .FirstAsync(u => u.Id == UsuarioActual.Id(User));
+
+        var alergenos = RecetaService.CalcularAlergenos(receta);
+        var modelo = new DetalleRecetaViewModel
+        {
+            Id = receta.Id,
+            Nombre = receta.Nombre,
+            Descripcion = receta.Descripcion,
+            Emoji = receta.Emoji,
+            Categoria = receta.Categoria.Nombre,
+            TiempoMin = receta.TiempoMin,
+            Porciones = receta.Porciones,
+            Calorias = receta.Calorias,
+            Dificultad = receta.Dificultad,
+            Alergenos = alergenos,
+            AlergenosDelUsuario = alergenos.Intersect(usuario.Alergenos.Select(a => a.Nombre)).ToList(),
+            AptaPara = RecetaService.RestriccionesAptas(receta, await _db.Restricciones.ToListAsync()),
+            Ingredientes = receta.Ingredientes
+                .OrderBy(ri => ri.Ingrediente.Nombre)
+                .Select(ri => (ri.Ingrediente.Nombre, TextoCantidad(ri)))
+                .ToList(),
+            Pasos = receta.Pasos.OrderBy(p => p.Orden).Select(p => p.Texto).ToList(),
+        };
+        return View(modelo);
+    }
+
+    // "200 g", "0,5 ud" o "a gusto".
+    private static string TextoCantidad(RecetaIngrediente ri)
+    {
+        if (ri.Cantidad is null)
+        {
+            return "a gusto";
+        }
+        var numero = ri.Cantidad.Value.ToString("0.##", CultureInfo.GetCultureInfo("es-AR"));
+        return string.IsNullOrEmpty(ri.Unidad) ? numero : $"{numero} {ri.Unidad}";
     }
 }
