@@ -20,4 +20,8 @@ public interface IRecetaService
 
     // false si la receta no existe.
     Task<bool> EliminarAsync(int id);
+
+    // Recetas para el Inicio de un usuario: sin sus alérgenos, aptas para sus restricciones y
+    // ordenadas por sus gustos. Opcional: texto a buscar en nombre o descripción, y un gusto para filtrar.
+    Task<List<Receta>> ListarParaUsuarioAsync(int usuarioId, string? texto = null, int? gustoId = null);
 }

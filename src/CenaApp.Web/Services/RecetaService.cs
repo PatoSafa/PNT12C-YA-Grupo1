@@ -120,8 +120,54 @@ public class RecetaService : IRecetaService
         return true;
     }
 
+    public async Task<List<Receta>> ListarParaUsuarioAsync(int usuarioId, string? texto = null, int? gustoId = null)
+    {
+        var usuario = await _db.Usuarios
+            .Include(u => u.Restricciones)
+            .Include(u => u.Alergenos)
+            .Include(u => u.Gustos)
+            .AsSplitQuery()
+            .FirstAsync(u => u.Id == usuarioId);
+
+        var consulta = ConIngredientesYGustos(_db.Recetas);
+
+        // RF11: búsqueda por texto en nombre o descripción.
+        if (!string.IsNullOrWhiteSpace(texto))
+        {
+            var buscado = texto.Trim().ToLower();
+            consulta = consulta.Where(r => r.Nombre.ToLower().Contains(buscado)
+                || (r.Descripcion != null && r.Descripcion.ToLower().Contains(buscado)));
+        }
+
+        // RF11: filtro por un gusto.
+        if (gustoId is not null)
+        {
+            consulta = consulta.Where(r => r.Gustos.Any(g => g.Id == gustoId));
+        }
+
+        // El filtro de aptitud se hace en memoria con las funciones de abajo (son las que tienen tests).
+        var recetas = await consulta.ToListAsync();
+        return FiltrarYOrdenar(recetas,
+            usuario.Restricciones.Select(r => r.Id).ToList(),
+            usuario.Alergenos.Select(a => a.Id).ToList(),
+            usuario.Gustos.Select(g => g.Id).ToList());
+    }
+
+    // Include de todo lo que necesitan los cálculos de aptitud.
+    private static IQueryable<Receta> ConIngredientesYGustos(IQueryable<Receta> recetas) =>
+        recetas
+            .Include(r => r.Categoria)
+            .Include(r => r.Gustos)
+            .Include(r => r.Ingredientes).ThenInclude(ri => ri.Ingrediente).ThenInclude(i => i.Alergenos)
+            .Include(r => r.Ingredientes).ThenInclude(ri => ri.Ingrediente).ThenInclude(i => i.RestriccionesIncompatibles)
+            .AsSplitQuery();
+
+    // ---------------------------------------------------------------------------------------------
+    // Reglas de aptitud (VN-04 a VN-08). Son funciones puras: reciben las recetas ya cargadas con sus
+    // ingredientes y devuelven un resultado, sin tocar la base. Por eso se pueden testear (CenaApp.Tests).
+    // ---------------------------------------------------------------------------------------------
+
     // Alérgenos de una receta = todos los alérgenos de sus ingredientes, sin repetir (VN-04).
-    // Necesita la receta cargada con Ingredientes → Ingrediente → Alergenos.
     public static List<string> CalcularAlergenos(Receta receta)
     {
         return receta.Ingredientes
@@ -129,6 +175,50 @@ public class RecetaService : IRecetaService
             .Select(a => a.Nombre)
             .Distinct()
             .Order()
+            .ToList();
+    }
+
+    // Una receta es apta para una restricción si NINGUNO de sus ingredientes es incompatible con ella.
+    // Con varias restricciones tiene que ser apta para todas (filtro estricto, VN-06).
+    public static bool EsApta(Receta receta, ICollection<int> restriccionesIds)
+    {
+        return !receta.Ingredientes.Any(ri =>
+            ri.Ingrediente.RestriccionesIncompatibles.Any(r => restriccionesIds.Contains(r.Id)));
+    }
+
+    // De un catálogo de restricciones, las que la receta cumple (para mostrar "Apta para: ...").
+    public static List<string> RestriccionesAptas(Receta receta, IEnumerable<Restriccion> catalogo)
+    {
+        return catalogo
+            .Where(r => EsApta(receta, [r.Id]))
+            .Select(r => r.Nombre)
+            .Order()
+            .ToList();
+    }
+
+    // true si algún ingrediente tiene alguno de esos alérgenos (VN-05).
+    public static bool ContieneAlergeno(Receta receta, ICollection<int> alergenosIds)
+    {
+        return receta.Ingredientes.Any(ri =>
+            ri.Ingrediente.Alergenos.Any(a => alergenosIds.Contains(a.Id)));
+    }
+
+    // Cuántos de los gustos del usuario tiene la receta (para ordenar, VN-08).
+    public static int GustosEnComun(Receta receta, ICollection<int> gustosIds)
+    {
+        return receta.Gustos.Count(g => gustosIds.Contains(g.Id));
+    }
+
+    // Lo que ve el usuario en el Inicio: sin sus alérgenos, aptas para todas sus restricciones,
+    // primero las que más coinciden con sus gustos y, a igual coincidencia, por nombre.
+    public static List<Receta> FiltrarYOrdenar(IEnumerable<Receta> recetas,
+        ICollection<int> restriccionesIds, ICollection<int> alergenosIds, ICollection<int> gustosIds)
+    {
+        return recetas
+            .Where(r => !ContieneAlergeno(r, alergenosIds))
+            .Where(r => EsApta(r, restriccionesIds))
+            .OrderByDescending(r => GustosEnComun(r, gustosIds))
+            .ThenBy(r => r.Nombre)
             .ToList();
     }
 }

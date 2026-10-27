@@ -40,7 +40,7 @@ Tareas chicas y ordenadas para llegar a la entrega del **lunes 2 de noviembre de
 
 | ✓ | # | Tarea | Depende | Diseño | Commit sugerido | Resp. |
 |---|---|---|---|---|---|---|
-| [ ] | T11 | Cálculo de aptitud en `RecetaService`: alérgenos desde ingredientes, restricciones aptas, orden por gustos. **Tests xUnit** | T05 | — | `feat: cálculo de recetas aptas + tests` | |
+| [x] | T11 | Cálculo de aptitud en `RecetaService`: alérgenos desde ingredientes, restricciones aptas, orden por gustos. **Tests xUnit** | T05 | — | `feat: cálculo de recetas aptas + tests` | |
 | [ ] | T12 | Inicio: saludo, buscador, filtro por gusto, tarjetas (vista parcial `_TarjetaReceta`), estado vacío | T10, T11 | §1.3 | `feat: pantalla de inicio` | |
 | [ ] | T13 | Detalle: datos, aviso de alérgenos, pestañas, pasos con checkbox (JS), vista "no encontrada" con 404 | T11 | §1.4 | `feat: detalle de receta` | |
 | [ ] | T14 | Favoritos: corazón con `fetch` + lista "Mis favoritos" | T12 | §1.3 | `feat: favoritos` | |
