@@ -1,0 +1,133 @@
+@* Parte de la Despensa que cambia al agregar o quitar: ingredientes en casa, accesos rápidos y recetas sugeridas.
+   La devuelven Agregar / Quitar / Vaciar para que js/despensa.js la reemplace sin recargar. *@
+@model CenaApp.Web.ViewModels.DespensaContenidoViewModel
+
+@* Token antiforgery que usan los fetch de esta pantalla (se renueva con cada respuesta). *@
+@Html.AntiForgeryToken()
+
+@if (Model.Mensaje is not null)
+{
+    <div class="alert alert-warning py-2" role="alert">@Model.Mensaje</div>
+}
+
+@if (Model.Rapidos.Count > 0)
+{
+    <div class="chips mb-3" aria-label="Agregar rápido">
+        @foreach (var i in Model.Rapidos)
+        {
+            <form asp-action="Agregar" method="post" class="form-despensa">
+                <input type="hidden" name="texto" value="@i.Nombre" />
+                <button type="submit" class="chip"><i class="bi bi-plus"></i> @i.Nombre</button>
+            </form>
+        }
+    </div>
+}
+
+<section class="tarjeta">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h2 class="fs-6 mb-0">Tengo en casa (@Model.Ingredientes.Count)</h2>
+        @if (Model.Ingredientes.Count > 0)
+        {
+            <form asp-action="Vaciar" method="post" class="form-despensa" data-confirmar="¿Vaciar toda la despensa?">
+                <button type="submit" class="btn btn-link btn-sm text-danger p-0">Limpiar todo</button>
+            </form>
+        }
+    </div>
+
+    @if (Model.Ingredientes.Count == 0)
+    {
+        <div class="vacio py-3">
+            <span class="icono">🥦</span>
+            <p class="fw-medium text-body mb-1">¿Qué tenés en casa?</p>
+            <p class="mb-0">Ingresá los ingredientes disponibles y te mostramos qué podés cocinar ahora mismo.</p>
+        </div>
+    }
+    else
+    {
+        <div class="chips">
+            @foreach (var i in Model.Ingredientes)
+            {
+                <form asp-action="Quitar" asp-route-id="@i.Id" method="post" class="form-despensa">
+                    <span class="etiqueta etiqueta-despensa">
+                        @i.Nombre
+                        <button type="submit" aria-label="Quitar @i.Nombre"><i class="bi bi-x"></i></button>
+                    </span>
+                </form>
+            }
+        </div>
+    }
+</section>
+
+@if (Model.Ingredientes.Count > 0)
+{
+    <div class="segmentado mb-3" role="tablist">
+        <button class="active" data-bs-toggle="tab" data-bs-target="#podes" type="button" role="tab">
+            <i class="bi bi-check-circle"></i> Podés cocinar (@Model.PodesCocinar.Count)
+        </button>
+        <button class="casi" data-bs-toggle="tab" data-bs-target="#casi" type="button" role="tab">
+            <i class="bi bi-exclamation-circle"></i> Casi listas (@Model.CasiListas.Count)
+        </button>
+    </div>
+
+    <div class="tab-content">
+        <section class="tab-pane fade show active" id="podes" role="tabpanel">
+            @if (Model.PodesCocinar.Count == 0)
+            {
+                <div class="vacio">
+                    <i class="bi bi-egg-fried icono"></i>
+                    <p class="mb-1">Ninguna receta se puede hacer con estos ingredientes solos.</p>
+                    <p class="mb-0">Revisá las recetas "Casi listas" para ver qué te falta comprar.</p>
+                </div>
+            }
+            @foreach (var r in Model.PodesCocinar)
+            {
+                <a asp-controller="Recetas" asp-action="Detalle" asp-route-id="@r.Id" class="tarjeta-despensa completa">
+                    <span class="emoji">@r.Emoji</span>
+                    <span class="flex-grow-1">
+                        <span class="d-block fw-medium">@r.Nombre</span>
+                        <span class="d-block small text-success">Tenés todos los ingredientes</span>
+                        <span class="meta mt-1">⏱ @r.TiempoMin min <partial name="_Dificultad" model="r.Dificultad" /></span>
+                    </span>
+                    <i class="bi bi-chevron-right text-secondary"></i>
+                </a>
+            }
+        </section>
+
+        <section class="tab-pane fade" id="casi" role="tabpanel">
+            @if (Model.CasiListas.Count == 0)
+            {
+                <div class="vacio">
+                    <p class="mb-1">No hay recetas con al menos el 50% de ingredientes disponibles.</p>
+                    <p class="mb-0">Agregá más ingredientes para ver más sugerencias.</p>
+                </div>
+            }
+            @foreach (var r in Model.CasiListas)
+            {
+                <div class="tarjeta-despensa parcial">
+                    <a asp-controller="Recetas" asp-action="Detalle" asp-route-id="@r.Id" class="d-flex gap-3 align-items-center text-reset text-decoration-none">
+                        <span class="emoji">@r.Emoji</span>
+                        <span class="flex-grow-1">
+                            <span class="d-flex justify-content-between">
+                                <span class="fw-medium">@r.Nombre</span>
+                                <span class="small fw-medium text-warning-emphasis">@r.Porcentaje%</span>
+                            </span>
+                            <span class="barra-progreso d-block mt-2"><span class="d-block" style="width: @r.Porcentaje%"></span></span>
+                        </span>
+                    </a>
+                    <div class="faltantes">
+                        <div class="d-flex justify-content-between small mb-2">
+                            <span><i class="bi bi-cart"></i> Necesitás comprar (@r.Faltantes.Count):</span>
+                            <a asp-controller="Tiendas" asp-action="Index">Ver tiendas →</a>
+                        </div>
+                        <div class="d-flex flex-wrap gap-1">
+                            @foreach (var f in r.Faltantes)
+                            {
+                                <span class="etiqueta-faltante">@f</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </section>
+    </div>
+}

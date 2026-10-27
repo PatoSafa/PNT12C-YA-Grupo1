@@ -88,9 +88,10 @@ El docente asigna uno, sin dar la solución:
 - [ ] A: nuevo atributo · B: nuevo endpoint · C: búsqueda (`GET /api/recetas?nombre=...`) · D: segunda entidad · E: nueva validación · F: modificar un endpoint existente.
 
 ## Parte 15 — Frontend / AJAX
-- [ ] Página con formulario, inputs, botón, JavaScript y `fetch()`.
-- [ ] Recorrido: HTML → JavaScript → `fetch()` → API REST → Controller → EF Core → PostgreSQL.
-- [ ] La respuesta del backend se muestra en la página.
+- [x] Página con formulario, inputs, botón, JavaScript y `fetch()`.
+- [x] Recorrido: HTML → JavaScript → `fetch()` → API REST → Controller → EF Core → PostgreSQL.
+- [x] La respuesta del backend se muestra en la página.
+  - Hecho en **Mi Despensa** (`Views/Despensa/Index.cshtml` + `wwwroot/js/despensa.js`): el formulario "Agregar ingrediente" hace `fetch` y la respuesta (HTML de `_Contenido`) reemplaza las recetas sugeridas. También los favoritos (`js/favoritos.js`, respuesta JSON).
 
 ## Parte 16 — Git y GitHub (→ Evidencia 5)
 - [ ] Repo con `README.md`, archivo de build (`CenaApp.sln` / `.csproj` en lugar de `build.gradle`), `compose.yaml` y `src/`.
