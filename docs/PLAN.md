@@ -32,7 +32,7 @@ Tareas chicas y ordenadas para llegar a la entrega del **lunes 2 de noviembre de
 
 | ✓ | # | Tarea | Depende | Diseño | Commit sugerido | Resp. |
 |---|---|---|---|---|---|---|
-| [ ] | T08 | `_Layout.cshtml` con barra inferior, `estilos.css` con variables de color y clases propias, Bootstrap Icons | T01 | §1.1, §2, §5 | `feat: layout, barra inferior y estilos base` | |
+| [x] | T08 | `_Layout.cshtml` con barra inferior, `estilos.css` con variables de color y clases propias, Bootstrap Icons | T01 | §1.1, §2, §5 | `feat: layout, barra inferior y estilos base` | |
 | [ ] | T09 | Registro, inicio y cierre de sesión con cookie + `PasswordHasher`; roles Usuario/Admin; `[Authorize]` | T04, T08 | §1.2 (misma estructura) | `feat: registro, login y roles` | |
 | [ ] | T10 | Onboarding y Perfil (misma vista para crear y editar): nombre, restricciones, alergias, gustos, nivel. Botón "Cerrar sesión" | T09 | §1.2, §1.7 | `feat: onboarding y perfil` | |
 

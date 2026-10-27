@@ -1,17 +1,25 @@
+@* Pantalla provisoria: confirma que la app corre y llega a la base. Se reemplaza por el Inicio de recetas (T12). *@
 @model CenaApp.Web.ViewModels.InicioViewModel
 @{
     ViewData["Title"] = "Inicio";
+    ViewData["Seccion"] = "Inicio";
 }
 
-<div class="text-center">
-    <h1 class="display-5">CenaAPP</h1>
-    <p>El proyecto está corriendo.</p>
-    @if (Model.BaseConectada)
-    {
-        <p class="text-success">Base de datos PostgreSQL: conectada.</p>
-    }
-    else
-    {
-        <p class="text-danger">Base de datos PostgreSQL: sin conexión. ¿Levantaste el contenedor con <code>docker compose up -d</code>?</p>
-    }
+<header class="encabezado encabezado-inicio">
+    <h1>CenaAPP 👋</h1>
+    <p>Tu asistente personal de cocina</p>
+</header>
+
+<div class="cuerpo">
+    <section class="tarjeta superpuesta">
+        <p class="mb-2">El proyecto está corriendo.</p>
+        @if (Model.BaseConectada)
+        {
+            <p class="mb-0 text-success"><i class="bi bi-check-circle"></i> Base de datos PostgreSQL: conectada.</p>
+        }
+        else
+        {
+            <p class="mb-0 text-danger"><i class="bi bi-exclamation-circle"></i> Base de datos PostgreSQL: sin conexión. ¿Levantaste el contenedor con <code>docker compose up -d</code>?</p>
+        }
+    </section>
 </div>

@@ -1,0 +1,483 @@
+/* Estilos propios de CenaAPP: colores de Figma como variables (pisan a Bootstrap) y los componentes
+   que se repiten en las pantallas (ver docs/DISENO.md §5). Para cambiar un color, tocá solo :root. */
+
+/* ---------- 1. Paleta (DISENO.md §2) ---------- */
+:root {
+    --color-primario: #F97316;        /* orange-500 */
+    --color-primario-hover: #EA580C;  /* orange-600 */
+    --color-primario-claro: #FFF7ED;  /* orange-50 */
+    --color-primario-suave: #FFEDD5;  /* orange-100 */
+    --color-primario-texto: #9A3412;  /* orange-800 */
+    --color-secundario: #F59E0B;      /* amber-500 */
+
+    --color-exito: #22C55E;           /* green-500 */
+    --color-exito-hover: #16A34A;
+    --color-exito-claro: #F0FDF4;
+    --color-exito-suave: #DCFCE7;
+    --color-exito-texto: #15803D;
+
+    --color-despensa: #10B981;        /* emerald-500 */
+    --color-despensa-hover: #059669;
+    --color-despensa-suave: #D1FAE5;
+    --color-despensa-texto: #065F46;
+    --color-teal: #14B8A6;
+
+    --color-ambar: #F59E0B;
+    --color-ambar-claro: #FFFBEB;
+    --color-ambar-suave: #FEF3C7;
+    --color-ambar-texto: #92400E;
+
+    --color-peligro: #EF4444;         /* red-500 */
+    --color-peligro-hover: #DC2626;
+    --color-peligro-claro: #FEF2F2;
+    --color-peligro-suave: #FEE2E2;
+    --color-peligro-texto: #991B1B;
+
+    --color-perfil: #A855F7;          /* purple-500 */
+    --color-perfil-claro: #FAF5FF;
+    --color-rosa: #EC4899;            /* pink-500 */
+    --color-rosa-suave: #FCE7F3;
+    --color-rosa-texto: #9D174D;
+
+    --color-info-claro: #EFF6FF;      /* blue-50 */
+    --color-info: #2563EB;
+    --color-amarillo-suave: #FEF9C3;
+    --color-amarillo-texto: #A16207;
+
+    --color-texto: #1F2937;           /* gray-800 */
+    --color-texto-secundario: #4B5563;
+    --color-texto-apagado: #6B7280;
+    --color-borde: #E5E7EB;
+    --color-superficie: #F3F4F6;
+    --color-superficie-clara: #F9FAFB;
+
+    --ancho-maximo: 512px;            /* RNF1: contenido centrado de hasta 512 px */
+    --radio: 12px;
+    --radio-chico: 8px;
+    --sombra: 0 10px 15px -3px rgba(0, 0, 0, .1), 0 4px 6px -4px rgba(0, 0, 0, .1);
+    --sombra-media: 0 4px 6px -1px rgba(0, 0, 0, .1), 0 2px 4px -2px rgba(0, 0, 0, .1);
+    --transicion: 300ms ease;         /* RNF6 */
+
+    /* Bootstrap */
+    --bs-body-color: var(--color-texto);
+    --bs-body-font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --bs-link-color: var(--color-primario-hover);
+    --bs-link-hover-color: var(--color-primario-texto);
+    --bs-border-radius: var(--radio-chico);
+    --bs-border-color: var(--color-borde);
+}
+
+/* ---------- 2. Base ---------- */
+html {
+    font-size: 16px;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #FFF7ED, #FFFBEB, #FEFCE8); /* orange-50 → amber-50 → yellow-50 */
+}
+
+h1, h2, h3, h4 {
+    font-weight: 500;
+}
+
+/* Contenedor central de todas las pantallas. El padding de abajo deja lugar a la barra fija. */
+.contenedor {
+    max-width: var(--ancho-maximo);
+    margin: 0 auto;
+    padding-bottom: 6rem;
+}
+
+.contenedor.sin-barra {
+    padding-bottom: 1.5rem;
+}
+
+.cuerpo {
+    padding: 0 1.5rem;
+}
+
+/* ---------- 3. Header con degradado por sección ---------- */
+.encabezado {
+    color: #fff;
+    padding: 1.5rem 1.5rem 2rem;
+    background: linear-gradient(90deg, var(--desde), var(--hasta));
+}
+
+.encabezado h1 {
+    font-size: 1.5rem;
+    margin-bottom: .25rem;
+}
+
+.encabezado p {
+    margin: 0;
+    opacity: .9;
+}
+
+.encabezado-inicio   { --desde: #F97316; --hasta: #F59E0B; }
+.encabezado-despensa { --desde: #10B981; --hasta: #14B8A6; }
+.encabezado-tiendas  { --desde: #22C55E; --hasta: #10B981; }
+.encabezado-perfil   { --desde: #A855F7; --hasta: #EC4899; }
+.encabezado-admin    { --desde: #374151; --hasta: #1F2937; }
+
+/* ---------- 4. Tarjetas ---------- */
+.tarjeta {
+    background: #fff;
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* La primera tarjeta sube sobre el header (efecto del diseño). */
+.tarjeta.superpuesta {
+    margin-top: -1rem;
+    position: relative;
+}
+
+.tarjeta-grande {
+    border-radius: 1rem;
+    padding: 2rem;
+}
+
+/* Tarjeta horizontal de receta: emoji a la izquierda, datos a la derecha. */
+.tarjeta-receta {
+    display: flex;
+    background: #fff;
+    border-radius: var(--radio);
+    box-shadow: var(--sombra-media);
+    overflow: hidden;
+    margin-bottom: .75rem;
+    color: inherit;
+    text-decoration: none;
+    transition: box-shadow var(--transicion);
+}
+
+.tarjeta-receta:hover {
+    box-shadow: var(--sombra);
+    color: inherit;
+}
+
+.tarjeta-receta .emoji {
+    flex: 0 0 7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    background: linear-gradient(135deg, #FED7AA, #FDE68A); /* orange-200 → amber-200 */
+}
+
+.tarjeta-receta .datos {
+    flex: 1;
+    padding: .75rem 1rem;
+    min-width: 0;
+}
+
+.tarjeta-receta h3 {
+    font-size: 1rem;
+    margin: 0 0 .25rem;
+}
+
+.tarjeta-receta .descripcion {
+    font-size: .875rem;
+    color: var(--color-texto-secundario);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: .5rem;
+}
+
+.meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    align-items: center;
+    font-size: .875rem;
+    color: var(--color-texto-apagado);
+}
+
+/* ---------- 5. Chips ---------- */
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    padding: .5rem 1rem;
+    min-height: 2.75rem; /* RNF2: área táctil */
+    border: none;
+    border-radius: 999px;
+    font-size: .875rem;
+    background: var(--color-superficie);
+    color: var(--color-texto-secundario);
+    text-decoration: none;
+    cursor: pointer;
+    transition: background var(--transicion), color var(--transicion);
+}
+
+.chip:hover {
+    background: var(--color-borde);
+    color: var(--color-texto);
+}
+
+.chip.activo,
+.btn-check:checked + .chip {
+    background: var(--color-primario);
+    color: #fff;
+}
+
+.chip-despensa.activo,  .btn-check:checked + .chip-despensa  { background: var(--color-despensa); }
+.chip-tiendas.activo,   .btn-check:checked + .chip-tiendas   { background: var(--color-exito); }
+.chip-alergia.activo,   .btn-check:checked + .chip-alergia   { background: var(--color-peligro); }
+.chip-gusto.activo,     .btn-check:checked + .chip-gusto     { background: var(--color-rosa); }
+
+/* Chip de solo lectura (perfil, ingredientes de la despensa). */
+.etiqueta {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    padding: .35rem .85rem;
+    border-radius: 999px;
+    font-size: .875rem;
+    background: var(--color-primario-suave);
+    color: var(--color-primario-texto);
+}
+
+.etiqueta-alergia  { background: var(--color-peligro-suave);  color: var(--color-peligro-texto); }
+.etiqueta-gusto    { background: var(--color-rosa-suave);     color: var(--color-rosa-texto); }
+.etiqueta-despensa { background: var(--color-despensa-suave); color: var(--color-despensa-texto); }
+
+.etiqueta button {
+    border: none;
+    background: none;
+    padding: 0;
+    color: inherit;
+    line-height: 1;
+}
+
+/* ---------- 6. Opción seleccionable de ancho completo (nivel de cocina) ---------- */
+.opcion {
+    display: block;
+    width: 100%;
+    padding: .75rem 1rem;
+    margin-bottom: .5rem;
+    border: 2px solid var(--color-borde);
+    border-radius: var(--radio-chico);
+    background: #fff;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color var(--transicion), background var(--transicion);
+}
+
+.opcion:hover {
+    border-color: #FDBA74; /* orange-300 */
+}
+
+.btn-check:checked + .opcion {
+    border-color: var(--color-primario);
+    background: var(--color-primario-claro);
+}
+
+.opcion small {
+    display: block;
+    color: var(--color-texto-apagado);
+}
+
+/* ---------- 7. Botones (pisan los colores de Bootstrap) ---------- */
+.btn {
+    min-height: 2.75rem; /* RNF2 */
+    border-radius: var(--radio-chico);
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--color-primario);
+    --bs-btn-border-color: var(--color-primario);
+    --bs-btn-hover-bg: var(--color-primario-hover);
+    --bs-btn-hover-border-color: var(--color-primario-hover);
+    --bs-btn-active-bg: var(--color-primario-hover);
+    --bs-btn-active-border-color: var(--color-primario-hover);
+    --bs-btn-disabled-bg: #D1D5DB;
+    --bs-btn-disabled-border-color: #D1D5DB;
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--color-primario);
+    --bs-btn-border-color: var(--color-primario);
+    --bs-btn-hover-bg: var(--color-primario-claro);
+    --bs-btn-hover-color: var(--color-primario-hover);
+    --bs-btn-hover-border-color: var(--color-primario);
+    --bs-btn-active-bg: var(--color-primario-suave);
+    --bs-btn-active-color: var(--color-primario-hover);
+    border-width: 2px;
+}
+
+.btn-success {
+    --bs-btn-bg: var(--color-exito);
+    --bs-btn-border-color: var(--color-exito);
+    --bs-btn-hover-bg: var(--color-exito-hover);
+    --bs-btn-hover-border-color: var(--color-exito-hover);
+}
+
+.btn-despensa {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: var(--color-despensa);
+    --bs-btn-border-color: var(--color-despensa);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--color-despensa-hover);
+    --bs-btn-hover-border-color: var(--color-despensa-hover);
+}
+
+.btn-outline-danger {
+    border-width: 2px;
+}
+
+/* Botón translúcido sobre el header (ej: "Editar" en el perfil). */
+.btn-vidrio {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: rgba(255, 255, 255, .2);
+    --bs-btn-border-color: transparent;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: rgba(255, 255, 255, .3);
+}
+
+/* ---------- 8. Formularios ---------- */
+.form-control,
+.form-select {
+    border-width: 2px;
+    min-height: 2.75rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--color-primario);
+    box-shadow: 0 0 0 .2rem rgba(249, 115, 22, .2);
+}
+
+/* Buscador con ícono adentro (lupa). */
+.buscador {
+    position: relative;
+}
+
+.buscador .bi {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9CA3AF;
+}
+
+.buscador .form-control {
+    padding-left: 2.75rem;
+    border: none;
+    border-radius: var(--radio);
+}
+
+/* ---------- 9. Datos, badges y alertas ---------- */
+.pill-dato {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .5rem 1rem;
+    border-radius: var(--radio-chico);
+    font-size: .9rem;
+}
+
+.pill-tiempo    { background: var(--color-primario-claro); color: var(--color-primario-hover); }
+.pill-porciones { background: var(--color-info-claro);     color: var(--color-info); }
+.pill-calorias  { background: var(--color-peligro-claro);  color: var(--color-peligro-hover); }
+
+.dificultad {
+    display: inline-block;
+    padding: .15rem .6rem;
+    border-radius: 999px;
+    font-size: .875rem;
+}
+
+.dificultad-Facil   { background: var(--color-exito-suave);    color: var(--color-exito-texto); }
+.dificultad-Media   { background: var(--color-amarillo-suave); color: var(--color-amarillo-texto); }
+.dificultad-Dificil { background: var(--color-peligro-suave);  color: #B91C1C; }
+
+.alerta-alergenos {
+    background: var(--color-peligro-claro);
+    border-left: 4px solid var(--color-peligro);
+    border-radius: 4px;
+    padding: 1rem;
+    color: var(--color-peligro-texto);
+}
+
+/* ---------- 10. Barra de progreso (despensa) ---------- */
+.barra-progreso {
+    height: .5rem;
+    background: var(--color-superficie);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.barra-progreso > div {
+    height: 100%;
+    background: linear-gradient(90deg, #FBBF24, #FB923C); /* amber-400 → orange-400 */
+}
+
+/* ---------- 11. Estado vacío ---------- */
+.vacio {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    color: var(--color-texto-apagado);
+}
+
+.vacio .icono {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: .5rem;
+}
+
+/* ---------- 12. Barra de navegación inferior (una sola vez, en _Layout) ---------- */
+.barra-inferior {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: #fff;
+    border-top: 1px solid #FED7AA; /* orange-200 */
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, .06);
+}
+
+.barra-inferior nav {
+    max-width: var(--ancho-maximo);
+    margin: 0 auto;
+    padding: .5rem 1rem;
+    display: flex;
+    justify-content: space-around;
+}
+
+.barra-inferior a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .15rem;
+    min-width: 4rem;
+    padding: .4rem .75rem;
+    border-radius: var(--radio-chico);
+    font-size: .875rem;
+    color: var(--color-texto-secundario);
+    text-decoration: none;
+    transition: color var(--transicion), background var(--transicion);
+}
+
+.barra-inferior a .bi {
+    font-size: 1.5rem;
+}
+
+.barra-inferior a:hover {
+    color: var(--color-primario);
+}
+
+.barra-inferior a.activo {
+    color: var(--color-primario-hover);
+    background: var(--color-primario-claro);
+}
