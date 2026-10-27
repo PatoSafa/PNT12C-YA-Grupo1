@@ -21,6 +21,7 @@ builder.Services.Configure<WebEncoderOptions>(o => o.TextEncoderSettings = new T
 builder.Services.AddScoped<IRecetaService, RecetaService>();
 builder.Services.AddScoped<ICuentaService, CuentaService>();
 builder.Services.AddScoped<IPerfilService, PerfilService>();
+builder.Services.AddScoped<IDespensaService, DespensaService>();
 
 // Login por cookie (sin Identity completo, ver CLAUDE.md §3). Si alguien sin sesión entra a una
 // página con [Authorize], lo manda a /Cuenta/Ingresar; si no tiene el rol, a /Cuenta/AccesoDenegado.
