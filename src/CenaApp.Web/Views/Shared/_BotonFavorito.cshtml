@@ -1,0 +1,7 @@
+@* Corazón para marcar o desmarcar favorito. Lo maneja js/favoritos.js con fetch (D-07). Modelo: (id de la receta, si ya es favorita). *@
+@model (int RecetaId, bool EsFavorita)
+
+<button type="button" class="boton-favorito @(Model.EsFavorita ? "activo" : "")" data-receta="@Model.RecetaId"
+        aria-pressed="@(Model.EsFavorita ? "true" : "false")" aria-label="Marcar como favorita">
+    <i class="bi @(Model.EsFavorita ? "bi-heart-fill" : "bi-heart")"></i>
+</button>

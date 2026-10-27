@@ -12,7 +12,10 @@
 <div class="cuerpo">
     <article class="hoja">
         <p class="small text-secondary mb-1">@Model.Categoria</p>
-        <h1 class="fs-3 mb-2">@Model.Nombre</h1>
+        <div class="d-flex justify-content-between align-items-start gap-2">
+            <h1 class="fs-3 mb-2">@Model.Nombre</h1>
+            <partial name="_BotonFavorito" model="(Model.Id, Model.EsFavorita)" />
+        </div>
         @if (!string.IsNullOrEmpty(Model.Descripcion))
         {
             <p class="text-secondary">@Model.Descripcion</p>
@@ -86,6 +89,9 @@
     </article>
 </div>
 
+@Html.AntiForgeryToken()
+
 @section Scripts {
     <script src="~/js/receta.js" asp-append-version="true"></script>
+    <script src="~/js/favoritos.js" asp-append-version="true"></script>
 }

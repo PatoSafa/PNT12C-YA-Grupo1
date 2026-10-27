@@ -153,6 +153,50 @@ public class RecetaService : IRecetaService
             usuario.Gustos.Select(g => g.Id).ToList());
     }
 
+    // ---------- Favoritos (RF12) ----------
+
+    public async Task<bool?> AlternarFavoritoAsync(int usuarioId, int recetaId)
+    {
+        var receta = await _db.Recetas.FindAsync(recetaId);
+        if (receta is null)
+        {
+            return null;
+        }
+
+        var usuario = await _db.Usuarios.Include(u => u.Favoritos).FirstAsync(u => u.Id == usuarioId);
+        var yaEstaba = usuario.Favoritos.Any(f => f.Id == recetaId);
+        if (yaEstaba)
+        {
+            usuario.Favoritos.RemoveAll(f => f.Id == recetaId);
+        }
+        else
+        {
+            usuario.Favoritos.Add(receta);
+        }
+
+        // EF Core agrega o borra la fila (UsuarioId, RecetaId) de la tabla Favoritos.
+        await _db.SaveChangesAsync();
+        return !yaEstaba;
+    }
+
+    public async Task<HashSet<int>> IdsFavoritosAsync(int usuarioId)
+    {
+        var ids = await _db.Usuarios
+            .Where(u => u.Id == usuarioId)
+            .SelectMany(u => u.Favoritos.Select(f => f.Id))
+            .ToListAsync();
+        return ids.ToHashSet();
+    }
+
+    public async Task<List<Receta>> ListarFavoritosAsync(int usuarioId)
+    {
+        return await _db.Usuarios
+            .Where(u => u.Id == usuarioId)
+            .SelectMany(u => u.Favoritos)
+            .OrderBy(r => r.Nombre)
+            .ToListAsync();
+    }
+
     // Include de todo lo que necesitan los cálculos de aptitud.
     private static IQueryable<Receta> ConIngredientesYGustos(IQueryable<Receta> recetas) =>
         recetas

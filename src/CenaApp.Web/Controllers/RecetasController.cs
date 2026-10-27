@@ -1,4 +1,4 @@
-// Pantallas de recetas del usuario: Inicio (recetas aptas para su perfil) y Detalle.
+// Pantallas de recetas del usuario: Inicio (recetas aptas para su perfil), Detalle y Favoritos.
 using System.Globalization;
 using CenaApp.Web.Data;
 using CenaApp.Web.Models;
@@ -35,6 +35,7 @@ public class RecetasController : Controller
 
         var gustos = await _db.Gustos.OrderBy(g => g.Tipo).ThenBy(g => g.Nombre).ToListAsync();
         var recetas = await _recetas.ListarParaUsuarioAsync(usuarioId, buscar, gusto);
+        var favoritos = await _recetas.IdsFavoritosAsync(usuarioId);
 
         var modelo = new InicioRecetasViewModel
         {
@@ -52,9 +53,42 @@ public class RecetasController : Controller
                 TiempoMin = r.TiempoMin,
                 Porciones = r.Porciones,
                 Dificultad = r.Dificultad,
+                EsFavorita = favoritos.Contains(r.Id),
             }).ToList(),
         };
         return View(modelo);
+    }
+
+    // GET /Recetas/Favoritos → lista "Mis favoritos".
+    [HttpGet]
+    public async Task<IActionResult> Favoritos()
+    {
+        var recetas = await _recetas.ListarFavoritosAsync(UsuarioActual.Id(User));
+        var tarjetas = recetas.Select(r => new TarjetaRecetaViewModel
+        {
+            Id = r.Id,
+            Nombre = r.Nombre,
+            Descripcion = r.Descripcion,
+            Emoji = r.Emoji,
+            TiempoMin = r.TiempoMin,
+            Porciones = r.Porciones,
+            Dificultad = r.Dificultad,
+            EsFavorita = true,
+        }).ToList();
+        return View(tarjetas);
+    }
+
+    // POST /Recetas/Favorito/5 → lo llama js/favoritos.js con fetch. Responde JSON { esFavorita }.
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Favorito(int id)
+    {
+        var esFavorita = await _recetas.AlternarFavoritoAsync(UsuarioActual.Id(User), id);
+        if (esFavorita is null)
+        {
+            return NotFound(new { mensaje = $"No existe una receta con id {id}." });
+        }
+        return Json(new { esFavorita });
     }
 
     // GET /Recetas/Detalle/5 → la receta, o la vista "no encontrada" con código 404 (D-17).
@@ -92,6 +126,7 @@ public class RecetasController : Controller
                 .Select(ri => (ri.Ingrediente.Nombre, TextoCantidad(ri)))
                 .ToList(),
             Pasos = receta.Pasos.OrderBy(p => p.Orden).Select(p => p.Texto).ToList(),
+            EsFavorita = (await _recetas.IdsFavoritosAsync(usuario.Id)).Contains(receta.Id),
         };
         return View(modelo);
     }
