@@ -175,3 +175,9 @@ Formato: **fecha · decisión · alternativas · motivo**.
 - **Alternativas:** dejar que la app falle (500, no aceptado por el enunciado); responder 200 con `null` (el cliente no se entera de que algo salió mal); 400 Bad Request (incorrecto: el pedido está bien formado, lo que no existe es el recurso).
 - **Motivo:** 404 es el código HTTP que significa justamente "ese recurso no existe", así que cualquier cliente (Postman, `fetch`, el navegador) lo entiende sin leer el cuerpo. El mensaje dice qué id se buscó, para que el error se entienda sin mirar el código. Además, `{id:int}` en la ruta hace que `/api/recetas/abc` también dé 404 en vez de un error.
 - **Validaciones (Parte 12):** los datos inválidos del POST responden **400** con la lista de errores por campo. Las dos reglas propias del dominio son VAL-15 (nombre obligatorio, hasta 80 caracteres, único) y VAL-16 (tiempo y porciones mayores a 0, calorías mayores o iguales a 0); su justificación está en `DISENO_ENTIDADES.md`.
+
+## D-18 · La API `/api/recetas` queda abierta, sin login
+- **Fecha:** 2026-10-26
+- **Decisión:** los cuatro endpoints de `/api/recetas` (Partes 8 a 11) no piden sesión. Las pantallas de la app sí: `[Authorize]` para las del usuario y `[Authorize(Roles = "Admin")]` para la administración (RNF12).
+- **Alternativas:** exigir rol Admin en `POST` y `DELETE`, que es más seguro.
+- **Motivo:** el enunciado prevé que el docente pruebe la API en vivo con Postman (Partes 8 a 11 y la prueba sorpresa de la Parte 19), igual que en la Clase 3. Pedir login y cookie para eso suma fricción y no es lo que se evalúa en esas partes. **Para cerrarla** alcanza con agregar `[Authorize(Roles = "Admin")]` arriba de `Crear` y `Eliminar` en `RecetasApiController`.

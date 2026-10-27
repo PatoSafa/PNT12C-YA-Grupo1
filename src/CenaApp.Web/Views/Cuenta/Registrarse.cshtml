@@ -1,0 +1,45 @@
+@* Pantalla de registro: email y contraseña. El resto del perfil se completa después, en el onboarding. *@
+@model CenaApp.Web.ViewModels.RegistroViewModel
+@{
+    ViewData["Title"] = "Registrarse";
+    ViewData["OcultarBarra"] = true;
+}
+
+<div class="cuerpo pt-5">
+    <partial name="_Marca" />
+
+    <section class="tarjeta tarjeta-grande">
+        <h2 class="h4 mb-4">Creá tu cuenta</h2>
+
+        <form asp-action="Registrarse" method="post" novalidate>
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2"></div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" autocomplete="email" placeholder="tu@email.com" />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" class="form-control" autocomplete="new-password" />
+                <div class="form-text">Al menos 8 caracteres.</div>
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="ConfirmarPassword" class="form-label"></label>
+                <input asp-for="ConfirmarPassword" class="form-control" autocomplete="new-password" />
+                <span asp-validation-for="ConfirmarPassword" class="text-danger small"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Crear cuenta <i class="bi bi-arrow-right"></i></button>
+        </form>
+    </section>
+
+    <p class="text-center">¿Ya tenés cuenta? <a asp-action="Ingresar">Ingresá</a></p>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -45,7 +45,7 @@ public class RecetaCrearDto
     [StringLength(300, ErrorMessage = "La descripción puede tener hasta 300 caracteres.")]
     public string? Descripcion { get; set; }
 
-    [StringLength(16)]
+    [StringLength(16, ErrorMessage = "El emoji puede tener hasta 16 caracteres.")]
     public string? Emoji { get; set; }
 
     // VAL-16: tiempo y porciones enteros mayores a 0; calorías mayores o iguales a 0.
@@ -82,6 +82,6 @@ public class IngredienteCrearDto
     [Range(0.01, 10000, ErrorMessage = "La cantidad tiene que ser mayor a 0.")]
     public decimal? Cantidad { get; set; }
 
-    [StringLength(20)]
+    [StringLength(20, ErrorMessage = "La unidad puede tener hasta 20 caracteres.")]
     public string? Unidad { get; set; }
 }

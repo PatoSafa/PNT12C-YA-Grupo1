@@ -1,0 +1,39 @@
+@* Pantalla de inicio de sesión (usuarios y administradores usan la misma). *@
+@model CenaApp.Web.ViewModels.IngresoViewModel
+@{
+    ViewData["Title"] = "Ingresar";
+    ViewData["OcultarBarra"] = true;
+}
+
+<div class="cuerpo pt-5">
+    <partial name="_Marca" />
+
+    <section class="tarjeta tarjeta-grande">
+        <h2 class="h4 mb-4">Ingresá a tu cuenta</h2>
+
+        <form asp-action="Ingresar" method="post" novalidate>
+            <input type="hidden" asp-for="ReturnUrl" />
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2"></div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" autocomplete="email" placeholder="tu@email.com" />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" class="form-control" autocomplete="current-password" />
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Ingresar <i class="bi bi-arrow-right"></i></button>
+        </form>
+    </section>
+
+    <p class="text-center">¿No tenés cuenta? <a asp-action="Registrarse">Registrate</a></p>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

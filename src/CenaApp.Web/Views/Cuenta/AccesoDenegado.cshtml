@@ -1,0 +1,13 @@
+@* Se muestra cuando alguien logueado entra a una página para la que no tiene permiso (ej: administración). *@
+@{
+    ViewData["Title"] = "Acceso denegado";
+}
+
+<div class="cuerpo pt-5">
+    <section class="tarjeta vacio">
+        <i class="bi bi-shield-lock icono"></i>
+        <h1 class="h4 text-body">No tenés permiso para ver esta página</h1>
+        <p>Esta sección es solo para administradores.</p>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Volver al inicio</a>
+    </section>
+</div>
