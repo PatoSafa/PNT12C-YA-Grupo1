@@ -94,21 +94,21 @@ El docente asigna uno, sin dar la solución:
   - Hecho en **Mi Despensa** (`Views/Despensa/Index.cshtml` + `wwwroot/js/despensa.js`): el formulario "Agregar ingrediente" hace `fetch` y la respuesta (HTML de `_Contenido`) reemplaza las recetas sugeridas. También los favoritos (`js/favoritos.js`, respuesta JSON).
 
 ## Parte 16 — Git y GitHub (→ Evidencia 5)
-- [ ] Repo con `README.md`, archivo de build (`CenaApp.sln` / `.csproj` en lugar de `build.gradle`), `compose.yaml` y `src/`.
-- [ ] **Al menos 4 commits significativos** durante el desarrollo, no uno solo al final. Ejemplos:
+- [x] Repo con `README.md`, archivo de build (`CenaApp.sln` / `.csproj` en lugar de `build.gradle`), `compose.yaml` y `src/`.
+- [x] **Al menos 4 commits significativos** durante el desarrollo, no uno solo al final. Ejemplos:
   - Inicialización del proyecto ASP.NET Core
   - Configuración de PostgreSQL con Docker
   - Entidad, DbContext y migración
   - API REST
-- [ ] Mensajes que describan lo que realmente se hizo.
+- [x] Mensajes que describan lo que realmente se hizo.
 
 ## Parte 17 — README
-- [ ] Nombre del proyecto.
-- [ ] Descripción: qué problema resuelve.
-- [ ] Tecnologías.
-- [ ] Cómo ejecutar: `docker compose up -d` → `dotnet ef database update` → `dotnet run --project src/CenaApp.Web`.
-- [ ] Endpoints: `GET`, `GET /{id}`, `POST`, `DELETE`.
-- [ ] Al menos un ejemplo de JSON.
+- [x] Nombre del proyecto.
+- [x] Descripción: qué problema resuelve.
+- [x] Tecnologías.
+- [x] Cómo ejecutar: `docker compose up -d` → `dotnet ef database update` → `dotnet run --project src/CenaApp.Web`.
+- [x] Endpoints: `GET`, `GET /{id}`, `POST`, `DELETE`.
+- [x] Al menos un ejemplo de JSON.
 
 ## Parte 18 — Evidencia de intervención humana (obligatoria)
 | Evidencia | Qué pide | Dónde va |
@@ -139,14 +139,14 @@ El docente asigna uno, sin dar la solución:
 El enunciado pide (versión Spring): `README.md`, `build.gradle`, `settings.gradle`, `compose.yaml`, `.gitignore`, `src/main/...`, `src/test/`.
 
 Versión .NET:
-- [ ] `README.md`
-- [ ] `CenaApp.sln` (en lugar de `build.gradle` / `settings.gradle`)
-- [ ] `compose.yaml`
-- [ ] `Dockerfile`
-- [ ] `.gitignore`
-- [ ] `src/CenaApp.Web/`
-- [ ] `tests/CenaApp.Tests/` (en lugar de `src/test/`)
-- [ ] Documentación de decisiones y evidencias (`docs/`)
+- [x] `README.md`
+- [x] `CenaApp.sln` (en lugar de `build.gradle` / `settings.gradle`)
+- [x] `compose.yaml`
+- [x] `Dockerfile`
+- [x] `.gitignore`
+- [x] `src/CenaApp.Web/`
+- [x] `tests/CenaApp.Tests/` (en lugar de `src/test/`)
+- [x] Documentación de decisiones y evidencias (`docs/`)
 
 > **Confirmar con el docente** que acepta esta estructura .NET y qué espera en la Parte 13 y la Parte 19.
 
@@ -162,6 +162,6 @@ Versión .NET:
 - [ ] responder preguntas sobre la arquitectura
 
 ## Desafío extra (opcional)
-- [ ] Segunda entidad relacionada con la primera (ejemplo: Receta–Categoría).
-- [ ] Incluye: entidades nuevas, relación en EF Core, cambios en controller/servicio, endpoints nuevos, datos de prueba y README actualizado.
+- [x] Segunda entidad relacionada con la primera (ejemplo: Receta–Categoría).
+- [x] Incluye: entidades nuevas, relación en EF Core, cambios en controller/servicio, endpoints nuevos, datos de prueba y README actualizado.
 - [ ] Pregunta oral: "¿Por qué elegiste ese tipo de relación y cómo se representa en la base de datos?"

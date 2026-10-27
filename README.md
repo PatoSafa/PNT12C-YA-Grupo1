@@ -11,6 +11,23 @@ A quien tiene restricciones alimentarias (vegetariana, vegana, sin gluten, sin l
 - **Despensa:** muestra qué se puede cocinar con lo que ya hay en casa y qué falta comprar.
 - **Tiendas:** dónde comprar lo que falta, en un mapa con comercios de la zona.
 
+## Integrantes
+
+`<<completar con los nombres del grupo>>`
+
+## Qué se puede hacer
+
+| Pantalla | Ruta | Qué hace |
+|---|---|---|
+| Registro e inicio de sesión | `/Cuenta/Registrarse`, `/Cuenta/Ingresar` | Cuenta con email y contraseña (hasheada). El mismo login sirve para usuarios y admin. |
+| Onboarding y Perfil | `/Perfil`, `/Perfil/Editar` | Nombre, restricciones, alergias, gustos y nivel de cocina. |
+| Inicio | `/Recetas` | Recetas aptas para el perfil, ordenadas por gustos, con buscador y filtro por gusto. |
+| Detalle | `/Recetas/Detalle/{id}` | Ingredientes, pasos que se pueden marcar, alérgenos calculados y para qué restricciones es apta. Si la receta no existe, 404. |
+| Mis favoritos | `/Recetas/Favoritos` | Recetas guardadas con el corazón (se marca con `fetch`, sin recargar). |
+| Mi Despensa | `/Despensa` | Ingredientes que hay en casa (por nombre o sinónimo), "Podés cocinar" (100 %) y "Casi listas" (≥ 50 %) con lo que falta comprar. Se actualiza con `fetch`. |
+| Tiendas | `/Tiendas` | Comercios de ejemplo cerca de ORT Yatay en un mapa (Leaflet), con filtro por tipo y ruta a pie. |
+| Administración | `/Admin/Recetas`, `/Admin/Ingredientes` | Alta, edición y baja de recetas e ingredientes. Solo para el rol Admin. |
+
 ## Tecnologías
 
 | Para qué | Tecnología |
@@ -152,6 +169,25 @@ Si el `POST` llega con el nombre vacío y el tiempo en 0, responde `400 Bad Requ
     "TiempoMin": ["El tiempo tiene que estar entre 1 y 600 minutos."]
   }
 }
+```
+
+## Estructura del repositorio
+
+```
+CenaApp.sln                 solución (equivale a build.gradle / settings.gradle)
+compose.yaml                PostgreSQL para desarrollo
+Dockerfile                  imagen para Render
+src/CenaApp.Web/
+  Controllers/              reciben la petición y eligen la vista (Api/ = controllers JSON)
+  Services/                 reglas de negocio (aptitud de recetas, despensa, cuentas...)
+  Models/                   entidades (tablas)
+  ViewModels/               lo que recibe cada vista y los DTO de la API
+  Data/                     AppDbContext, datos iniciales y Migrations/
+  Views/                    vistas Razor, una carpeta por controller
+  wwwroot/                  estilos.css y los JS (favoritos, despensa, tiendas...)
+  recetas.http              pruebas de la API
+tests/CenaApp.Tests/        tests xUnit de las reglas de aptitud y despensa
+docs/                       consigna, decisiones, errores, arquitectura, diseño
 ```
 
 ## Documentación

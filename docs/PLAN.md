@@ -65,7 +65,7 @@ Tareas chicas y ordenadas para llegar a la entrega del **lunes 2 de noviembre de
 | ✓ | # | Tarea | Depende | Commit sugerido | Resp. |
 |---|---|---|---|---|---|
 | [ ] | T20 | ~~`Dockerfile`~~ (hecho y probado en local como en Render, pasos en el README). **Falta (equipo):** crear la base y el Web Service en Render y cargar las variables de entorno | T06 | `chore: Dockerfile y despliegue en Render` | |
-| [ ] | T21 | README completo (Parte 17): descripción, tecnologías, cómo correr, endpoints, JSON de ejemplo | T20 | `docs: README completo` | |
+| [x] | T21 | README completo (Parte 17): descripción, tecnologías, cómo correr, endpoints, JSON de ejemplo | T20 | `docs: README completo` | |
 | [ ] | T22 | Evidencias: capturas, `ERRORES.md` con al menos un error real, reflexión (Parte 20), repasar `CONSIGNA.md` ítem por ítem | todas | `docs: evidencias y reflexión final` | |
 | [ ] | T23 | Ensayo de defensa: cada integrante explica un recorrido completo (View → Controller → Service → DbContext → PostgreSQL) y hace un simulacro de prueba sorpresa (Parte 19) | todas | — | todos |
 

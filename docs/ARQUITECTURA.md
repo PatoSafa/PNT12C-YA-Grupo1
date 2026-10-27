@@ -55,19 +55,22 @@ PNT12C-YA-Grupo1/
 | `ViewModels/` | Datos ya preparados para una vista o respuesta JSON | `PasswordHash` ni entidades completas |
 | `Data/` | `AppDbContext`, `DatosIniciales` (carga inicial, D-16), `Migrations/` | Reglas |
 
-## 3. Controllers y services previstos
+## 3. Controllers y services
 
-| Controller | Pantallas / endpoints | Service |
-|---|---|---|
-| `CuentaController` | Registro, Inicio de sesión, Cerrar sesión | `CuentaService` |
-| `PerfilController` | Onboarding y Perfil (misma vista, crear/editar) | `PerfilService` |
-| `RecetasController` | Inicio, Detalle, Mis favoritos, marcar favorito (`fetch`) | `RecetaService` |
-| `DespensaController` | Mi Despensa, agregar/quitar (`fetch` → vista parcial) | `DespensaService` |
-| `TiendasController` | Tiendas (lista fija) | `ComercioService` |
-| `AdminRecetasController`, `AdminIngredientesController` | CRUD (solo rol Admin) | `RecetaService`, `IngredienteService` |
-| `Api/RecetasApiController` | `GET /api/recetas`, `GET /api/recetas/{id}`, `POST`, `DELETE` | `RecetaService` |
+| Controller | Pantallas / endpoints | Service | JS |
+|---|---|---|---|
+| `HomeController` | `/`: manda al login, al onboarding, al Inicio o al panel de admin. Página de error | — | — |
+| `CuentaController` | Registro, Inicio de sesión, Cerrar sesión, Acceso denegado | `CuentaService` | — |
+| `PerfilController` | Onboarding y Perfil (misma vista para crear y editar) | `PerfilService` | — |
+| `RecetasController` | Inicio, Detalle, Mis favoritos, `POST Favorito/{id}` (JSON) | `RecetaService` | `favoritos.js`, `receta.js` |
+| `DespensaController` | Mi Despensa; `Agregar` / `Quitar` / `Vaciar` responden la vista parcial `_Contenido` | `DespensaService` | `despensa.js` |
+| `TiendasController` | Tiendas con filtro por tipo | `ComercioService` (singleton, lista fija) | `tiendas.js` (Leaflet) |
+| `AdminRecetasController` | `/Admin/Recetas`: ABM (solo Admin) | `RecetaService` | `admin-receta.js`, `confirmar.js` |
+| `AdminIngredientesController` | `/Admin/Ingredientes`: ABM (solo Admin) | `IngredienteService` | `confirmar.js` |
+| `Api/RecetasApiController` | `GET /api/recetas`, `GET /api/recetas/{id}`, `POST`, `DELETE` | `RecetaService` | — |
 
-Se ajusta durante la implementación si algo sobra; un cambio de capas se plantea como decisión nueva.
+Las reglas centrales son funciones estáticas puras dentro de los services, y por eso tienen tests sin base de datos:
+`RecetaService.CalcularAlergenos`, `EsApta`, `FiltrarYOrdenar` y `DespensaService.Analizar`, `Clasificar`, `Buscar`.
 
 ## 4. Modelo de datos (D-08)
 
