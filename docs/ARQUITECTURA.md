@@ -53,7 +53,7 @@ PNT12C-YA-Grupo1/
 | `Services/` | Reglas de negocio y consultas con `AppDbContext` (D-05: sin Repository) | HTML, cosas de HTTP |
 | `Models/` | Clases que EF Core convierte en tablas | Lógica |
 | `ViewModels/` | Datos ya preparados para una vista o respuesta JSON | `PasswordHash` ni entidades completas |
-| `Data/` | `AppDbContext`, seed, migraciones | Reglas |
+| `Data/` | `AppDbContext`, `DatosIniciales` (carga inicial, D-16), `Migrations/` | Reglas |
 
 ## 3. Controllers y services previstos
 

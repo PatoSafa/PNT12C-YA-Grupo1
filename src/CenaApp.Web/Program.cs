@@ -14,6 +14,14 @@ builder.Services.AddDbContext<AppDbContext>(opciones => opciones.UseNpgsql(caden
 
 var app = builder.Build();
 
+// Al arrancar: aplica las migraciones pendientes y carga los datos iniciales si la base está vacía.
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+    DatosIniciales.Cargar(db, app.Configuration);
+}
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");

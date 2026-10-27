@@ -23,7 +23,7 @@ docker compose up -d
 # 2. Restaurar la herramienta de migraciones (solo la primera vez)
 dotnet tool restore
 
-# 3. Aplicar las migraciones (cuando existan)
+# 3. Aplicar las migraciones (opcional: la app también las aplica al arrancar)
 dotnet ef database update --project src/CenaApp.Web
 
 # 4. Correr la app
@@ -31,6 +31,13 @@ dotnet run --project src/CenaApp.Web
 ```
 
 Abrir http://localhost:5224. La página de inicio indica si la app se conectó a la base de datos.
+
+Al arrancar por primera vez, la app carga los datos iniciales (32 recetas, 81 ingredientes y los catálogos) y dos usuarios de prueba, solo en desarrollo:
+
+| Usuario | Contraseña | Rol |
+|---|---|---|
+| `admin@cenaapp.com` | `admin1234` | Administrador |
+| `demo@cenaapp.com` | `demo1234` | Usuario (vegetariana, alérgica a frutos secos, con despensa cargada) |
 
 Para correr los tests: `dotnet test`.
 

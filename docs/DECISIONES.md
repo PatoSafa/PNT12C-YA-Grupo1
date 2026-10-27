@@ -161,3 +161,10 @@ Formato: **fecha · decisión · alternativas · motivo**.
 - **Decisión:** los ~6 comercios fijos de `ComercioService` (D-11) se ubican alrededor de la sede de ORT en Almagro, y el mapa se centra ahí. Son datos de ejemplo para la demo: nombres ficticios en calles reales de la zona.
 - **Alternativas:** Belgrano (ORT Belgrano); centro (como el prototipo).
 - **Motivo:** zona conocida por todo el equipo y el docente, la demo resulta natural.
+
+## D-16 · Datos iniciales por código al arrancar (y migraciones automáticas)
+- **Fecha:** 2026-10-26
+- **Decisión:** `Data/DatosIniciales.cs` carga catálogos, ingredientes, recetas y los usuarios de prueba **solo si la base está vacía**. Se ejecuta al arrancar la app, después de `db.Database.Migrate()`, que aplica las migraciones pendientes.
+- **Alternativas:** `HasData` de EF Core (los datos quedan dentro de una migración, pero con relaciones N:M hay que escribir a mano cada fila de las tablas intermedias con sus Id); script SQL aparte.
+- **Motivo:** el código de carga se lee como una lista ("este ingrediente tiene gluten y no es apto para Sin gluten"), y se puede corregir sin tocar migraciones. Aplicar las migraciones al arrancar es lo que necesita el deploy en Render (T20). `dotnet ef database update` sigue funcionando igual en local.
+- **Contraseñas de los usuarios de prueba:** salen de la configuración (`DatosIniciales:ClaveAdmin` y `DatosIniciales:ClaveDemo`): en local, de `appsettings.Development.json` (solo valores de desarrollo); en producción, de variables de entorno. Si no están, no se crean.
