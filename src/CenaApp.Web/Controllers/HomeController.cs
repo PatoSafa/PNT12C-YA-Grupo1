@@ -30,8 +30,14 @@ public class HomeController : Controller
             return RedirectToAction("Ingresar", "Cuenta");
         }
 
+        // El administrador va a su panel (provisorio: ingredientes, hasta que esté el admin de recetas).
+        if (usuario.Rol == Rol.Admin)
+        {
+            return RedirectToAction("Index", "AdminIngredientes");
+        }
+
         // Cuenta recién creada, sin perfil → onboarding. Si no, al Inicio de recetas.
-        if (usuario.Rol == Rol.Usuario && string.IsNullOrEmpty(usuario.Nombre))
+        if (string.IsNullOrEmpty(usuario.Nombre))
         {
             return RedirectToAction("Index", "Perfil");
         }

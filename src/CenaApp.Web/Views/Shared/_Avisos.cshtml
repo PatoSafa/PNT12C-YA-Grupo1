@@ -1,0 +1,9 @@
+@* Mensajes de éxito o error que deja una acción antes de redirigir (TempData). *@
+@if (TempData["Exito"] is string exito)
+{
+    <div class="alert alert-success py-2" role="status"><i class="bi bi-check-circle"></i> @exito</div>
+}
+@if (TempData["Error"] is string error)
+{
+    <div class="alert alert-danger py-2" role="alert"><i class="bi bi-exclamation-circle"></i> @error</div>
+}

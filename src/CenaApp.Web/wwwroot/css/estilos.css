@@ -806,3 +806,31 @@ h1, h2, h3, h4 {
 .btn-outline-success {
     border-width: 2px;
 }
+
+/* ---------- 19. Administración ---------- */
+.pestanas-admin {
+    display: flex;
+    gap: .25rem;
+}
+
+.pestanas-admin a {
+    padding: .4rem 1rem;
+    border-radius: var(--radio-chico);
+    color: rgba(255, 255, 255, .8);
+    text-decoration: none;
+}
+
+.pestanas-admin a.activo {
+    background: rgba(255, 255, 255, .2);
+    color: #fff;
+}
+
+.fila-admin {
+    display: flex;
+    gap: .75rem;
+    align-items: flex-start;
+}
+
+.min-w-0 {
+    min-width: 0;
+}

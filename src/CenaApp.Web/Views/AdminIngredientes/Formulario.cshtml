@@ -1,0 +1,79 @@
+@* Alta y edición de un ingrediente (la misma vista para las dos). *@
+@model CenaApp.Web.ViewModels.IngredienteFormularioViewModel
+@{
+    var esAlta = Model.Id is null;
+    ViewData["Title"] = esAlta ? "Nuevo ingrediente" : $"Editar {Model.Nombre}";
+    ViewData["OcultarBarra"] = true;
+}
+
+<partial name="_AdminEncabezado" />
+
+<form asp-action="@(esAlta ? "Crear" : "Editar")" asp-route-id="@Model.Id" method="post" class="cuerpo" novalidate>
+    <section class="tarjeta superpuesta">
+        <h2 class="fs-5 mb-3">@(esAlta ? "Nuevo ingrediente" : "Editar ingrediente")</h2>
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2"></div>
+
+        <div class="mb-3">
+            <label asp-for="Nombre" class="form-label"></label>
+            <input asp-for="Nombre" class="form-control" />
+            <span asp-validation-for="Nombre" class="text-danger small"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Grupo" class="form-label"></label>
+            <input asp-for="Grupo" class="form-control" list="grupos" placeholder="Ej: Verdura, Lácteo, Legumbre" />
+            <datalist id="grupos">
+                @foreach (var g in Model.Grupos)
+                {
+                    <option value="@g"></option>
+                }
+            </datalist>
+            <span asp-validation-for="Grupo" class="text-danger small"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Sinonimos" class="form-label"></label>
+            <input asp-for="Sinonimos" class="form-control" placeholder="Separados por coma. Ej: aguacate" />
+            <div class="form-text">Sirven para encontrarlo en la despensa con otro nombre.</div>
+            <span asp-validation-for="Sinonimos" class="text-danger small"></span>
+        </div>
+
+        <div class="form-check form-switch">
+            <input asp-for="CuentaEnDespensa" class="form-check-input" role="switch" />
+            <label asp-for="CuentaEnDespensa" class="form-check-label"></label>
+            <div class="form-text">Desactivalo para básicos como sal, agua o especias (VN-10).</div>
+        </div>
+    </section>
+
+    <section class="tarjeta">
+        <h2 class="fs-6"><i class="bi bi-exclamation-triangle text-danger"></i> Alérgenos que contiene</h2>
+        <div class="chips">
+            @foreach (var a in Model.Alergenos)
+            {
+                <input type="checkbox" class="btn-check" name="AlergenosIds" value="@a.Id" id="alergeno-@a.Id" checked="@Model.AlergenosIds.Contains(a.Id)" />
+                <label class="chip chip-alergia" for="alergeno-@a.Id">@a.Nombre</label>
+            }
+        </div>
+    </section>
+
+    <section class="tarjeta">
+        <h2 class="fs-6"><i class="bi bi-slash-circle text-warning"></i> No es apto para</h2>
+        <p class="small text-secondary">Las recetas que lo usen dejan de ser aptas para estas restricciones.</p>
+        <div class="chips">
+            @foreach (var r in Model.Restricciones)
+            {
+                <input type="checkbox" class="btn-check" name="RestriccionesIncompatiblesIds" value="@r.Id" id="restriccion-@r.Id" checked="@Model.RestriccionesIncompatiblesIds.Contains(r.Id)" />
+                <label class="chip" for="restriccion-@r.Id">@r.Nombre</label>
+            }
+        </div>
+    </section>
+
+    <div class="d-flex gap-2 mb-4">
+        <a asp-action="Index" class="btn btn-outline-primary">Cancelar</a>
+        <button type="submit" class="btn btn-primary flex-grow-1">@(esAlta ? "Crear" : "Guardar cambios")</button>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

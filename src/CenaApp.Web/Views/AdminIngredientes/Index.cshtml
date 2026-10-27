@@ -1,0 +1,58 @@
+@* Administración de ingredientes: buscar, crear, editar y eliminar (CU-14). *@
+@model List<CenaApp.Web.ViewModels.IngredienteFilaViewModel>
+@{
+    ViewData["Title"] = "Ingredientes";
+    ViewData["OcultarBarra"] = true;
+}
+
+<partial name="_AdminEncabezado" />
+
+<div class="cuerpo">
+    <section class="tarjeta superpuesta">
+        <div class="d-flex gap-2">
+            <form asp-action="Index" method="get" class="buscador flex-grow-1" role="search">
+                <i class="bi bi-search"></i>
+                <input type="search" name="buscar" value="@ViewData["Buscar"]" class="form-control borde" placeholder="Buscar por nombre o sinónimo..." aria-label="Buscar ingredientes" />
+            </form>
+            <a asp-action="Crear" class="btn btn-primary text-nowrap"><i class="bi bi-plus-lg"></i> Nuevo</a>
+        </div>
+    </section>
+
+    <partial name="_Avisos" />
+
+    <p class="small text-secondary">@Model.Count ingredientes</p>
+
+    @foreach (var i in Model)
+    {
+        <article class="tarjeta fila-admin">
+            <div class="flex-grow-1 min-w-0">
+                <h2 class="fs-6 mb-1">@i.Nombre <span class="small text-secondary fw-normal">· @i.Grupo</span></h2>
+                @if (!string.IsNullOrEmpty(i.Sinonimos))
+                {
+                    <p class="small text-secondary mb-1">También: @i.Sinonimos</p>
+                }
+                <div class="d-flex flex-wrap gap-1 align-items-center">
+                    @foreach (var a in i.Alergenos)
+                    {
+                        <span class="etiqueta etiqueta-alergia py-0">@a</span>
+                    }
+                    <span class="small text-secondary">Usado en @i.RecetasQueLoUsan @(i.RecetasQueLoUsan == 1 ? "receta" : "recetas")</span>
+                </div>
+            </div>
+            <div class="d-flex flex-column gap-1">
+                <a asp-action="Editar" asp-route-id="@i.Id" class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil"></i> Editar</a>
+                @* VN-21: si se usa en recetas no se puede borrar (el servidor también lo controla). *@
+                <form asp-action="Eliminar" asp-route-id="@i.Id" method="post" data-confirmar="¿Eliminar el ingrediente @i.Nombre?">
+                    <button type="submit" class="btn btn-outline-danger btn-sm w-100" disabled="@(i.RecetasQueLoUsan > 0)"
+                            title="@(i.RecetasQueLoUsan > 0 ? "Se usa en recetas: no se puede eliminar" : "Eliminar")">
+                        <i class="bi bi-trash"></i> Eliminar
+                    </button>
+                </form>
+            </div>
+        </article>
+    }
+</div>
+
+@section Scripts {
+    <script src="~/js/confirmar.js" asp-append-version="true"></script>
+}

@@ -22,6 +22,7 @@ builder.Services.AddScoped<IRecetaService, RecetaService>();
 builder.Services.AddScoped<ICuentaService, CuentaService>();
 builder.Services.AddScoped<IPerfilService, PerfilService>();
 builder.Services.AddScoped<IDespensaService, DespensaService>();
+builder.Services.AddScoped<IIngredienteService, IngredienteService>();
 // Sin estado ni base de datos: una sola instancia para toda la app.
 builder.Services.AddSingleton<IComercioService, ComercioService>();
 

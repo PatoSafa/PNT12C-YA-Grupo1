@@ -1,0 +1,19 @@
+@* Header de las pantallas de administración, con pestañas Recetas | Ingredientes y cierre de sesión. *@
+@{
+    var actual = ViewContext.RouteData.Values["controller"] as string;
+}
+<header class="encabezado encabezado-admin">
+    <div class="d-flex justify-content-between align-items-start">
+        <div>
+            <h1><i class="bi bi-gear"></i> Administración</h1>
+            <p>Catálogo de recetas e ingredientes</p>
+        </div>
+        <form asp-controller="Cuenta" asp-action="Salir" method="post">
+            <button type="submit" class="btn btn-vidrio btn-sm"><i class="bi bi-box-arrow-right"></i> Salir</button>
+        </form>
+    </div>
+    <nav class="pestanas-admin mt-3">
+        <a asp-controller="AdminRecetas" asp-action="Index" class="@(actual == "AdminRecetas" ? "activo" : "")">Recetas</a>
+        <a asp-controller="AdminIngredientes" asp-action="Index" class="@(actual == "AdminIngredientes" ? "activo" : "")">Ingredientes</a>
+    </nav>
+</header>
