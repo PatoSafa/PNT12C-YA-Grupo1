@@ -1,3 +1,4 @@
+> **Reemplazado** por `DECISIONES.md` (D-03, D-04 y D-12 del 26/10). Se deja como registro del análisis del 19/10.
 # Conflictos entre referencias
 
 Diferencias entre el enunciado, las clases, la documentación funcional (`docs/funcional/`), el prototipo de Figma y el stack elegido. Cada uno necesita una decisión del equipo o una consulta al docente.

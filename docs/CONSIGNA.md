@@ -1,58 +1,166 @@
-# Consigna del TP — checklist
+# Consigna — checklist
 
-Fuente: `_referencias/clases/Clase 3/Enunciado - entrega a definir_.docx` ("Práctica integradora"). El enunciado está escrito para Java + Spring Boot + Gradle + MySQL; acá cada requisito está traducido a nuestro stack (.NET, ver `docs/TECNOLOGIAS.md`).
+Requisitos del enunciado "Práctica integradora — Java + Spring Boot + Gradle + JPA + MySQL + Docker + REST + GitHub" (Clase 3), traducidos a nuestro stack .NET.
 
-> **Pendiente con el docente:** confirmar que acepta .NET en lugar de Spring Boot, PostgreSQL en lugar de MySQL y `.sln` / `.csproj` en lugar de `build.gradle` / `settings.gradle`, y qué espera en "Detectives de errores" (Parte 13) y en la "Prueba sorpresa" (Parte 19).
+**Datos generales**
+- Entrega: el link al repositorio de GitHub, con la documentación de decisiones y evidencias.
+- Fecha: el enunciado no la define; el equipo fijó **2 de noviembre de 2026** (D-03).
+- No hay rúbrica con puntajes; la evaluación es el "Criterio fundamental" (al final).
+- IA permitida, pero hay que poder explicar y modificar todo el código entregado.
+- El enunciado está pensado para **una entidad con una API REST**. Lo que pide es el piso: CenaAPP implementa la documentación funcional completa (D-03), pero todo lo de este checklist tiene que estar cumplido.
 
-Estado: ✅ hecho · 🟡 en curso · ⬜ pendiente
+## Parte 1 — Preparación del proyecto
+- [ ] Proyecto ASP.NET Core MVC (en lugar de Spring Boot) con EF Core, Npgsql y validación (Data Annotations, incluidas en el framework).
+- [ ] Nombre relacionado con el dominio: `CenaApp` (`CenaApp.sln`, `src/CenaApp.Web`).
 
-## Construcción
+## Parte 2 — Elegir un dominio
+- [x] Dominio: **Recetas** (está en la lista de la cátedra).
+- [ ] Permite guardar información en una base de datos, con atributos decididos por el grupo.
 
-| # | Parte del enunciado | Qué pide | Cómo se cumple en .NET | Estado |
-|---|---|---|---|---|
-| 1 | Preparación del proyecto | Proyecto con Spring Web, Data JPA, driver MySQL y Validation; nombre ligado al dominio | Solución `CocinaFacil.sln` con ASP.NET Core MVC, EF Core, Npgsql y Data Annotations | ✅ |
-| 2 | Elegir un dominio | Un dominio que guarde datos ("Recetas" está en la lista) | Recetas (CocinaFácil) | ✅ |
-| 3 | Diseñar antes de programar | Entidad, atributos, tipo de cada atributo y justificación, **antes de programar** | Tabla de diseño de `Receta` (y relacionadas) con tipos C#, en `docs/` antes de crear las clases. Es la **Evidencia 1** | ⬜ |
-| 4 | Base de datos con Docker | `compose.yaml` con imagen oficial, base, usuario, contraseña, puerto y volumen; `docker compose up -d` / `down`; **captura** del contenedor corriendo | `compose.yaml` con `postgres:17` (base `cocinafacil`, volumen `cocinafacil-datos`). Falta la captura | 🟡 |
-| 5 | Configuración | Conectar la app a la base con JPA; **sin contraseñas reales en GitHub** | `AppDbContext` + `UseNpgsql`; cadena de desarrollo en `appsettings.Development.json`, producción por variable de entorno | ✅ |
-| 6 | Crear la entidad | `@Entity`, `@Id`, id autogenerado, atributos del diseño; explicar por qué es entidad, cuál es el id y su relación con la tabla | Clase en `Models/` con `Id` (clave autogenerada por convención de EF Core), `DbSet<Receta>` y migración que crea la tabla | ⬜ |
-| 7 | Repository | Obtener todos, por id, guardar y eliminar sin escribirlos a mano; explicar qué evita `JpaRepository` | `DbSet<T>`: `ToListAsync`, `FindAsync`, `Add` + `SaveChangesAsync`, `Remove` (decisión D-04) | ⬜ |
-| 8 | API REST | Mínimo `GET /api/recurso`, `GET /api/recurso/{id}`, `POST /api/recurso`, `DELETE /api/recurso/{id}` | Controller con `[ApiController]` y `[Route("api/recetas")]` (ver conflicto C-01 en `docs/CONFLICTOS.md`) | ⬜ |
-| 9 | Crear registros | `POST` que recibe JSON y lo guarda | `[HttpPost]` con `[FromBody]` y DTO de entrada | ⬜ |
-| 10 | Consultar registros | `GET` de todos y por id; **decidir y explicar qué pasa con un id inexistente** | `[HttpGet]` y `[HttpGet("{id}")]`; id inexistente → `404 NotFound` con mensaje claro (y vista "no encontrado" en las pantallas Razor) | ⬜ |
-| 11 | Eliminar | `DELETE`: comprobar que existe, que se elimina y que después no aparece en el `GET` | `[HttpDelete("{id}")]`: 404 si no existe, 204 si se borró | ⬜ |
-| 12 | Validación | Validaciones sobre los datos recibidos; **al menos 2 reglas propias del dominio**, explicadas | Data Annotations (`[Required]`, `[Range]`, `[StringLength]`, `[EmailAddress]`) + reglas de negocio en Services (por ejemplo, receta con al menos un ingrediente) | ⬜ |
-| 15 | Frontend / AJAX | Página con formulario, inputs, botón y JavaScript con `fetch()` que muestre la respuesta | Despensa y favoritos con `fetch()` (D-06), más el formulario de alta que llame al `POST` de la API | ⬜ |
-| 16 | Git y GitHub | Repo con README, build, `compose.yaml`, `src/`; **al menos 4 commits significativos** durante el desarrollo | Commits por tarea, con mensajes que describan lo hecho | 🟡 |
-| 17 | README | Nombre, descripción, tecnologías, cómo ejecutar, **endpoints** y **un ejemplo de JSON** | `README.md` ya tiene nombre, descripción, tecnologías y cómo ejecutar. Faltan endpoints y JSON | 🟡 |
+## Parte 3 — Diseñar antes de programar (→ Evidencia 1)
+- [ ] Nombre de la entidad.
+- [ ] Atributos.
+- [ ] Tabla Atributo | Tipo (en C#: `int`, `string`, `int?`, `decimal`…).
+- [ ] Justificación: por qué esos atributos y si alguno sobra.
+- [ ] Hacerlo **antes** de programar.
 
-## Corrección y defensa
+## Parte 4 — Base de datos con Docker
+- [ ] `compose.yaml` en la raíz con imagen oficial de PostgreSQL (en lugar de MySQL).
+- [ ] Define nombre de base, usuario y contraseña (solo de desarrollo).
+- [ ] Expone el puerto (`5432:5432`).
+- [ ] Usa un volumen para no perder los datos.
+- [ ] Funciona con `docker compose up -d` y se detiene con `docker compose down`.
+- [ ] **Evidencia:** captura del contenedor corriendo.
 
-| # | Parte | Qué pide | Cómo prepararse | Estado |
-|---|---|---|---|---|
-| 13 | Detectives de errores | Recibir un proyecto con errores (código, controller, repository, configuración de base, Docker, build, endpoints), encontrarlos y corregirlos. **Registro obligatorio** por error: error, mensaje, causa, solución y cómo se comprobó | `docs/ERRORES.md` con ese formato, completado con errores reales del desarrollo. Practicar leyendo errores de `dotnet build`, EF Core y Docker | ⬜ |
-| 14 | Cambio de requisitos | El docente asigna uno: A) nuevo atributo, B) nuevo endpoint, C) búsqueda (`GET /api/recetas?nombre=...`), D) segunda entidad, E) nueva validación, F) cambiar un endpoint. Sin código de solución | Cada integrante tiene que saber hacer A–F solo. Atributo nuevo = propiedad + migración + DTO + vista | ⬜ |
-| 18 | Evidencias de intervención humana | 1) Diseño de la entidad · 2) **Tres decisiones técnicas** · 3) Un error real y su solución · 4) Qué se cambió por el nuevo requisito · 5) Los commits · 6) Explicación oral de cualquier archivo | 1) Parte 3 · 2) `docs/DECISIONES.md` · 3) `docs/ERRORES.md` · 4) Sección en `docs/` cuando ocurra · 5) Historial de Git · 6) Regla de la cátedra (`CLAUDE.md`, sección 1) | 🟡 |
-| 19 | Prueba sorpresa | Modificación en vivo: endpoint de búsqueda por palabra, atributo nuevo en POST y GET, o cambiar la respuesta de id inexistente | Mismo entrenamiento que la Parte 14 | ⬜ |
-| 20 | Reflexión final | Responder 7 preguntas: lo más fácil, lo más difícil, el error que más enseñó, MySQL directo vs Docker, **qué función cumple Gradle**, recorrido de una petición desde el Controller hasta la base, qué harían distinto | Traducir: Gradle → `dotnet` CLI y `.csproj`; recorrido Controller → Service → `DbContext` → PostgreSQL | ⬜ |
-| — | Desafío extra | Segunda entidad con relación (JPA), endpoints, datos de prueba, README actualizado; explicar el tipo de relación y cómo se ve en la base | Ya está en el modelo (Receta–Ingrediente, Receta–Paso). Saber explicar cómo EF Core crea las claves foráneas y la tabla intermedia | ⬜ |
+## Parte 5 — Configuración
+- [ ] Conexión a la base de Docker en `appsettings.Development.json` (equivale a `application.yaml`).
+- [ ] EF Core configurado en `Program.cs`.
+- [ ] **Sin contraseñas reales en GitHub:** variables de entorno o User Secrets.
 
-## Entrega final
+## Parte 6 — Crear la entidad
+- [ ] Clase C# registrada como `DbSet<T>` en el `DbContext`, con `Id` autogenerado.
+- [ ] Atributos del diseño de la Parte 3. No copiar una entidad de ejemplo.
+- [ ] Poder explicar: por qué es una entidad, cuál es el identificador, qué relación hay entre la clase y la tabla.
+- [ ] Migración creada (`dotnet ef migrations add ...`).
 
-El enunciado pide el enlace al repositorio de GitHub con esta estructura en la raíz (traducida):
+## Parte 7 — Repository
+- [ ] Obtener todos, obtener por ID, guardar, eliminar (con `DbContext` o una capa Repository, según la decisión de arquitectura).
+- [ ] Poder responder: "¿Qué problema nos evita resolver JpaRepository?" (en .NET: qué nos resuelve EF Core / `DbSet`).
 
-| Enunciado (Spring) | Nuestro repo (.NET) | Estado |
+## Parte 8 — API REST
+- [ ] `GET /api/recetas`
+- [ ] `GET /api/recetas/{id}`
+- [ ] `POST /api/recetas`
+- [ ] `DELETE /api/recetas/{id}`
+
+> Aunque las pantallas sean vistas Razor, el enunciado pide estos endpoints JSON. Hay que tener ambas cosas.
+
+## Parte 9 — Crear registros
+- [ ] El `POST` recibe JSON y el registro queda guardado en PostgreSQL.
+
+## Parte 10 — Consultar registros
+- [ ] `GET /api/recetas` devuelve todos; `GET /api/recetas/{id}` devuelve uno.
+- [ ] **ID inexistente:** no puede romper la app. Decidir cómo se maneja (404 con mensaje claro / vista "no encontrado") y **explicar la decisión**.
+
+## Parte 11 — Eliminar
+- [ ] `DELETE /api/recetas/{id}`.
+- [ ] Verificar que el registro existe, que se puede eliminar y que después no aparece en el `GET`.
+
+## Parte 12 — Validación
+- [ ] Validar los datos que llegan (nombre no vacío, email válido si hay, números válidos) con Data Annotations.
+- [ ] **Al menos dos reglas propias del dominio**, con su justificación. Candidatas de la doc funcional:
+  - VAL-15: nombre de receta obligatorio, máx. 80 caracteres, único.
+  - VAL-16: tiempo y porciones enteros > 0; calorías enteras ≥ 0.
+
+## Parte 13 — Detectives de errores 🕵️
+- [ ] El docente entrega una versión con errores intencionales (en el lenguaje, el framework, controller, repository, configuración de base, Docker, build, endpoints).
+- [ ] Ejecutar, identificar, analizar el mensaje, encontrar la causa, corregir y comprobar.
+- [ ] **Registro obligatorio** en `docs/ERRORES.md`, por cada error:
+  - Error encontrado
+  - Mensaje obtenido
+  - ¿Qué estaba provocando el error?
+  - ¿Cómo lo solucioné?
+  - ¿Cómo comprobé que quedó solucionado?
+- [ ] Usar el mismo formato para los errores reales que aparezcan durante el desarrollo (→ Evidencia 3).
+
+## Parte 14 — Cambio de requisitos (→ Evidencia 4)
+El docente asigna uno, sin dar la solución:
+- [ ] A: nuevo atributo · B: nuevo endpoint · C: búsqueda (`GET /api/recetas?nombre=...`) · D: segunda entidad · E: nueva validación · F: modificar un endpoint existente.
+
+## Parte 15 — Frontend / AJAX
+- [ ] Página con formulario, inputs, botón, JavaScript y `fetch()`.
+- [ ] Recorrido: HTML → JavaScript → `fetch()` → API REST → Controller → EF Core → PostgreSQL.
+- [ ] La respuesta del backend se muestra en la página.
+
+## Parte 16 — Git y GitHub (→ Evidencia 5)
+- [ ] Repo con `README.md`, archivo de build (`CenaApp.sln` / `.csproj` en lugar de `build.gradle`), `compose.yaml` y `src/`.
+- [ ] **Al menos 4 commits significativos** durante el desarrollo, no uno solo al final. Ejemplos:
+  - Inicialización del proyecto ASP.NET Core
+  - Configuración de PostgreSQL con Docker
+  - Entidad, DbContext y migración
+  - API REST
+- [ ] Mensajes que describan lo que realmente se hizo.
+
+## Parte 17 — README
+- [ ] Nombre del proyecto.
+- [ ] Descripción: qué problema resuelve.
+- [ ] Tecnologías.
+- [ ] Cómo ejecutar: `docker compose up -d` → `dotnet ef database update` → `dotnet run --project src/CenaApp.Web`.
+- [ ] Endpoints: `GET`, `GET /{id}`, `POST`, `DELETE`.
+- [ ] Al menos un ejemplo de JSON.
+
+## Parte 18 — Evidencia de intervención humana (obligatoria)
+| Evidencia | Qué pide | Dónde va |
 |---|---|---|
-| `README.md` | `README.md` | 🟡 |
-| `build.gradle`, `settings.gradle` | `CocinaFacil.sln`, `src/CocinaFacil.Web/CocinaFacil.Web.csproj` | ✅ |
-| `compose.yaml` | `compose.yaml` | ✅ |
-| `.gitignore` | `.gitignore` | ✅ |
-| `src/main/java/...`, `src/main/resources/...` | `src/CocinaFacil.Web/` | ✅ |
-| `src/test/` | `tests/CocinaFacil.Tests/` | ✅ |
-| Documentación de decisiones y evidencias | `docs/` | 🟡 |
+| 1 — Diseño | Diseño inicial de la entidad | `docs/DISENO_ENTIDADES.md` (o sección en `DECISIONES.md`) — a definir |
+| 2 — Decisiones | Tres decisiones técnicas con su motivo | `docs/DECISIONES.md` |
+| 3 — Error | Un error real del desarrollo y cómo se solucionó | `docs/ERRORES.md` |
+| 4 — Cambio de requisito | Qué se cambió al recibir el nuevo requisito | `docs/DECISIONES.md` o sección propia — a definir |
+| 5 — Git | Los commits del desarrollo | Historial de GitHub |
+| 6 — Explicación oral | Qué hace un archivo, por qué existe, qué pasa si cambia, cómo se relaciona con las otras capas | Defensa oral |
 
-Además, antes de la entrega final se borra `_referencias/` del repo.
+## Parte 19 — Prueba sorpresa
+- [ ] Modificación chica en vivo, sin aviso. Ejemplos del enunciado:
+  - Endpoint que filtre por nombre que contenga una palabra.
+  - Nuevo atributo que aparezca en el `POST` y en el `GET` (→ entidad + migración + DTO).
+  - Cambiar la respuesta cuando no existe el ID.
 
-## Criterio de evaluación (textual del enunciado)
+## Parte 20 — Reflexión final
+- [ ] ¿Qué parte te resultó más sencilla?
+- [ ] ¿Cuál más difícil?
+- [ ] ¿Qué error te permitió comprender mejor el framework?
+- [ ] ¿Diferencia entre instalar la base directamente y usar Docker?
+- [ ] ¿Qué función cumple la herramienta de build (en .NET: `dotnet` CLI y `.csproj`, en lugar de Gradle)?
+- [ ] ¿Cuál es el recorrido de una petición desde el Controller hasta la base?
+- [ ] ¿Qué harías diferente?
 
-"El proyecto debe funcionar, pero que funcione no es suficiente." Se evalúa que cada estudiante pueda explicar su código, detectar errores, justificar decisiones, modificar el proyecto, interpretar mensajes de error, hacer cambios sin recibir la solución, mostrar el proceso con Git y responder preguntas de arquitectura.
+## Entrega final — estructura
+El enunciado pide (versión Spring): `README.md`, `build.gradle`, `settings.gradle`, `compose.yaml`, `.gitignore`, `src/main/...`, `src/test/`.
+
+Versión .NET:
+- [ ] `README.md`
+- [ ] `CenaApp.sln` (en lugar de `build.gradle` / `settings.gradle`)
+- [ ] `compose.yaml`
+- [ ] `Dockerfile`
+- [ ] `.gitignore`
+- [ ] `src/CenaApp.Web/`
+- [ ] `tests/CenaApp.Tests/` (en lugar de `src/test/`)
+- [ ] Documentación de decisiones y evidencias (`docs/`)
+
+> **Confirmar con el docente** que acepta esta estructura .NET y qué espera en la Parte 13 y la Parte 19.
+
+## Criterio fundamental
+"El proyecto debe funcionar, pero que funcione no es suficiente." Cada integrante tiene que poder:
+- [ ] explicar su código
+- [ ] detectar errores
+- [ ] justificar decisiones
+- [ ] modificar el proyecto
+- [ ] interpretar mensajes de error
+- [ ] hacer cambios sin recibir el código de la solución
+- [ ] demostrar el proceso con Git
+- [ ] responder preguntas sobre la arquitectura
+
+## Desafío extra (opcional)
+- [ ] Segunda entidad relacionada con la primera (ejemplo: Receta–Categoría).
+- [ ] Incluye: entidades nuevas, relación en EF Core, cambios en controller/servicio, endpoints nuevos, datos de prueba y README actualizado.
+- [ ] Pregunta oral: "¿Por qué elegiste ese tipo de relación y cómo se representa en la base de datos?"

@@ -1,66 +1,97 @@
-# Tecnologías
+# Tecnologías del proyecto
 
-Stack del proyecto y su equivalencia con lo visto en las clases (Java + Spring Boot). Las clases se citan por archivo dentro de `_referencias/clases/`.
+Stack de CenaAPP y su equivalencia con lo que se vio en clase (Java + Spring Boot).
 
-> **Estado:** borrador para validar. Cuando el equipo escriba "TECNOLOGIAS.md aprobado", esta lista reemplaza la tabla de la sección 3 de `CLAUDE.md`.
+> Cuando el equipo apruebe este archivo ("TECNOLOGIAS.md aprobado"), pasa a ser la fuente de verdad del stack y reemplaza la tabla de la sección 3 de `CLAUDE.md`.
 
-## Lo que se vio en clase
+## 1. Stack base
 
-| Clase | Archivo | Temas |
-|---|---|---|
-| 1 | `Clase 1/Clase1.html`, `Practica clase 1 - Entrega 19-08_.docx` | HTML desde cero: estructura, títulos, listas, `div`, formularios (`form`, `label`, `input`, `select`, `textarea`, `button`), tablas, etiquetas semánticas |
-| 2 | `Clase 2/Clase2 - repaso_html_css_javascript.html` | CSS (en línea, interno y **externo**), JavaScript: funciones, eventos, modificar el DOM, archivo `.js` externo |
-| 2 | `Clase 2/Clase2 - ajax_api_gateway_backend.html`, `Practica 2 - Entrega 07-09_.docx` | AJAX con `fetch()`, métodos HTTP, `POST` con `method`, `headers`, `Content-Type: application/json`, `body` y `JSON.stringify()`, API Gateway, manejo de errores |
-| 3 | `Clase 3/repaso_javascript_interactiva_codigo.html` | Variables, condicionales, validación de formularios en JavaScript, `console.log()` |
-| 3 | `Clase 3/guia_springboot_gradle_docker_github.html` | Java 17, Spring Initializr, **Gradle (Groovy)**, dependencias Spring Web, Spring Data JPA, MySQL Driver y Validation, MySQL `mysql:8.4` en Docker, `@Entity`, `@Id`, `@GeneratedValue`, `JpaRepository`, `@RestController`, `@RequestMapping`, `@GetMapping`, `@PostMapping`, `@RequestBody`, `ddl-auto`, Postman/Insomnia, Git y GitHub |
-| 3 | `Clase 3/guia_frontend_backend_springboot.html` | Conectar frontend y backend: `fetch()`, CORS y `@CrossOrigin`, `POST`, `DELETE` con `@DeleteMapping` y `@PathVariable` |
-| 4 | `Clase 4/guia_completa_springboot_local_render.html`, `guia_conexion_backend_vista_git_docker.html` | Levantar en local, vista en `static/index.html`, variables `DB_USER` / `DB_PASSWORD`, despliegue en Render, puerto `${PORT}`, Maven, Git Bash (config, clone, commit, push), errores frecuentes |
-| 5 | `Clase 5/guia_crud_componentes.html` | CRUD completo desde la vista: `GET`, `POST`, `PUT`, `DELETE`, `ResponseEntity`, `@RequestParam`, recargar la tabla |
-| 5 | `Clase 5/paso_a_paso_home_ajax.html` | Login con AJAX, **jQuery 3.7.1** con `$.ajax`, usuario guardado en `sessionStorage`, redirección al Home |
-| 6 | `Clase 6/preparaProyectoRender.html` | Preparar para Render: **PostgreSQL**, perfiles `application-local.yaml` / `application-prod.yaml`, variables de entorno, `server.port=${PORT:8080}`, Maven, `render.yaml` |
-
-## Stack y equivalencias
-
-| Capa | Nuestro proyecto (.NET) | Equivalente en clase (Spring) | Visto en |
+| Capa | Tecnología | Equivalente visto en clase | Dónde se vio |
 |---|---|---|---|
-| Lenguaje y runtime | C# sobre .NET 10 | Java 17 | Clase 3 |
-| Framework | ASP.NET Core MVC | Spring Boot (Spring Web) | Clase 3 |
-| Crear el proyecto | `dotnet new mvc` / `dotnet new sln` | Spring Initializr | Clase 3 |
-| Build y dependencias | `dotnet` CLI, `.sln` / `.csproj`, paquetes NuGet | Gradle (Groovy) / Maven | Clases 3, 4, 6 |
-| Controller (pantallas) | Clase `Controller` + `return View(viewModel)` | `static/index.html` + controller REST | Clases 3, 4 |
-| Controller (API) | `[ApiController]`, `[Route]`, `[HttpGet]`, `[HttpPost]`, `[HttpPut]`, `[HttpDelete]`, `[FromBody]`, parámetros de ruta y de query, `ActionResult` / `NotFound()` | `@RestController`, `@RequestMapping`, `@GetMapping`, `@PostMapping`, `@PutMapping`, `@DeleteMapping`, `@RequestBody`, `@PathVariable`, `@RequestParam`, `ResponseEntity` | Clases 3, 5 |
-| Vista | Vistas Razor (`.cshtml`) con `_Layout.cshtml` | HTML en `static/` | Clases 1, 4 |
-| Estilos | Bootstrap + `wwwroot/css/estilos.css` propio | CSS externo | Clase 2 |
-| JavaScript | Archivos en `wwwroot/js/`, `fetch()` con JSON y `JSON.stringify()` | `fetch()`, `$.ajax` | Clases 2, 3, 5 |
-| CORS | No hace falta: vista y API se sirven desde la misma app | `@CrossOrigin` | Clase 3 |
-| Entidad | Clase en `Models/` con propiedad `Id` (clave autogenerada por convención) | `@Entity`, `@Id`, `@GeneratedValue` | Clase 3 |
-| Acceso a datos | `DbContext` + `DbSet<T>` (EF Core) | `JpaRepository<T, ID>` | Clase 3 |
-| Esquema de la base | Migraciones (`dotnet ef migrations add`, `dotnet ef database update`) | `spring.jpa.hibernate.ddl-auto` | Clase 3 |
-| Validación | Data Annotations: `[Required]`, `[StringLength]`, `[Range]`, `[EmailAddress]` | Dependencia Validation (anotaciones Bean Validation) | Clase 3 / Enunciado |
-| Base de datos | PostgreSQL 17 en Docker (local y producción) | MySQL 8.4 en Docker (local), PostgreSQL (Render) | Clases 3, 6 |
-| Configuración | `appsettings.json` + `appsettings.Development.json` + variables de entorno (`ConnectionStrings__CocinaFacil`) | `application.yaml` + perfiles `local` / `prod` + variables de entorno | Clases 4, 6 |
-| Puerto en producción | Variable `ASPNETCORE_HTTP_PORTS` / `PORT` en el contenedor | `server.port=${PORT:8080}` | Clases 4, 6 |
-| Login y sesión | Autenticación por cookie + `PasswordHasher<T>` + `[Authorize(Roles = "Admin")]` | Login con AJAX + usuario en `sessionStorage` | Clase 5 |
-| Tests | xUnit (`tests/CocinaFacil.Tests`) | `src/test` | Clase 3 (estructura) |
-| Probar endpoints | Postman, Insomnia o archivos `.http` | Postman, Insomnia | Clases 3, 4 |
-| Contenedores | Docker Desktop, `compose.yaml` | Docker Desktop, `compose.yaml` | Clases 3, 4 |
-| Despliegue | Render con `Dockerfile` (Render no tiene runtime nativo de .NET) | Render (Web Service + PostgreSQL) | Clases 4, 6 |
-| Versionado | Git, GitHub, Git Bash | Git, GitHub, Git Bash | Clases 3, 4 |
-| IDE | Visual Studio Code + C# Dev Kit + Claude Code | IntelliJ IDEA | Clase 3 |
+| Lenguaje y runtime | C# sobre .NET 10 (LTS) | Java 17 | Clase 3 — guía Spring Boot + Gradle |
+| Framework | ASP.NET Core MVC | Spring Boot (Web) | Clase 3 — guía Spring Boot + Gradle |
+| Controller | Clases `Controller` con `[HttpGet]`, `[HttpPost]`, `[Route]` | `@RestController`, `@GetMapping` | Clase 3; Clase 5 — CRUD |
+| View | Vistas Razor (`.cshtml`) con `_Layout.cshtml` compartido | `static/*.html` | Clase 4 — guía completa local/Render; Clase 5 |
+| View, partes interactivas | JavaScript con `fetch()` contra endpoints JSON | `fetch()` / `$.ajax` | Clase 2 — AJAX; Clase 3 — frontend/backend; Clase 5 — login AJAX |
+| Estilos | Bootstrap + `wwwroot/css/estilos.css` propio | CSS externo en `css/estilos.css` | Clase 2 — repaso HTML/CSS/JS |
+| Model, datos | Entity Framework Core, code-first con migraciones | Spring Data JPA | Clase 3; Enunciado Partes 6 y 7 |
+| Model, reglas | Clases *Service* con interfaz, registradas en DI | Capa `Service` | Clase 5 — CRUD de componentes |
+| Model hacia la View | ViewModels / DTOs | — (en clase se devolvía la entidad) | No visto (ver sección 3) |
+| Validación | Data Annotations | Spring Validation | Clase 3 (dependencia); Enunciado Parte 12 |
+| Base de datos | PostgreSQL (Npgsql) en Docker | MySQL en Docker (local), PostgreSQL en Render | Clases 3 y 4 (MySQL); Clase 6 (PostgreSQL en prod) |
+| Configuración | `appsettings.json` + `appsettings.Development.json` + variables de entorno / User Secrets | `application.yaml` + perfiles `local`/`prod` | Clase 4; Clase 6 |
+| Login y roles | Cookie auth + `PasswordHasher<T>` + `[Authorize(Roles = "Admin")]` | `sessionStorage` + `window.location.href` | Clase 5 — login AJAX |
+| Build | `dotnet` CLI, `.sln` / `.csproj` | Gradle (Clase 3), Maven (Clases 4–6) | Clases 3–6 |
+| Tests | xUnit | `src/test` | Enunciado — estructura de entrega |
+| Probar endpoints | Postman o archivos `.http` | Postman / Insomnia | Clases 3, 4 y 5 |
+| Contenedores | `compose.yaml` (PostgreSQL) + `Dockerfile` | `compose.yaml` (MySQL) | Clase 3; Clase 4 |
+| Despliegue | Render con `Dockerfile` | Render con runtime Java nativo | Clase 4; Clase 6 |
+| Versionado | Git, GitHub | Git, GitHub | Clase 3; Clase 4 — guía de conexión |
 
-## Lo que usamos y no se vio en clase
+También habilitadas por la cátedra: Node.js y npm (solo como herramientas de desarrollo).
 
-Habilitado por la cátedra (ecosistema .NET, JavaScript, Node.js, Docker y Bootstrap), pero conviene poder explicarlo porque no tiene guía de clase:
+## 2. Equivalencias Spring → .NET, concepto por concepto
 
-| Elemento | Por qué lo usamos | Cómo explicarlo en la defensa |
+| Concepto | Spring (como se vio) | .NET (como lo hacemos) | Clase de origen |
+|---|---|---|---|
+| Crear el proyecto | Spring Initializr con Web, Data JPA, MySQL Driver, Validation | `dotnet new mvc` + paquetes `Npgsql.EntityFrameworkCore.PostgreSQL` y `Microsoft.EntityFrameworkCore.Design` | Clase 3 — guía Spring Boot + Gradle |
+| Archivo de build | `build.gradle` / `pom.xml` | `.csproj` (proyecto) y `.sln` (solución) | Clase 3 (Gradle); Clases 4–6 (Maven) |
+| Correr la app | `./gradlew bootRun` / `./mvnw spring-boot:run` | `dotnet run --project src/CenaApp.Web` | Clase 3; Clase 4 |
+| Empaquetar | `./mvnw clean package` → `.jar` | `dotnet publish -c Release` | Clase 6 |
+| Carpetas | `controller/`, `model/`, `repository/` | `Controllers/`, `Models/`, `Data/`, `Services/`, `Views/` | Clase 3; Clase 4 |
+| Entidad | `@Entity`, `@Id`, `@GeneratedValue(IDENTITY)` | Clase C# común + `DbSet<T>` en el `DbContext`; `Id` es la clave por convención | Clase 3; Enunciado Parte 6 |
+| Repository | `interface XRepository extends JpaRepository<X, Long>` | `DbContext` / `DbSet<T>`: `ToListAsync()`, `FindAsync(id)`, `Add` + `SaveChangesAsync()`, `Remove` | Clase 3; Enunciado Parte 7 |
+| Crear/actualizar tablas | `spring.jpa.hibernate.ddl-auto=update` | Migraciones: `dotnet ef migrations add <Nombre>` + `dotnet ef database update` | Clases 3, 4 y 6 |
+| Ver el SQL | `show-sql: true` | Nivel de log `Microsoft.EntityFrameworkCore.Database.Command` en `appsettings.Development.json` | Clase 4; Clase 6 |
+| Relaciones | Producto → Categoría (desafío extra) | Propiedades de navegación + FK; `Include()` para traerlas | Clase 3 (desafío); Enunciado (desafío extra) |
+| Controller REST | `@RestController` + `@RequestMapping("/api/x")` | `[ApiController]` + `[Route("api/x")]` sobre `ControllerBase` | Clase 3 — guías |
+| Controller que devuelve vista | `@Controller` (+ `@ResponseBody` para JSON) | `Controller` con `return View(modelo)` o `return Json(...)` | Clase 5 — login AJAX |
+| Verbos HTTP | `@GetMapping`, `@PostMapping`, `@PutMapping`, `@DeleteMapping` | `[HttpGet]`, `[HttpPost]`, `[HttpPut]`, `[HttpDelete]` | Clase 3 (GET/POST/DELETE); Clase 5 (PUT) |
+| Parámetros | `@RequestBody`, `@PathVariable`, `@RequestParam` | `[FromBody]`, `{id}` en la ruta, `[FromQuery]` | Clase 3; Clase 5 |
+| Respuesta con código | `ResponseEntity.ok()`, `.accepted()`, 404 "Componente no encontrado" | `IActionResult`: `Ok()`, `Accepted()`, `NotFound("Receta no encontrada")`, `CreatedAtAction()` | Clase 5 — CRUD de componentes |
+| ID inexistente | No dejar que falle; decidir y explicar | `if (receta is null) return NotFound(...)` o vista "no encontrado" | Enunciado Partes 10, 11 y 19 |
+| Capa de servicio | `@Service` llamado desde el controller | `IRecetaService` + `RecetaService`, registrado con `builder.Services.AddScoped<...>()` | Clase 5 |
+| Inyección de dependencias | Inyección por constructor | Inyección por constructor (la registra `Program.cs`) | Clase 3 |
+| Validación | Dependencia Validation, `@NotBlank`, `@Min`, `@Email` | `[Required]`, `[Range]`, `[EmailAddress]`, `[StringLength]` + `ModelState.IsValid` | Clase 3; Enunciado Parte 12 |
+| Búsqueda por query | `GET /api/libros?autor=...` | `[FromQuery] string? nombre` + LINQ `Where(...Contains(...))` | Enunciado Partes 14 y 19 |
+| Páginas | `src/main/resources/static/index.html` | Vistas Razor en `Views/` + estáticos en `wwwroot/` | Clase 4; Clase 5 |
+| CSS / JS propios | `css/estilos.css`, `js/script.js` | `wwwroot/css/estilos.css`, `wwwroot/js/*.js` | Clase 2 — repaso |
+| AJAX | `fetch` GET/POST con `Content-Type: application/json` y `JSON.stringify`; `$.ajax` | Igual, contra acciones que devuelven JSON | Clase 2; Clase 3; Clase 5 |
+| URLs relativas | `fetch("/elementos")`, nunca `localhost:8080` | Igual (`fetch("/api/recetas")` o `@Url.Action(...)`) | Clase 4; Clase 6 |
+| Mostrar éxito y error en la página | Mensajes distintos, no solo `console.log` | Revisar `response.ok` y mostrar alerta de Bootstrap | Clase 2 — AJAX; Práctica 2 |
+| CORS | `@CrossOrigin` | No hace falta: vistas y API salen de la misma app | Clase 3 — frontend/backend |
+| API Gateway | Concepto: un punto de entrada que rutea por recurso | Concepto equivalente: una sola app con rutas `/api/...` | Clase 2 — AJAX |
+| CRUD en pantalla | Tabla con +/editar/eliminar, confirmación, recargar | Vistas Index/Create/Edit + confirmación antes de borrar | Clase 5 — CRUD de componentes |
+| Login | POST `/login` por AJAX, usuario en `sessionStorage` | Cookie de autenticación firmada por el servidor + `PasswordHasher` (la guía de clase aclara que `sessionStorage` no es autenticación real) | Clase 5 — login AJAX |
+| Configuración | `application.properties` / `application.yaml` | `appsettings.json` (`ConnectionStrings:DefaultConnection`) | Clase 3; Clase 4 |
+| Perfiles | `application-local.yaml`, `application-prod.yaml`, `SPRING_PROFILES_ACTIVE` | `appsettings.Development.json`, `appsettings.Production.json`, `ASPNETCORE_ENVIRONMENT` | Clase 6 |
+| Secretos | `${DB_URL}`, `${DB_USERNAME}`, `${DB_PASSWORD}` | Variable `ConnectionStrings__DefaultConnection` o User Secrets en local | Clase 4; Clase 6 |
+| Puerto | `server.port: ${PORT:8080}` | Leer `PORT` en `Program.cs` / `ASPNETCORE_URLS` | Clase 4; Clase 6 |
+| Base en Docker | `compose.yaml` con `mysql:8.4`, puerto `3306:3306`, volumen | `compose.yaml` con `postgres`, puerto `5432:5432`, volumen | Clase 3; Clase 4 |
+| Orden de prueba | Docker → backend → Postman → página | Igual | Clase 4 — guía de conexión |
+| Deploy | Render Web Service, runtime Java, PostgreSQL de Render | Render Web Service con runtime Docker (`Dockerfile`), PostgreSQL de Render | Clase 4; Clase 6 |
+| Git | `init -b main`, `remote add`, `add/commit/push`, `clone` | Igual, con `.gitignore` de .NET (`bin/`, `obj/`) | Clase 3; Clase 4 |
+| Commits | Al menos 4 significativos, no uno solo al final | Igual | Enunciado Parte 16 |
+| README | Descripción, tecnologías, cómo correr, endpoints, JSON de ejemplo | Igual, con comandos `docker compose` / `dotnet` | Clase 3; Enunciado Parte 17 |
+
+## 3. Conceptos que no se vieron en clase (preparar para la defensa)
+
+| Concepto | Por qué lo usamos | Qué había en clase |
 |---|---|---|
-| Capa de Services | Las reglas de negocio (alérgenos, aptitud, despensa) quedan en un solo lugar (D-02) | En clase el Controller llamaba directo al Repository; nosotros agregamos un paso intermedio |
-| Vistas Razor y ViewModels | MVC de ASP.NET Core: el Controller arma el ViewModel y la View lo muestra (D-06) | Equivale a armar el HTML en el servidor en lugar de traer JSON con `fetch()` |
-| Migraciones de EF Core | Cada cambio del modelo queda versionado en Git | Reemplaza a `ddl-auto` |
-| Autenticación por cookie y `PasswordHasher` | Login, roles y contraseñas con hash sin librerías externas | Reemplaza al `sessionStorage` de la Clase 5, que no es seguro para roles |
-| Relaciones entre entidades | El modelo tiene recetas, ingredientes, pasos, alérgenos y restricciones | Es el "Desafío extra" del enunciado |
-| jQuery | Viene con la plantilla MVC para la validación del lado del cliente | Visto en la Clase 5; decisión pendiente si se mantiene |
+| **Vistas Razor** | Es la "V" del MVC de ASP.NET Core: el Controller arma el modelo y la vista lo dibuja en el servidor | HTML estático que pedía datos por `fetch` |
+| **Migraciones de EF Core** | Cada cambio del modelo queda versionado en Git, en vez de que la base se modifique sola | `ddl-auto=update` |
+| **ViewModels / DTOs** | Evitan mandar a la vista datos que no corresponden (por ejemplo `PasswordHash`) | Se devolvía la entidad directamente |
+| **Dockerfile** | Render no tiene runtime nativo de .NET, así que la app se despliega como contenedor | Render compilaba Java por su cuenta; Docker solo se usaba para la base |
+| **Cookie auth + `PasswordHasher`** | Login real del lado del servidor, con contraseñas hasheadas | `sessionStorage` (la guía aclaraba que no es seguro) |
+| **xUnit** | Tests automáticos del proyecto | No hubo ejemplos de tests |
 
-## Complementarias
+## 4. Tecnologías complementarias
 
-Ninguna aprobada todavía. Candidata: Leaflet + OpenStreetMap para el mapa de Tiendas (segunda entrega, D-09).
+Para sumar una tiene que pasar los cuatro filtros de `CLAUDE.md` (resuelve algo concreto, complementa sin reemplazar, es chica y aislada, el equipo la puede explicar). Se propone como decisión, y si se aprueba queda en `docs/DECISIONES.md` y en esta tabla.
+
+| Tecnología | Para qué | Estado |
+|---|---|---|
+| Leaflet + OpenStreetMap | Mapa de Tiendas con comercios fijos | **Aprobada** (D-11) |
+| Bootstrap Icons | Íconos (el prototipo usa lucide) | **Aprobada** (D-10) |
+
+**No usar sin decisión explícita:** React, TypeScript, Tailwind, shadcn, ASP.NET Core Identity completo, Blazor, Java/Spring Boot.
