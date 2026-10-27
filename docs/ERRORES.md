@@ -23,3 +23,29 @@ Errores reales que aparecieron durante el desarrollo, con el formato que pide el
   2. `docker compose up -d` descargó `postgres:17` y levantó el contenedor `cenaapp-postgres`, que quedó en estado `healthy`.
   3. Con `dotnet run --project src/CenaApp.Web`, la página de inicio mostró "Base de datos PostgreSQL: conectada."
 - **Qué aprendí:** el mensaje que se ve en pantalla ("unable to start") no dice la causa. La causa real estaba en el log de Docker. Leer los logs antes de reinstalar ahorra tiempo.
+
+## E-02 · La migración no se crea: "skip navigation doesn't have a foreign key"
+- **Fecha:** 2026-10-26
+- **Error encontrado:** al cambiar los nombres de las columnas de las tablas intermedias N:M (para que `Favoritos` tenga `RecetaId` en vez de `FavoritosId`), `dotnet ef migrations add` y `dotnet ef database update` dejaron de funcionar.
+- **Mensaje obtenido:**
+  ```
+  Unable to create a 'DbContext' of type 'AppDbContext'. The exception 'The skip navigation
+  'Alergeno.Ingrediente' doesn't have a foreign key associated with it. Every skip navigation
+  must have a configured foreign key.' was thrown while attempting to create an instance.
+  ```
+- **¿Qué estaba provocando el error?** En `UsingEntity(tabla, ladoA, ladoB)` de EF Core, el **primer** lambda configura la clave foránea hacia la entidad **relacionada** (la de la lista, ej. `Receta`) y el **segundo** hacia la entidad **dueña** (ej. `Usuario`). Los había puesto al revés, así que EF Core quedaba con una relación sin clave foránea.
+- **¿Cómo lo solucioné?** Invertí el orden en el método `TablaIntermedia` de `AppDbContext` y le puse nombres claros a los parámetros (`ladoRelacionado`, `ladoDuenio`) para que no vuelva a pasar. Después rehice la migración `Inicial` (`database update 0` → `migrations remove` → `migrations add Inicial` → `database update`).
+- **¿Cómo comprobé que quedó solucionado?** La migración se aplicó, y en PostgreSQL las tablas intermedias quedaron con columnas `UsuarioId` / `RecetaId`, `UsuarioId` / `IngredienteId`, etc. (consulta a `information_schema.columns`).
+- **Qué aprendí:** el mensaje nombra la relación que falla (`Alergeno.Ingrediente`), y eso indica qué lado quedó mal configurado.
+
+## E-03 · Warning MSB3277: conflicto de versiones de EF Core en el proyecto de tests
+- **Fecha:** 2026-10-26
+- **Error encontrado:** el build terminaba bien pero con una advertencia en `CenaApp.Tests`.
+- **Mensaje obtenido:**
+  ```
+  warning MSB3277: Existía un conflicto entre "Microsoft.EntityFrameworkCore, Version=10.0.4.0"
+  y "Microsoft.EntityFrameworkCore, Version=10.0.13.0".
+  ```
+- **¿Qué estaba provocando el error?** La app usa EF Core 10.0.13, que llega por el paquete `Design`. Pero `Design` está marcado como privado (solo para la herramienta de migraciones), así que esa versión no pasa al proyecto de tests. Los tests recibían la versión que pide Npgsql (10.0.4), y quedaban dos versiones distintas.
+- **¿Cómo lo solucioné?** En `CenaApp.Web.csproj` agregué una referencia explícita a `Microsoft.EntityFrameworkCore.Relational` 10.0.13, para que la app y los tests usen la misma versión.
+- **¿Cómo comprobé que quedó solucionado?** `dotnet build CenaApp.sln` → "0 Advertencia(s), 0 Errores", y `dotnet test` → 1 de 1 correcto.

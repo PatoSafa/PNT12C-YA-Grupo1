@@ -9,6 +9,8 @@
   <ItemGroup>
     <!-- EF Core con PostgreSQL (stack de la sección 3 de CLAUDE.md) -->
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
+    <!-- Fija EF Core en la misma versión que Design; si no, el proyecto de tests recibe una más vieja (warning MSB3277) -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.13" />
     <!-- Necesario para crear y aplicar migraciones con dotnet ef -->
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.13">
       <PrivateAssets>all</PrivateAssets>

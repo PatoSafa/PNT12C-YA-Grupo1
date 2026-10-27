@@ -146,7 +146,7 @@ erDiagram
     }
 ```
 
-Las relaciones `}o--o{` no tienen clase propia: EF Core crea la tabla intermedia a partir de las listas de cada entidad (por ejemplo `Usuario.Favoritos` y `Receta.UsuariosQueLaGuardaron`).
+Las relaciones `}o--o{` no tienen clase propia: EF Core crea la tabla intermedia a partir de las listas de cada entidad (por ejemplo `Usuario.Favoritos` genera la tabla `Favoritos`).
 
 ## 5. Reglas centrales (en `RecetaService` y `DespensaService`)
 

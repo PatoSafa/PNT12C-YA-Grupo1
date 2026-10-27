@@ -30,7 +30,8 @@ Relaciones (no son columnas de la tabla `Recetas`, EF Core las arma con otras ta
 | `Pasos` | `List<Paso>` | una receta → muchos pasos, con orden (1:N) |
 | `Ingredientes` | `List<RecetaIngrediente>` | receta ↔ ingrediente, con cantidad y unidad (N:M con datos propios) |
 | `Gustos` | `List<Gusto>` | receta ↔ gusto (N:M simple) |
-| `UsuariosQueLaGuardaron` | `List<Usuario>` | favoritos (N:M simple) |
+
+Los favoritos se navegan desde el usuario (`Usuario.Favoritos`); la receta no necesita la lista inversa.
 
 ### Por qué estos atributos
 - **`Nombre`** es lo que el usuario busca y ve en cada tarjeta. Es único porque dos recetas con el mismo nombre confundirían la búsqueda y el admin (VAL-15).
